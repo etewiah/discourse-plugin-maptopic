@@ -4,3 +4,6 @@
 # authors: Ed Tewiah
 
 register_asset "javascripts/discourse/templates/composer.js.handlebars"
+register_asset "javascripts/discourse_overrides/composer.js"
+register_asset "javascripts/select_location_modal_controller.js"
+register_asset "javascripts/select_location_modal_view.js"

@@ -1,5 +1,4 @@
 <div class='spinner'>{{i18n composer.uploading}}</div>
-
 <div class='contents'>
 
   {{render "composer-messages"}}
@@ -22,7 +21,14 @@
               <a {{action displayEditReason}} class="display-edit-reason">{{i18n composer.show_edit_reason}}</a>
             {{/if}}
           {{/if}}
+
+          <button class="btn btn-primary create" {{action addMapReference}} title="">
+            Associate this conversation with a location....
+          </button>
+
         </div>
+
+
 
         {{#if model.canEditTitle}}
           <div class='form-element clearfix'>
@@ -42,6 +48,12 @@
               {{popupInputTip validation=view.titleValidation shownAt=view.showTitleTip}}
             </div>
 
+
+<button class="btn btn-primary create" {{action addMapReference}} title="">
+  Associate this conversation with a location....
+</button>
+
+
             {{#unless model.privateMessage}}
               <div class="category-input">
                 {{category-chooser valueAttribute="id" value=model.categoryId scopedCategoryId=scopedCategoryId}}
@@ -56,11 +68,9 @@
         {{/if}}
 
 <div class='control-row topic-location'>
-
-  <button class="btn btn-primary create"  title="">
-    Associate this conversation with a location
-  </button>
 </div>
+
+
         <div class='wmd-controls'>
           <div class='textarea-wrapper'>
             <div class='wmd-button-bar' id='wmd-button-bar'></div>

@@ -1,0 +1,43 @@
+{{#unless complete}}
+  <div class="modal-body">
+    <div>
+      <form>
+      <table>
+      <tr >
+          <td style="" class="label"><label for='new-account-name'>
+          Currently, only events that have already been created on facebook can be added.
+          <br>
+          To add a gig, please enter the url to the event on facebook:
+          </label></td>
+      </tr>
+      <tr class="input">
+          <td style="">
+          {{text-field value=facebookUrl id="facebook-event-url" autofocus="autofocus"}}
+          &nbsp;{{input-tip validation=urlValidation}}
+          </td>
+      </tr>
+      <tr class="instructions">
+        <td><label>Full url of facebook event</label></td>
+      </tr>
+
+
+
+
+
+      </table>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-footer">
+
+    <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled"}} {{action createGig}}>
+    Add
+      </button>
+    {{#if formSubmitted}}
+      &nbsp; <i class='fa fa-spinner fa-spin'></i>
+    {{else}}
+      &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
+    {{/if}}
+  </div>
+{{/unless}}
