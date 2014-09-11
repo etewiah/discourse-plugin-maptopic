@@ -2,37 +2,17 @@
 // didn't even have to add it to plugin.rb file...
 export
 default {
-  name: "maptopic-settings",
+    name: "maptopic-settings",
 
-  initialize: function() {
-    Discourse.SiteSettings.maptopic = {
-      api_url_base: '/gapi',
-      // 'http://gigsounder.com/gapi',
-      // '/gapi',
-      defaultCity: 'birmingham',
-      defaultTimeRange: 'this_week',
-      citySelectionItems: [{
-        displayString: 'Berlin',
-        value: 'berlin'
-      }, {
-        displayString: 'Birmingham',
-        value: 'birmingham'
-      }, {
-        displayString: 'London',
-        value: 'london'
-      }, {
-        displayString: 'Madrid',
-        value: 'madrid'
-      }],
-      timerangeSelectionItems: [{
-        displayString: 'this week',
-        value: 'this_week'
-      }, {
-        displayString: 'next week',
-        value: 'next_week'
-      }]
+    initialize: function() {
+        Discourse.SiteSettings.maptopic = {
+            defaultCity: {
+                city_name: "madrid",
+                longitude: "-3.7037902",
+                latitude: "40.4167754",
+                country: "Spain",
+            }
 
-
-    };
-  }
+        };
+    }
 };
