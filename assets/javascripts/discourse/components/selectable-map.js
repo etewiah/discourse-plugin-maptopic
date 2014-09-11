@@ -88,9 +88,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
             'latLng': latlng
         }, function(results, status) {
             if (status == google.maps.GeocoderStatus.OK) {
-
-                // debugger;
-
                 if (results[0]) {
                     // that.map.setZoom(11);
                     if (that.marker) {
@@ -106,6 +103,9 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
                     });
                     that.infowindow.setContent(results[0].formatted_address);
                     that.infowindow.open(that.map, that.marker);
+
+                    that.sendAction('action', latlng, results[0]);
+
                 } else {
                     alert("No results found");
                 }

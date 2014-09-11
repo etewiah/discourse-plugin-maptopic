@@ -2,7 +2,7 @@
   <div class="modal-body">
     <div>
             <div>
-              {{ selectable-map action="mapClicked" }}
+              {{ selectable-map action="locationSelected" }}
             </div>
 
       <form>
@@ -19,9 +19,12 @@
           </td>
       </tr>
       <tr class="instructions">
-        <td><label>Full url of facebook event</label></td>
+        <td><label>Full url of facebook event....</label></td>
       </tr>
 
+      <tr class="instructions">
+        <td><label>{{ locationObject.formattedAddress }}</label></td>
+      </tr>
 
 
 
@@ -33,7 +36,7 @@
 
   <div class="modal-footer">
 
-    <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled"}} {{action createGig}}>
+    <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled"}} {{action addLocationToTopic}}>
     Add
       </button>
     {{#if formSubmitted}}
