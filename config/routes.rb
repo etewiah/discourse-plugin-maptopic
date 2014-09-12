@@ -1,7 +1,7 @@
 MapTopic::Engine.routes.draw do
 
-  get "/map_topics" => "map_topics#index"
-  get "/map_topics/set_location" => "map_topics#set_location"
+  get "/location_topics" => "location_topics#index"
+  get "/location_topics/set_location" => "location_topics#set_location"
 
 end
 

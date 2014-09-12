@@ -1,5 +1,5 @@
 module MapTopic
-  class MapTopicsController < ApplicationController
+  class LocationTopicsController < ApplicationController
     include CurrentUser
 
     before_action :check_user, only: [:set_location]
