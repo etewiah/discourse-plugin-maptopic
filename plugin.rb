@@ -17,6 +17,12 @@ register_asset "javascripts/discourse_extensions/application_route.js"
 register_asset "javascripts/select_location_modal_controller.js"
 register_asset "javascripts/select_location_modal_view.js"
 
+register_asset "javascripts/map_controllers.js"
+register_asset "javascripts/map_views.js"
+register_asset "javascripts/map_routes.js"
+register_asset "javascripts/discourse/templates/map.js.handlebars"
+
+
 register_asset "stylesheets/desktop/maptopic.scss", :desktop
 
 # And mount the engine
