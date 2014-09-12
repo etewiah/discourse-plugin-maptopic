@@ -52,25 +52,28 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
     return { val: 'recent' };
   },
   setupController: function(controller, model) {
-    this.controllerFor('discovery/topics').setProperties({
-      "model": model
-      //  "tagname": this.get("tag")
-    });
+    debugger;
+    controller.set('content',model);
+    // this.controllerFor('discovery/topics').setProperties({
+    //   "model": model
+    //   //  "tagname": this.get("tag")
+    // });
   },
-  renderTemplate: function() {
-    var controller = this.controllerFor('discovery/topics');
-    // this.render('tag_topic_list_head', { controller: controller, outlet: 'navigation-bar' });
-    // this.render('discovery/topics', { controller: controller, outlet: 'list-container'});
-// about the only change I make to either of these 2 templates is to remove the footer
-    var topicsTemplate = "conversations/gig_topics";
-    if(Discourse.Mobile.mobileView){
-      topicsTemplate = "conversations/gig_topics_mobile";
-    }
-    this.render(topicsTemplate, {
-      controller: controller,
-      outlet: 'list-container'
-    });
-  }
+//   renderTemplate: function() {
+//     var controller = this.controllerFor('discovery/topics');
+//     // this.render('tag_topic_list_head', { controller: controller, outlet: 'navigation-bar' });
+//     // this.render('discovery/topics', { controller: controller, outlet: 'list-container'});
+// // about the only change I make to either of these 2 templates is to remove the footer
+//     var topicsTemplate = "conversations/gig_topics";
+//     if(Discourse.Mobile.mobileView){
+//       topicsTemplate = "conversations/gig_topics_mobile";
+//     }
+//     this.render(topicsTemplate, {
+//       controller: controller,
+//       outlet: 'list-container'
+//     });
+//   }
+
 });
 
 

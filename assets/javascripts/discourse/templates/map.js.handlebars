@@ -13,6 +13,15 @@
 
   <div class='container'>
     {{custom-html "top"}} {{Discourse.globalNotice}} {{discourse-banner user=currentUser banner=Discourse.banner}}
+
+    <div class="row">
+      <div class="full-width">
+        <div id='header-list-area'>
+          outlet for map is here:
+          {{ outlet }}
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class='list-controls'>
@@ -24,30 +33,6 @@
   <div {{bind-attr class="loadingSpinner::hidden" }}>
     <div class='spinner'>{{i18n loading}}</div>
   </div>
-
-
-  <div {{bind-attr class=":container :list-container loadingSpinner:hidden" }}>
-    <div class="row">
-      <div class="full-width">
-        <div id='header-list-area'>
-          {{outlet header-list-container}}
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="full-width">
-        <div id='list-area'>
-          {{outlet list-container}}
-        </div>
-      </div>
-    </div>
-  </div>
-
-
-
-
-
 
 
 
