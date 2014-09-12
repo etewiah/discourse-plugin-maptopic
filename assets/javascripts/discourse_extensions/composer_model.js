@@ -11,7 +11,7 @@ Discourse.Composer.reopen({
     var dfr = this._super(opts);
     if (locationObject) {
       dfr.then(function(post_result) {
-        var map_topic = Discourse.ajax('/map_topic/set_location', {
+        var map_topic = Discourse.ajax('/map_topics/set_location', {
           data: {
             location: locationObject,
             topic_id: post_result.post.topic_id
