@@ -22,16 +22,3 @@ require("discourse/controllers/composer")["default"].reopen({
     }
   }
 });
-
-require("discourse/routes/application")["default"].reopen({
-  actions: {
-    showLocationSelectorModal: function(model) {
-      // this.set('controllers.modal.modalClass', 'edit-category-modal full');
-      // this.set('controllers.modal.title', "Select Loc");
-
-      // this.send('showModal');
-      Discourse.Route.showModal(this, 'selectLocationModal', model);
-      // this.controllerFor('editCategory').set('selectedTab', 'general');
-    }
-  }
-});
