@@ -1,39 +1,47 @@
 Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
-    uniqueUsernameValidation: null,
+  // uniqueUsernameValidation: null,
 
-    // resetForm: function() {
-    //     this.setProperties({
-    //         facebookUrl: '',
-    //     });
-    // },
+  // resetForm: function() {
+  //     this.setProperties({
+  //         facebookUrl: '',
+  //     });
+  // },
 
-    // submitDisabled: function() {
-    //     return false;
-    // }.property('passwordRequired', 'urlValidation.failed', 'formSubmitted'),
-
-
-
-    actions: {
-        locationSelected: function(latlng, geocodedLocation) {
-            var locationObject = {
-                formattedAddress: geocodedLocation.formatted_address,
-                latitude: latlng.lat(),
-                longitude: latlng.lng()
-            }
-            this.set('locationObject', locationObject);
-        },
-        addLocationToTopic: function() {
-            if (this.get('locationObject')) {
-                debugger;
-                this.set('model.locationObject', this.get('locationObject'));
-
-            };
-            // var self = this;
-            // debugger;
-            this.send('closeModal');
-            // this.set('formSubmitted', true);
-
-
-        }
+  readyToSelect: function() {
+    if(this.get('locationObject.title')){
+      return true;
     }
+    else{
+      return false;
+    }
+  }.property( 'locationObject.title'),
+
+
+
+  actions: {
+    locationSelected: function(latlng, geocodedLocation) {
+      var locationObject = {
+        formattedAddress: geocodedLocation.formatted_address,
+        latitude: latlng.lat(),
+        longitude: latlng.lng()
+      }
+      this.set('locationObject', locationObject);
+    },
+    addLocationToTopic: function() {
+      if(Ember.isEmpty(this.get('locationObject.title'))){
+        return;
+      };
+      if (this.get('locationObject')) {
+        debugger;
+        this.set('model.locationObject', this.get('locationObject'));
+
+      };
+      // var self = this;
+      // debugger;
+      this.send('closeModal');
+      // this.set('formSubmitted', true);
+
+
+    }
+  }
 });

@@ -1,28 +1,37 @@
 // Discourse.Composer.reopen({
 require("discourse/controllers/composer")["default"].reopen({
-    actions: {
-        showLocationSelector: function() {
-          this.send('showLocationSelectorModal', this.get('model'));
+  setLocationPrompt: function() {
+    if (this.get('model.locationObject')) {
+      return " - Change location";
+    } else {
+      return " - Associate with a location";
+    };
+  }.property('model.locationObject'),
+  locationTitle: function() {
+    if (this.get('model.locationObject')) {
+      debugger;
+      return "This topic is associated with ' " + this.get('model.locationObject.title') + " '";
+    } else {
+      return "This topic is not associated with a location.";
+    };
+  }.property('model.locationObject.title'),
+  actions: {
+    showLocationSelector: function() {
+      this.send('showLocationSelectorModal', this.get('model'));
 
-        }
     }
+  }
 });
 
 require("discourse/routes/application")["default"].reopen({
-    actions: {
-        showLocationSelectorModal: function(model) {
-            // this.set('controllers.modal.modalClass', 'edit-category-modal full');
-            // this.set('controllers.modal.title', "Select Loc");
+  actions: {
+    showLocationSelectorModal: function(model) {
+      // this.set('controllers.modal.modalClass', 'edit-category-modal full');
+      // this.set('controllers.modal.title', "Select Loc");
 
-            // this.send('showModal');
-            Discourse.Route.showModal(this, 'selectLocationModal', model);
-            //  Discourse.Route.showModal(this, 'editCategory', Discourse.Category.create({
-            //   color: 'AB9364', text_color: 'FFFFFF', group_permissions: [{group_name: 'everyone', permission_type: 1}],
-            //   available_groups: Discourse.Site.current().group_names,
-            //   allow_badges: true
-            // }));
-            // this.controllerFor('editCategory').set('selectedTab', 'general');
-
-        }
+      // this.send('showModal');
+      Discourse.Route.showModal(this, 'selectLocationModal', model);
+      // this.controllerFor('editCategory').set('selectedTab', 'general');
     }
+  }
 });

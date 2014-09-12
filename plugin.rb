@@ -10,3 +10,5 @@ register_asset "javascripts/discourse/components/selectable-map.js"
 register_asset "javascripts/discourse_overrides/composer.js"
 register_asset "javascripts/select_location_modal_controller.js"
 register_asset "javascripts/select_location_modal_view.js"
+
+register_asset "stylesheets/desktop/maptopic.scss", :desktop

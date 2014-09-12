@@ -1,48 +1,45 @@
 {{#unless complete}}
-  <div class="modal-body">
+<div class="modal-body">
+  <div>
     <div>
-            <div>
-              {{ selectable-map action="locationSelected" }}
-            </div>
-
-      <form>
-      <table>
-      <tr >
-          <td style="" class="label"><label for='new-account-name'>
-          Hello..
-          </label></td>
-      </tr>
-      <tr class="input">
-          <td style="">
-          {{text-field value=facebookUrl id="facebook-event-url" autofocus="autofocus"}}
-          &nbsp;{{input-tip validation=urlValidation}}
-          </td>
-      </tr>
-      <tr class="instructions">
-        <td><label>Full url of facebook event....</label></td>
-      </tr>
-
-      <tr class="instructions">
-        <td><label>{{ locationObject.formattedAddress }}</label></td>
-      </tr>
-
-
-
-
-      </table>
-      </form>
+      {{ selectable-map action="locationSelected" }}
     </div>
   </div>
+</div>
 
-  <div class="modal-footer">
+<div class="modal-footer">
+  {{#if locationObject }}
+  <form>
+    <table>
+      <tr>
+        <td style="" class="label">
+          <label for='location-title'>
+            What is the name for this location?
+          </label>
+        </td>
+      </tr>
+      <tr class="input">
+        <td style="">
+          {{text-field value=locationObject.title id="location-title" autofocus="autofocus"}}
+        </td>
+      </tr>
 
-    <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled"}} {{action addLocationToTopic}}>
-    Add
-      </button>
-    {{#if formSubmitted}}
-      &nbsp; <i class='fa fa-spinner fa-spin'></i>
-    {{else}}
-      &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
-    {{/if}}
-  </div>
+      <tr class="instructions">
+        <td>
+          <label>{{ locationObject.formattedAddress }}</label>
+        </td>
+      </tr>
+    </table>
+  </form>
+  {{/if}}
+
+  {{#if readyToSelect}}
+  <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addLocationToTopic}}>
+    Select
+  </button>
+  {{/if}}
+  {{#if formSubmitted}} &nbsp; <i class='fa fa-spinner fa-spin'></i>
+  {{else}} &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
+  {{/if}}
+</div>
 {{/unless}}

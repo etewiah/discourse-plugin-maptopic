@@ -11,7 +11,12 @@
         {{plugin-outlet "composer-open"}}
 
         <div class='reply-to'>
-          {{{model.actionTitle}}}:
+          {{{model.actionTitle}}}  (
+            {{ locationTitle }}
+            <a {{action showLocationSelector}} class="composer-location-selector">
+              {{ setLocationPrompt }}
+              </a>)  :
+
           {{#if canEdit}}
             {{#if showEditReason}}
               <div class="edit-reason-input">
@@ -22,9 +27,6 @@
             {{/if}}
           {{/if}}
 
-          <button class="btn btn-primary create" {{action showLocationSelector}} title="">
-            Associate this conversation with a location....
-          </button>
 
         </div>
 
@@ -47,11 +49,6 @@
               {{text-field value=model.title tabindex="2" id="reply-title" maxLength=maxTitleLength placeholderKey="composer.title_placeholder"}}
               {{popupInputTip validation=view.titleValidation shownAt=view.showTitleTip}}
             </div>
-
-
-<button class="btn btn-primary create" {{action showLocationSelector}} title="">
-  Associate this conversation with a location....
-</button>
 
 
             {{#unless model.privateMessage}}
