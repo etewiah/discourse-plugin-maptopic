@@ -1,10 +1,5 @@
 Discourse.Composer.reopen({
 
-  // only creation of new topic and editing of first post are valid for us
-  // can_be_tagged: function(){
-  //   return this.get("creatingTopic") || (this.get("editingPost") && this.get("editingFirstPost"));
-  // }.property("creatingTopic", "editingPost", "editingFirstPost"),
-
   createPost: function(opts) {
     var locationObject = this.get('locationObject');
     debugger;
@@ -14,6 +9,9 @@ Discourse.Composer.reopen({
         var map_topic = Discourse.ajax('/map_topics/set_location', {
           data: {
             location: locationObject,
+            longitude: locationObject.longitude,
+            latitude: locationObject.latitude,
+
             topic_id: post_result.post.topic_id
           }
         });

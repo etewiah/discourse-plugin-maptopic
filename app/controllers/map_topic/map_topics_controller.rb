@@ -23,21 +23,26 @@ module MapTopic
 
 
       # TODO - find location which is close enough to be considered the same..
-      location = MapTopic::Location.where(:longitude => params[:longitude], :latitude => params[:latitude]).first_or_create do |loc|
-        loc.title = params[:location_title] || ""
-      end
+      location = MapTopic::Location.where(:longitude => params[:longitude], :latitude => params[:latitude]).first_or_create
+      location.title = params[:location][:title] || ""
+      location.address = params[:location][:formattedAddress] || ""
+
+      # below will not update if already exists:
+      # do |loc|
+      #   loc.title = params[:location_title] || "ll"
+      # end
       location.save!
 
 
-      location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_create do |loc_topic|
-        loc_topic.location_title = location.title
-        loc_topic.longitude = location.longitude
-        loc_topic.latitude = location.latitude
+      location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_create
+      location_topic.location_title = location.title
+      location_topic.longitude = location.longitude
+      location_topic.latitude = location.latitude
+      location_topic.location_id = location.id
 
-      end
       location_topic.save!
 
-      return render json: location_topic.to_json
+      return render json: location.to_json
 
       # render json: @topic
     end

@@ -1,11 +1,4 @@
 Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
-  // uniqueUsernameValidation: null,
-
-  // resetForm: function() {
-  //     this.setProperties({
-  //         facebookUrl: '',
-  //     });
-  // },
 
   readyToSelect: function() {
     if(this.get('locationObject.title')){
@@ -32,15 +25,12 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
         return;
       };
       if (this.get('locationObject')) {
-        debugger;
         this.set('model.locationObject', this.get('locationObject'));
 
       };
       // var self = this;
       // debugger;
       this.send('closeModal');
-      // this.set('formSubmitted', true);
-
 
     }
   }
