@@ -6,7 +6,23 @@ module MapTopic
 
     # GET /tags
     def index
-      render json: { status: 'ok'}
+      #       if params[:filter_key] && params[:filter_value]
+      #   if params[:filter_key] == 'city'
+      #     @gig_topic_ids = ::MapTopic::GigTopic.where("gig_city = ?", params[:filter_value]).limit(50).pluck('topic_id')
+      #   else
+      #     return render json: false
+      #   end
+      # else
+      #   @gig_topic_ids = MapTopic::GigTopic.limit(50).pluck('topic_id')
+      # end
+
+      @gig_topic_ids = MapTopic::LocationTopic.limit(50).pluck('topic_id')
+
+      list = TopicList.new(:tag, current_user, gig_topics_query)
+      render_serialized(list, MapTopic::LocationTopicListSerializer,  root: 'topic_list')
+
+      # render list
+      # json: { status: 'ok'}
     end
 
     def set_location
@@ -48,7 +64,15 @@ module MapTopic
     end
 
     private
-    # Use callbacks to share common setup or constraints between actions.
+
+
+    def gig_topics_query(options={})
+      Topic.where("deleted_at" => nil)
+      .where("visible")
+      .where("archetype <> ?", Archetype.private_message)
+      .where(id: @gig_topic_ids)
+    end
+
     def check_user
       if current_user.nil?
         render status: :forbidden, json: false
