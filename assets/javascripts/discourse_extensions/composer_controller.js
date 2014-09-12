@@ -9,7 +9,6 @@ require("discourse/controllers/composer")["default"].reopen({
   }.property('model.locationObject'),
   locationTitle: function() {
     if (this.get('model.locationObject')) {
-      debugger;
       return "This topic is associated with ' " + this.get('model.locationObject.title') + " '";
     } else {
       return "This topic is not associated with a location.";

@@ -17,7 +17,8 @@ Discourse.Composer.reopen({
             topic_id: post_result.post.topic_id
           }
         });
-        map_topic.then(function() {
+        map_topic.then(function(set_location_result) {
+          debugger;
           return post_result;
         });
         return map_topic;
