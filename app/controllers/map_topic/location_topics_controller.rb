@@ -4,8 +4,13 @@ module MapTopic
 
     before_action :check_user, only: [:set_location]
 
-    # GET /tags
-    def index
+    # end point for routes that are only implemented client side
+    # TODO - render useful serverside content for search engine etc..
+    def landing
+      render json: { status: 'ok'}
+    end
+
+    def get_for_city
       #       if params[:filter_key] && params[:filter_value]
       #   if params[:filter_key] == 'city'
       #     @gig_topic_ids = ::MapTopic::GigTopic.where("gig_city = ?", params[:filter_value]).limit(50).pluck('topic_id')
@@ -26,10 +31,13 @@ module MapTopic
     end
 
     def set_location
-      unless(params[:topic_id] && params[:longitude] )
+      unless(params[:topic_id] && params[:location] )
         render_error "incorrect params"
         return
       end
+      longitude = params[:location][:longitude]
+      latitude = params[:location][:latitude]
+
 
       @topic = Topic.find(params[:topic_id])
       if current_user.guardian.ensure_can_edit!(@topic)
@@ -39,7 +47,7 @@ module MapTopic
 
 
       # TODO - find location which is close enough to be considered the same..
-      location = MapTopic::Location.where(:longitude => params[:longitude], :latitude => params[:latitude]).first_or_create
+      location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_create
       location.title = params[:location][:title] || ""
       location.address = params[:location][:formattedAddress] || ""
 

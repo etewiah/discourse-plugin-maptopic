@@ -12,7 +12,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   }.observes('markers'),
 
   didInsertElement: function() {
-    debugger;
     this._super();
     this.displayMapIfNeeded();
     // zoom = 8;

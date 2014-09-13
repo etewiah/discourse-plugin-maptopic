@@ -35,7 +35,9 @@ Discourse.MapRootRoute = Discourse.Route.extend({
     // appController.set('activeSubnav', 'gigs');
   },
   beforeModel: function(transition) {
-    var convModel = Discourse.TopicList.findWhereLocationPresent("location_topics", {});
+    // TODO - figure out default city bases 
+    var defaultCity = "madrid";
+    var convModel = Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + defaultCity, {});
     this.transitionTo('map.fromOneParam', convModel);
   }
 
@@ -44,8 +46,9 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
 
   model: function(params) {
+    debugger;
     // TODO make use of params to return either venue conversations or gig conversations
-    return Discourse.TopicList.findWhereLocationPresent("location_topics/" + params.tag, {});
+    return Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.city, {});
     // return Discourse.TopicList.findWhereLocationPresent("h/visitor_topics/" + params.tag, {});
   },
   serialize: function(model) {
@@ -68,7 +71,7 @@ Discourse.Route.buildRoutes(function() {
     });
     // :val can be gigs, artists (performers??) or venues
     this.route('fromOneParam', {
-      path: '/:val'
+      path: '/:city'
     });
 
   });

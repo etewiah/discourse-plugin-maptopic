@@ -1,15 +1,14 @@
 MapTopic::Engine.routes.draw do
 
-  get "/location_topics" => "location_topics#index"
+  # get "/location_topics" => "location_topics#index"
   get "/location_topics/set_location" => "location_topics#set_location"
-
-  # TODO - use a decent route:
-  get "/location_topics/*path" => "location_topics#index"
+  get "/location_topics/get_for_city/:city" => "location_topics#get_for_city"
 
 
-    get "/map" => "location_topics#index"
-    get "/map/*path" => "location_topics#index"
+  # end point for routes that are only implemented client side
+  # TODO - render useful serverside content for search engine etc..
+  get "/map" => "location_topics#landing"
+  get "/map/*path" => "location_topics#landing"
 
 
 end
-
