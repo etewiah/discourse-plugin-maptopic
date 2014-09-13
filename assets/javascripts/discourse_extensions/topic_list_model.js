@@ -9,7 +9,8 @@ Discourse.TopicList.reopenClass({
       var location_topic = location_topics.findBy('topic_id', t.id);
       // t.gig_id = location_topic.gig_id;
       if (location_topic) {
-        t.excerpt = location_topic.location_title;
+        // t.excerpt = location_topic.location_title;
+        t.location_title = location_topic.location_title;
         t.latitude = location_topic.latitude;
         t.longitude = location_topic.longitude;
       }

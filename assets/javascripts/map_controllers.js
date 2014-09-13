@@ -1,10 +1,7 @@
-Discourse.MapControllerMixin = Em.Mixin.create({
-
-  needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
-
+// Discourse.MapControllerMixin = Em.Mixin.create({
+Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   markers: function() {
     var topics = this.get('content.topics');
-    debugger;
     var currentMarkerValues = [];
     topics.forEach(function(t) {
       var latLngValue = {
@@ -13,33 +10,21 @@ Discourse.MapControllerMixin = Em.Mixin.create({
         // title: show_time.title,
         // start_time_string: t.get('start_time_string'),
         title: t.get('title'),
-        venueAddress: t.get('excerpt'),
-        venueName: t.get('venue_name')
+        // venueAddress: t.get('excerpt'),
+        venueName: t.get('location_title')
 
       };
       currentMarkerValues.push(latLngValue);
       // p.user = users[p.user_id];
     });
-    // var longitude = -0.1;
-    // // this.get('longitude');
-    // var latitude = 5.9;
-    // // this.get('latitude');
 
-    // if (latitude && latitude != "unknown") {
-    //   var latLngValue = {
-    //     latitude: latitude,
-    //     longitude: longitude,
-    //     // title: show_time.title,
-    //     start_time_string: this.get('start_time_string'),
-    //     title: this.get('title'),
-    //     venueAddress: this.get('venue_address'),
-    //     venueName: this.get('venue_name')
-
-    //   };
-    //   currentMarkerValues.push(latLngValue);
-    // }
     return currentMarkerValues;
-  }.property(),
+  }.property()
+});
+
+Discourse.MapController = Discourse.ObjectController.extend({
+  // need to add composer to be able to start a conversation from here.
+  needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
 
   actions: {
     startConversation: function() {
@@ -68,5 +53,5 @@ Discourse.MapControllerMixin = Em.Mixin.create({
 
 });
 
-Discourse.MapFromOneParamController = Discourse.ObjectController.extend(Discourse.MapControllerMixin, {});
-Discourse.MapRootController = Discourse.ObjectController.extend(Discourse.MapControllerMixin, {});
+// Discourse.MapFromOneParamController = Discourse.ObjectController.extend(Discourse.MapControllerMixin, {});
+// Discourse.MapRootController = Discourse.ObjectController.extend(Discourse.MapControllerMixin, {});
