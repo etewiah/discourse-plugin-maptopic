@@ -17,14 +17,14 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       currentMarkerValues.push(latLngValue);
       // p.user = users[p.user_id];
     });
-
     return currentMarkerValues;
   }.property()
 });
 
 Discourse.MapController = Discourse.ObjectController.extend({
   // need to add composer to be able to start a conversation from here.
-  needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
+  // needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
+  needs: ['composer'],
 
   actions: {
     startConversation: function() {
