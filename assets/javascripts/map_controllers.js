@@ -1,31 +1,43 @@
-
-
 Discourse.MapControllerMixin = Em.Mixin.create({
 
   needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
 
   markers: function() {
     var topics = this.get('content.topics');
-    // debugger;
+    debugger;
     var currentMarkerValues = [];
-    var longitude = -0.1;
-    // this.get('longitude');
-    var latitude = 5.9;
-    // this.get('latitude');
-
-    if (latitude && latitude != "unknown") {
+    topics.forEach(function(t) {
       var latLngValue = {
-        latitude: latitude,
-        longitude: longitude,
+        latitude: t.get('latitude'),
+        longitude: t.get('longitude'),
         // title: show_time.title,
-        start_time_string: this.get('start_time_string'),
-        title: this.get('title'),
-        venueAddress: this.get('venue_address'),
-        venueName: this.get('venue_name')
+        // start_time_string: t.get('start_time_string'),
+        title: t.get('title'),
+        venueAddress: t.get('excerpt'),
+        venueName: t.get('venue_name')
 
       };
       currentMarkerValues.push(latLngValue);
-    }
+      // p.user = users[p.user_id];
+    });
+    // var longitude = -0.1;
+    // // this.get('longitude');
+    // var latitude = 5.9;
+    // // this.get('latitude');
+
+    // if (latitude && latitude != "unknown") {
+    //   var latLngValue = {
+    //     latitude: latitude,
+    //     longitude: longitude,
+    //     // title: show_time.title,
+    //     start_time_string: this.get('start_time_string'),
+    //     title: this.get('title'),
+    //     venueAddress: this.get('venue_address'),
+    //     venueName: this.get('venue_name')
+
+    //   };
+    //   currentMarkerValues.push(latLngValue);
+    // }
     return currentMarkerValues;
   }.property(),
 
@@ -41,7 +53,9 @@ Discourse.MapControllerMixin = Em.Mixin.create({
         }).then(function() {
           // composerController.appendText('slightly longer ...New event weee');
           // as this is about no gig in particular...:
-          composerController.content.set('gig',{ id: 0});
+          composerController.content.set('gig', {
+            id: 0
+          });
           // debugger;
         });
       } else {
@@ -54,7 +68,5 @@ Discourse.MapControllerMixin = Em.Mixin.create({
 
 });
 
-Discourse.MapFromOneParamController = Discourse.ObjectController.extend(Discourse.MapControllerMixin,{
-});
-Discourse.MapRootController = Discourse.ObjectController.extend(Discourse.MapControllerMixin,{
-});
+Discourse.MapFromOneParamController = Discourse.ObjectController.extend(Discourse.MapControllerMixin, {});
+Discourse.MapRootController = Discourse.ObjectController.extend(Discourse.MapControllerMixin, {});

@@ -35,7 +35,7 @@ Discourse.MapRootRoute = Discourse.Route.extend({
     // appController.set('activeSubnav', 'gigs');
   },
   beforeModel: function(transition) {
-    var convModel = Discourse.TopicList.findWhereGigList("h/gig_topics", {});
+    var convModel = Discourse.TopicList.findWhereLocationPresent("location_topics", {});
     this.transitionTo('map.fromOneParam', convModel);
   }
 
@@ -45,34 +45,15 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
 
   model: function(params) {
     // TODO make use of params to return either venue conversations or gig conversations
-    return Discourse.TopicList.findWhereGigList("h/gig_topics/" + params.tag, {});
-    // return Discourse.TopicList.findWhereGigList("h/visitor_topics/" + params.tag, {});
+    return Discourse.TopicList.findWhereLocationPresent("location_topics/" + params.tag, {});
+    // return Discourse.TopicList.findWhereLocationPresent("h/visitor_topics/" + params.tag, {});
   },
   serialize: function(model) {
     return { val: 'recent' };
   },
   setupController: function(controller, model) {
-    debugger;
     controller.set('content',model);
-    // this.controllerFor('discovery/topics').setProperties({
-    //   "model": model
-    //   //  "tagname": this.get("tag")
-    // });
-  },
-//   renderTemplate: function() {
-//     var controller = this.controllerFor('discovery/topics');
-//     // this.render('tag_topic_list_head', { controller: controller, outlet: 'navigation-bar' });
-//     // this.render('discovery/topics', { controller: controller, outlet: 'list-container'});
-// // about the only change I make to either of these 2 templates is to remove the footer
-//     var topicsTemplate = "conversations/gig_topics";
-//     if(Discourse.Mobile.mobileView){
-//       topicsTemplate = "conversations/gig_topics_mobile";
-//     }
-//     this.render(topicsTemplate, {
-//       controller: controller,
-//       outlet: 'list-container'
-//     });
-//   }
+  }
 
 });
 

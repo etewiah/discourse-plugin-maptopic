@@ -13,6 +13,7 @@ register_asset "javascripts/discourse/templates/components/selectable-map.js.han
 register_asset "javascripts/discourse/components/selectable-map.js"
 register_asset "javascripts/discourse_extensions/composer_controller.js"
 register_asset "javascripts/discourse_extensions/composer_model.js"
+register_asset "javascripts/discourse_extensions/topic_list_model.js"
 register_asset "javascripts/discourse_extensions/application_route.js"
 register_asset "javascripts/select_location_modal_controller.js"
 register_asset "javascripts/select_location_modal_view.js"
