@@ -1,4 +1,5 @@
 Discourse.MapMixin = Em.Mixin.create({
+    
   activate: function(transition) {
     this._super()
     // ensure conversations nav is not shown in app handlebars
@@ -46,7 +47,6 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
 
   model: function(params) {
-    debugger;
     // TODO make use of params to return either venue conversations or gig conversations
     return Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.city, {});
     // return Discourse.TopicList.findWhereLocationPresent("h/visitor_topics/" + params.tag, {});

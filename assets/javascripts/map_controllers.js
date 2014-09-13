@@ -1,10 +1,25 @@
 // Discourse.MapControllerMixin = Em.Mixin.create({
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
+  actions: {
+    topicSelected: function(topic) {
+      debugger;
+      // this.transitionToRoute('topic.fromParams', topic);
+
+      this.transitionToRoute('topic.fromParams', Discourse.Topic.create({
+        id: topic.id
+      }));
+
+      //   topic.get('postStream').refresh().then(function() {
+      //   return topic;
+      // }));
+    }
+  },
   markers: function() {
     var topics = this.get('content.topics');
     var currentMarkerValues = [];
     topics.forEach(function(t) {
-      var latLngValue = {
+      var markerInfo = {
+        topic: t,
         latitude: t.get('latitude'),
         longitude: t.get('longitude'),
         // title: show_time.title,
@@ -14,7 +29,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         venueName: t.get('location_title')
 
       };
-      currentMarkerValues.push(latLngValue);
+      currentMarkerValues.push(markerInfo);
       // p.user = users[p.user_id];
     });
     return currentMarkerValues;
@@ -28,7 +43,6 @@ Discourse.MapController = Discourse.ObjectController.extend({
 
   actions: {
     startConversation: function() {
-      debugger;
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
         var self = this;
@@ -38,9 +52,9 @@ Discourse.MapController = Discourse.ObjectController.extend({
         }).then(function() {
           // composerController.appendText('slightly longer ...New event weee');
           // as this is about no gig in particular...:
-          composerController.content.set('gig', {
-            id: 0
-          });
+          // composerController.content.set('gig', {
+          //   id: 0
+          // });
           // debugger;
         });
       } else {
