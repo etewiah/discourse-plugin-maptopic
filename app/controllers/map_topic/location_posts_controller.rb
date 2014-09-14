@@ -1,37 +1,12 @@
 module MapTopic
-  class LocationTopicsController < ApplicationController
+  class LocationPostsController < ApplicationController
     include CurrentUser
 
     before_action :check_user, only: [:set_location]
 
-    # end point for routes that are only implemented client side
-    # TODO - render useful serverside content for search engine etc..
-    def landing
-      render json: { status: 'ok'}
-    end
-
-    def get_for_city
-      #       if params[:filter_key] && params[:filter_value]
-      #   if params[:filter_key] == 'city'
-      #     @location_topic_ids = ::MapTopic::GigTopic.where("gig_city = ?", params[:filter_value]).limit(50).pluck('topic_id')
-      #   else
-      #     return render json: false
-      #   end
-      # else
-      #   @location_topic_ids = MapTopic::GigTopic.limit(50).pluck('topic_id')
-      # end
-
-      @location_topic_ids = MapTopic::LocationTopic.limit(50).pluck('topic_id')
-
-      list = TopicList.new(:tag, current_user, location_topics_query)
-      render_serialized(list, MapTopic::LocationTopicListSerializer,  root: 'topic_list')
-
-      # render list
-      # json: { status: 'ok'}
-    end
 
     def set_location
-      unless(params[:topic_id] && params[:location] )
+      unless(params[:post_id] && params[:location] )
         render_error "incorrect params"
         return
       end
@@ -39,7 +14,7 @@ module MapTopic
       latitude = params[:location][:latitude]
 
 
-      @topic = Topic.find(params[:topic_id])
+      @topic = Topic.find(params[:post_id])
       if current_user.guardian.ensure_can_edit!(@topic)
         render status: :forbidden, json: false
         return
@@ -58,7 +33,7 @@ module MapTopic
       location.save!
 
 
-      location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_create
+      location_topic = MapTopic::LocationTopic.where(:post_id => @topic.id).first_or_create
       location_topic.location_title = location.title
       location_topic.longitude = location.longitude
       location_topic.latitude = location.latitude
@@ -72,14 +47,6 @@ module MapTopic
     end
 
     private
-
-
-    def location_topics_query(options={})
-      Topic.where("deleted_at" => nil)
-      .where("visible")
-      .where("archetype <> ?", Archetype.private_message)
-      .where(id: @location_topic_ids)
-    end
 
     def check_user
       if current_user.nil?

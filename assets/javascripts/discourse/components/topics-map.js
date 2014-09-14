@@ -17,6 +17,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   displayMapIfNeeded: function() {
+    debugger;
     var currentMarkerValues = this.get('markers');
     var markersFound = currentMarkerValues && currentMarkerValues.length > 0;
     // if (markersFound && !_mobile_device_) {
@@ -72,6 +73,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     var that = this;
 
     $.each(currentMarkerValues, function(index, value) {
+      debugger;
       var myLatlng = new google.maps.LatLng(value.latitude, value.longitude);
       // (52.519171, 13.4060912);
       // latlngbounds.extend(latLng);

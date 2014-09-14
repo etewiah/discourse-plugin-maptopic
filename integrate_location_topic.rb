@@ -2,7 +2,7 @@
 # I lose this (ability to say Topic.last.location_topic for example ) when I
 # call reload! from the console...
 # - also, reloading the console can cause the dev rails server to no longer recognise this...
-
+# https://meta.discourse.org/t/plugin-system-upgrades/16120/14
 # add our tags to the topics
 module LocationTopicExtender
   def self.included(klass)
