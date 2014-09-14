@@ -33,3 +33,7 @@ register_asset "stylesheets/desktop/maptopic.scss", :desktop
 Discourse::Application.routes.append do
     mount MapTopic::Engine, at: '/'
 end
+
+after_initialize do
+  require_dependency File.expand_path('../integrate_location_topic.rb', __FILE__)
+end

@@ -2,16 +2,12 @@
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   actions: {
     topicSelected: function(topic) {
-      debugger;
       // this.transitionToRoute('topic.fromParams', topic);
-
+      // above doesn't work
+      // https://meta.discourse.org/t/why-does-discourse-use-a-bunch-of-tags-with-unbound-in-the-basic-topic-list-template/10541/4
       this.transitionToRoute('topic.fromParams', Discourse.Topic.create({
         id: topic.id
       }));
-
-      //   topic.get('postStream').refresh().then(function() {
-      //   return topic;
-      // }));
     }
   },
   markers: function() {
