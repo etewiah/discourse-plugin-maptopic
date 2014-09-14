@@ -14,8 +14,8 @@ module MapTopic
       latitude = params[:location][:latitude]
 
 
-      @topic = Topic.find(params[:post_id])
-      if current_user.guardian.ensure_can_edit!(@topic)
+      @post = Post.find(params[:post_id])
+      if current_user.guardian.ensure_can_edit!(@post)
         render status: :forbidden, json: false
         return
       end
@@ -33,17 +33,17 @@ module MapTopic
       location.save!
 
 
-      location_topic = MapTopic::LocationTopic.where(:post_id => @topic.id).first_or_create
-      location_topic.location_title = location.title
-      location_topic.longitude = location.longitude
-      location_topic.latitude = location.latitude
-      location_topic.location_id = location.id
+      location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_create
+      location_post.location_title = location.title
+      location_post.longitude = location.longitude
+      location_post.latitude = location.latitude
+      location_post.location_id = location.id
 
-      location_topic.save!
+      location_post.save!
 
       return render json: location.to_json
 
-      # render json: @topic
+      # render json: @post
     end
 
     private

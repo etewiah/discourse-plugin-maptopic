@@ -9,27 +9,43 @@ Discourse.Topic.reopen({
   }.property("location"),
 
   markers: function() {
-    debugger;
     var currentMarkerValues = [];
+
+    if (this.get('postStream.posts')) {
+      var posts = this.get('postStream.posts');
+      posts.forEach(function(p) {
+        if (p.get('location')) {
+          var markerInfo = {
+            post: p,
+            location: p.get('location')
+          };
+          currentMarkerValues.push(markerInfo);
+        };
+
+      });
+    }
+
+
     if (this.get('location')) {
 
-      var longitude = this.get('location.longitude');
-      var latitude = this.get('location.latitude');
+      // var longitude = this.get('location.longitude');
+      // var latitude = this.get('location.latitude');
 
-      if (latitude && latitude != "unknown") {
+      // if (latitude && latitude != "unknown") {
         var markerInfo = {
           topic: this,
-          latitude: latitude,
-          longitude: longitude,
-          // title: show_time.title,
-          start_time_string: this.get('start_time_string'),
-          title: this.get('title'),
-          venueAddress: this.get('venue_address'),
-          venueName: this.get('venue_name')
+          location: this.get('location'),
+          // latitude: latitude,
+          // longitude: longitude,
+          // // title: show_time.title,
+          // start_time_string: this.get('start_time_string'),
+          // title: this.get('title'),
+          // venueAddress: this.get('venue_address'),
+          // venueName: this.get('venue_name')
 
         };
         currentMarkerValues.push(markerInfo);
-      }
+      // }
     }
     return currentMarkerValues;
   }.property('location')

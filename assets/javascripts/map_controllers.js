@@ -14,15 +14,17 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     var topics = this.get('content.topics');
     var currentMarkerValues = [];
     topics.forEach(function(t) {
+      debugger;
       var markerInfo = {
         topic: t,
-        latitude: t.get('latitude'),
-        longitude: t.get('longitude'),
-        // title: show_time.title,
-        // start_time_string: t.get('start_time_string'),
-        title: t.get('title'),
-        // venueAddress: t.get('excerpt'),
-        venueName: t.get('location_title')
+        location: t.get('location')
+        // latitude: t.get('latitude'),
+        // longitude: t.get('longitude'),
+        // // title: show_time.title,
+        // // start_time_string: t.get('start_time_string'),
+        // title: t.get('title'),
+        // // venueAddress: t.get('excerpt'),
+        // venueName: t.get('location_title')
 
       };
       currentMarkerValues.push(markerInfo);

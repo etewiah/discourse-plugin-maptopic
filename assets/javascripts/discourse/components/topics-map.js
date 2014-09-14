@@ -17,7 +17,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   displayMapIfNeeded: function() {
-    debugger;
     var currentMarkerValues = this.get('markers');
     var markersFound = currentMarkerValues && currentMarkerValues.length > 0;
     // if (markersFound && !_mobile_device_) {
@@ -48,7 +47,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // }
 
     var zoom = 15;
-    var icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+    var topic_icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
+    var post_icon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+
 
     var mapOptions = {
       zoom: zoom,
@@ -73,15 +74,33 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     var that = this;
 
     $.each(currentMarkerValues, function(index, value) {
+      if (value.post) {
+        var icon = post_icon;
+        var userName = value.post.name;
+        var title = value.location.title;
+        var dataObject = value.post;
+        var dataObjectType = 'post';
+      } else if (value.topic) {
+        var icon = topic_icon;
+        var userName = value.topic.get('details.created_by.username');
+        var title = value.location.title;
+        var dataObject = value.topic;
+        var dataObjectType = 'topic';
+
+      } else {
+        debugger;
+        return;
+      }
       debugger;
-      var myLatlng = new google.maps.LatLng(value.latitude, value.longitude);
+
+      var myLatlng = new google.maps.LatLng(value.location.latitude, value.location.longitude);
       // (52.519171, 13.4060912);
       // latlngbounds.extend(latLng);
       bounds.extend(myLatlng);
       var marker = new google.maps.Marker({
         position: myLatlng,
         map: map,
-        title: value.title,
+        title: title,
         icon: icon
         // address: value.title
       });
@@ -89,16 +108,18 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       var contentString = '<div id="content">' +
         '<div id="siteNotice">' +
         '</div>' +
-        '<h5 id="firstHeading" class="firstHeading">' + value.title +
+        '<h5 id="firstHeading" class="firstHeading">' + title +
         '</h5>' +
         '<div id="bodyContent">' +
-        '<p>at ' + value.venueName + '</p>' +
+        '<p>' + userName + '</p>' +
         '</div>' +
         '</div>';
 
       var infowindow = new google.maps.InfoWindow({
         content: contentString,
-        topic: value.topic
+        dataObject: dataObject,
+        dataObjectType: dataObjectType
+
       });
       google.maps.event.addListener(marker, 'mouseover', function() {
         setTimeout(function() {
@@ -110,7 +131,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       // debugger;
       google.maps.event.addListener(marker, 'click', function(event) {
         // debugger;
-        that.locationTopicSelected(event, infowindow.topic);
+        if (infowindow.dataObjectType === 'topic') {
+          debugger;
+          that.locationTopicSelected(event, infowindow.dataObject);
+        }
       });
 
     });
@@ -126,7 +150,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     }, 500);
   },
-  locationTopicSelected: function(event,  topic) {
+  locationTopicSelected: function(event, topic) {
     // debugger
     this.sendAction('action', topic);
   }
