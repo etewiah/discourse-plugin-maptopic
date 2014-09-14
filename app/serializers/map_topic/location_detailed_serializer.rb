@@ -1,5 +1,5 @@
 module MapTopic
-    class LocationTopicDetailedSerializer < ActiveModel::Serializer
+    class LocationDetailedSerializer < ActiveModel::Serializer
 
 
         attributes :id, :title, :description, :address, :city, :region, :postal_code, :country, :longitude, 

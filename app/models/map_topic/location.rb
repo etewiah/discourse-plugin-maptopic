@@ -5,6 +5,8 @@ module MapTopic
         has_many :location_topics
         # , class_name: "::Blog::GigTopic"
         has_many :topics, through: :location_topics
+        has_many :location_posts
+        has_many :posts, through: :location_posts
 
         #     t.string :title
         # t.text :description
