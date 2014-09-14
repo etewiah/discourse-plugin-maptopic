@@ -7,6 +7,7 @@
 load File.expand_path('../lib/map_topic/engine.rb', __FILE__)
 
 
+register_asset "javascripts/discourse/templates/topic.js.handlebars"
 register_asset "javascripts/discourse/templates/composer.js.handlebars"
 register_asset "javascripts/discourse/templates/modal/select_location.js.handlebars"
 register_asset "javascripts/discourse/templates/components/selectable-map.js.handlebars"
@@ -16,9 +17,11 @@ register_asset "javascripts/discourse/components/selectable-map.js"
 register_asset "javascripts/discourse_extensions/composer_controller.js"
 register_asset "javascripts/discourse_extensions/composer_model.js"
 register_asset "javascripts/discourse_extensions/topic_list_model.js"
+register_asset "javascripts/discourse_extensions/topic_model.js"
 register_asset "javascripts/discourse_extensions/application_route.js"
 register_asset "javascripts/select_location_modal_controller.js"
 register_asset "javascripts/select_location_modal_view.js"
+register_asset "javascripts/location_model.js"
 
 register_asset "javascripts/map_controllers.js"
 register_asset "javascripts/map_views.js"
