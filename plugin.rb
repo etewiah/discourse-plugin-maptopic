@@ -7,7 +7,8 @@
 load File.expand_path('../lib/map_topic/engine.rb', __FILE__)
 
 
-register_asset "javascripts/discourse/templates/topic.js.handlebars"
+# register_asset "javascripts/discourse/templates/topic.js.handlebars"
+register_asset "javascripts/discourse/templates/connectors/topic-title/map-for-topic.js.handlebars"
 register_asset "javascripts/discourse/templates/composer.js.handlebars"
 register_asset "javascripts/discourse/templates/modal/select_location.js.handlebars"
 register_asset "javascripts/discourse/templates/components/selectable-map.js.handlebars"

@@ -1,8 +1,7 @@
-
 <div class='container'>
   {{custom-html "top"}}
-  {{Discourse.globalNotice}}
-  {{discourse-banner user=currentUser banner=Discourse.banner overlay=view.hasScrolled}}
+  {{global-notice}}
+  {{discourse-banner user=currentUser banner=site.banner overlay=view.hasScrolled}}
 </div>
 
 {{#if postStream.loaded}}
@@ -18,7 +17,7 @@
 
           {{#if editingTopic}}
             {{#if isPrivateMessage}}
-              <span class="private-message-glyph">{{icon envelope}}</span>
+              <span class="private-message-glyph">{{fa-icon envelope}}</span>
             {{else}}
               {{category-chooser valueAttribute="id" value=newCategoryId source=category_id}}
             {{/if}}
@@ -28,7 +27,9 @@
             <button class='btn btn-small no-text' {{action cancelEditingTopic}}><i class='fa fa-times'></i></button>
           {{else}}
             <h1>
-              <span class="private-message-glyph"><i class='fa fa-envelope'></i></span>
+              {{#unless is_warning}}
+                <span class="private-message-glyph"><i class='fa fa-envelope'></i></span>
+              {{/unless}}
               {{#unless isPrivateMessage}}
                 {{#if category.parentCategory}}
                   {{bound-category-link category.parentCategory}}
@@ -56,22 +57,11 @@
         </div>
       </div>
     </div>
-
-
-This is from Maptopic...
-
-    {{#if model.gig}}
-      {{partial '_topic_gig' }}
-    {{/if}}
-
-    {{#if model.location}}
-      hey, there is a location
-    {{/if}}
   {{/if}}
 
   <div class="container posts">
 
-    {{view Discourse.SelectedPostsView}}
+    {{view "selected-posts"}}
 
     <div class="row">
       <section class="topic-area" id='topic' data-topic-id='{{unbound id}}'>
@@ -114,7 +104,7 @@ This is from Maptopic...
               <div id='suggested-topics'>
                 <h3>{{i18n suggested_topics.title}}</h3>
                 <div class='topics'>
-                  {{basic-topic-list topics=details.suggested_topics}}
+                  {{basic-topic-list topics=details.suggested_topics postsAction="showTopicEntrance"}}
                 </div>
                 <h3>{{{view.browseMoreMessage}}}</h3>
               </div>
@@ -157,12 +147,11 @@ This is from Maptopic...
 {{/if}}
 
 {{render "share"}}
-{{render "posterExpansion"}}
 
 {{#if currentUser.enable_quoting}}
   {{render "quote-button"}}
 {{/if}}
 
 {{#if currentUser.canManageTopic}}
-  {{render "topicAdminMenu" content}}
+  {{render "topic-admin-menu" content}}
 {{/if}}
