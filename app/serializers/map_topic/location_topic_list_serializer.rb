@@ -6,7 +6,8 @@ module MapTopic
                :draft,
                :draft_key,
                :draft_sequence,
-               :location_topics
+               :location_topics,
+               :locations
 
     has_many :topics, serializer: TopicListItemSerializer, embed: :objects
 
@@ -20,6 +21,12 @@ module MapTopic
 
     def location_topics
       MapTopic::LocationTopic.where(:topic_id => object.topic_ids)
+      # .where('location_id > 0')
+    end
+
+    def locations
+      location_ids = MapTopic::LocationTopic.where(:topic_id => object.topic_ids).pluck('location_id')
+      MapTopic::Location.find(location_ids)
       # .where('location_id > 0')
     end
 

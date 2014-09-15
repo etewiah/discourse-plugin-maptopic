@@ -91,7 +91,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         debugger;
         return;
       }
-      debugger;
 
       var myLatlng = new google.maps.LatLng(value.location.latitude, value.location.longitude);
       // (52.519171, 13.4060912);
@@ -111,14 +110,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         '<h5 id="firstHeading" class="firstHeading">' + title +
         '</h5>' +
         '<div id="bodyContent">' +
-        '<p>' + userName + '</p>' +
+        '<p>' + "userName" + '</p>' +
         '</div>' +
         '</div>';
 
       var infowindow = new google.maps.InfoWindow({
-        content: contentString,
-        dataObject: dataObject,
-        dataObjectType: dataObjectType
+        content: contentString
+        // dataObject: dataObject,
+        // dataObjectType: dataObjectType
 
       });
       google.maps.event.addListener(marker, 'mouseover', function() {
@@ -128,7 +127,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         infowindow.open(map, marker);
       });
 
-      // debugger;
+      debugger;
       google.maps.event.addListener(marker, 'click', function(event) {
         // debugger;
         if (infowindow.dataObjectType === 'topic') {
@@ -142,7 +141,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // below needed for showing more than 1 marker on the map...
     Ember.run.later(this, function() {
       if (this.get('markers.length') > 1) {
-        // debugger;
+        debugger;
         map.fitBounds(bounds);
       } else {}
       google.maps.event.trigger(map, 'resize');

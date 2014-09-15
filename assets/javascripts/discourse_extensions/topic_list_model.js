@@ -4,15 +4,17 @@ Discourse.TopicList.reopenClass({
     // Stitch together our side loaded data
     var categories = Discourse.Category.list(),
       users = this.extractByKey(result.users, Discourse.User),
+      locations = result.topic_list.locations,
       location_topics = result.topic_list.location_topics;
     return result.topic_list.topics.map(function(t) {
       var location_topic = location_topics.findBy('topic_id', t.id);
       // t.gig_id = location_topic.gig_id;
       if (location_topic) {
+        t.location = locations.findBy('id',location_topic.location_id);
         // t.excerpt = location_topic.location_title;
-        t.location_title = location_topic.location_title;
-        t.latitude = location_topic.latitude;
-        t.longitude = location_topic.longitude;
+        // t.location_title = location_topic.location_title;
+        // t.latitude = location_topic.latitude;
+        // t.longitude = location_topic.longitude;
       }
       t.category = categories.findBy('id', t.category_id);
       t.posters.forEach(function(p) {

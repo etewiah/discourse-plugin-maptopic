@@ -14,7 +14,6 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     var topics = this.get('content.topics');
     var currentMarkerValues = [];
     topics.forEach(function(t) {
-      debugger;
       var markerInfo = {
         topic: t,
         location: t.get('location')
