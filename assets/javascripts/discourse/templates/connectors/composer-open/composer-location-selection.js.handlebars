@@ -1,0 +1,19 @@
+<div class='location-aware-reply-to'>
+  {{{model.actionTitle}}}  (
+    {{ locationTitle }}
+    <a {{action showLocationSelector}} class="composer-location-selector">
+      {{ setLocationPrompt }}
+      </a>) 
+
+  {{#if canEdit}}
+    {{#if showEditReason}}
+      <div class="edit-reason-input">
+        {{text-field value=editReason tabindex="5" id="edit-reason" maxlength="255" placeholderKey="composer.edit_reason_placeholder"}}
+      </div>
+    {{else}}
+      <a {{action displayEditReason}} class="display-edit-reason">{{i18n composer.show_edit_reason}}</a>
+    {{/if}}
+  {{/if}}
+
+
+</div>

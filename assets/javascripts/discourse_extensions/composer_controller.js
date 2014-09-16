@@ -2,9 +2,9 @@
 require("discourse/controllers/composer")["default"].reopen({
   setLocationPrompt: function() {
     if (this.get('model.locationObject')) {
-      return " - Change location";
+      return " Change location";
     } else {
-      return " - Associate with a location";
+      return " Associate with a location";
     };
   }.property('model.locationObject'),
   locationTitle: function() {
