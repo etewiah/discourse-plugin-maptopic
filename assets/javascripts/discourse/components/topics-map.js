@@ -95,6 +95,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     //  uniqueMarkerValues.push(value);
 
     // });
+    this.infoWindows = [];
     var that = this;
 
     $.each(currentMarkerValues, function(index, value) {
@@ -145,9 +146,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
       });
       google.maps.event.addListener(marker, 'mouseover', function() {
-        setTimeout(function() {
-          infowindowInstance.close();
-        }, 6000);
+        // setTimeout(function() {
+        //   infowindowInstance.close();
+        // }, 6000);
+        for (var i = 0; i < that.infoWindows.length; i++) {
+          that.infoWindows[i].close();
+        }
+        that.infoWindows = [];
+        that.infoWindows.push(infowindowInstance);
         infowindowInstance.open(that.map, marker);
       });
 
@@ -186,7 +192,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     } else {
       // if there is only one marker, set center to be that one
       // even though I initialized the map with this center, it seems necessary to call this again
-      this.map.setCenter(mapCenter);
+      // this.map.setCenter(mapCenter);
+      // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+      this.map.fitBounds(bounds);
+      this.map.setZoom(zoom);
     }
 
     // Ember.run.later(this, function() {
