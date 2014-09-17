@@ -6,12 +6,17 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   doubleClicked: false,
   clickEvent: null,
 
-  markersChanged: function() {
-    debugger;
+  // markersChanged: function() {
+  //   debugger;
+  //   // for re-rendering as I browse
+  //   this.displayMapIfNeeded();
+  // }.observes('markers'),
+
+  markerAdded: function() {
+    // debugger;
     // for re-rendering as I browse
     this.displayMapIfNeeded();
-  }.observes('markers'),
-
+  }.observes('markers.length'),
   // hasMarkers: function() {
   //   if(this.get('markers') && this.get('markers').length > 0){
   //     return true;
@@ -68,7 +73,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           "visibility": "off"
         }]
       }
-
     ];
 
     var mapOptions = {
@@ -179,7 +183,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         if (infowindowInstance.dataObjectType === 'topic') {
           that.locationTopicSelected(event, infowindowInstance.dataObject);
         } else if (infowindowInstance.dataObjectType === 'post') {
-          that.locationPostSelected(e, infowindowInstance.dataObject);
+          that.locationPostSelected(event, infowindowInstance.dataObject);
         }
 
       });

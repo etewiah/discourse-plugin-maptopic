@@ -60,10 +60,19 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     var zoom = 15;
     var icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
 
+    var styles = [{
+      "featureType": "poi",
+      "elementType": "labels",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }];
+
     var mapOptions = {
       zoom: zoom,
       center: mapCenter,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      styles: styles
     };
 
     // debugger;

@@ -40,6 +40,7 @@ require("discourse/controllers/topic")["default"].reopen({
 });
 
 Discourse.Topic.reopen({
+  // locationCount
 
   hasLocation: function() {
     // debugger;
@@ -60,7 +61,7 @@ Discourse.Topic.reopen({
 
   markers: function() {
     var currentMarkerValues = [];
-
+debugger;
     if (this.get('postStream.posts')) {
       var posts = this.get('postStream.posts');
       posts.forEach(function(p) {
@@ -98,7 +99,9 @@ Discourse.Topic.reopen({
       // }
     }
     return currentMarkerValues;
-  }.property('location')
+    // locationCount below is not accurate, just a value that increments each time
+    // a new reply with a location is added (done in extension to composer model)
+  }.property('location','locationCount')
   // below is for showing an excerpt in the list of location topics
   // excerptNotEmpty: Em.computed.notEmpty('excerpt'),
   // // hasExcerpt: Em.computed.and('pinned', 'excerptNotEmpty'),
