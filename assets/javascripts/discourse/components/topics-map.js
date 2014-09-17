@@ -7,9 +7,19 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   clickEvent: null,
 
   markersChanged: function() {
+    debugger;
     // for re-rendering as I browse
     this.displayMapIfNeeded();
   }.observes('markers'),
+
+  // hasMarkers: function() {
+  //   if(this.get('markers') && this.get('markers').length > 0){
+  //     return true;
+  //   }
+  //   else{
+  //     return false;
+  //   }
+  // }.property('markers'),
 
   didInsertElement: function() {
     this._super();
@@ -118,7 +128,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         icon: icon
         // address: value.title
       });
-      var contentString = '<div id="content">' +
+      var contentString = '<div id="map-infowindow-content" >' +
         '<div id="siteNotice">' +
         '</div>' +
         '<h5 id="firstHeading" class="firstHeading">' + title +
@@ -128,7 +138,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         '</div>' +
         '</div>';
 
-      var infowindow = new google.maps.InfoWindow({
+      var infowindowInstance = new google.maps.InfoWindow({
         content: contentString,
         dataObject: dataObject,
         dataObjectType: dataObjectType
@@ -136,21 +146,47 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       });
       google.maps.event.addListener(marker, 'mouseover', function() {
         setTimeout(function() {
-          infowindow.close();
+          infowindowInstance.close();
         }, 6000);
-        infowindow.open(that.map, marker);
+        infowindowInstance.open(that.map, marker);
+      });
+
+      // google.maps.event.addListener(infowindowInstance, 'click', function(event) {
+      //   debugger;
+
+      // });
+
+      google.maps.event.addListener(infowindowInstance, 'domready', function() {
+        document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
+          e.stopPropagation();
+          // console.log("hi!");
+          // debugger;
+          if (infowindowInstance.dataObjectType === 'topic') {
+            that.locationTopicSelected(e, infowindowInstance.dataObject);
+          } else if (infowindowInstance.dataObjectType === 'post') {
+            that.locationPostSelected(e, infowindowInstance.dataObject);
+          }
+
+        });
       });
 
       google.maps.event.addListener(marker, 'click', function(event) {
-        if (infowindow.dataObjectType === 'topic') {
-          that.locationTopicSelected(event, infowindow.dataObject);
+        if (infowindowInstance.dataObjectType === 'topic') {
+          that.locationTopicSelected(event, infowindowInstance.dataObject);
+        } else if (infowindowInstance.dataObjectType === 'post') {
+          that.locationPostSelected(e, infowindowInstance.dataObject);
         }
+
       });
 
     });
 
     if (this.get('markers.length') > 1) {
-      that.map.fitBounds(bounds);
+      this.map.fitBounds(bounds);
+    } else {
+      // if there is only one marker, set center to be that one
+      // even though I initialized the map with this center, it seems necessary to call this again
+      this.map.setCenter(mapCenter);
     }
 
     // Ember.run.later(this, function() {
@@ -192,7 +228,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           that.infowindow.setContent(results[0].formatted_address);
           that.infowindow.open(that.map, that.marker);
           debugger;
-          that.sendAction('action', latlng, results[0]);
+          // that.sendAction('mapClickedAction', latlng, results[0]);
 
         } else {
           alert("No results found");
@@ -205,6 +241,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // this.get("controller").addEvent(lat, lng);
   },
   locationTopicSelected: function(event, topic) {
+    this.sendAction('action', topic);
+  },
+  locationPostSelected: function(event, topic) {
+    debugger;
     this.sendAction('action', topic);
   }
 });

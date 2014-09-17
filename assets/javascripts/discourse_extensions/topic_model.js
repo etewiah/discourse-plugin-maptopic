@@ -1,5 +1,15 @@
 Discourse.Topic.reopen({
 
+  hasLocation: function() {
+    // debugger;
+    if(this.get('location')){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }.property('location'),
+
   locationDetails: function() {
     if (this.get('location')) {
       return Discourse.Location.create(this.get('location'));

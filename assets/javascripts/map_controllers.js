@@ -1,6 +1,28 @@
 // Discourse.MapControllerMixin = Em.Mixin.create({
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   actions: {
+    startLocationTopic:  function(latlng, geocodedLocation) {
+      debugger;
+      var locationObject = {
+        formattedAddress: geocodedLocation.formatted_address,
+        latitude: latlng.lat(),
+        longitude: latlng.lng()
+      }
+      this.set('locationObject', locationObject);
+    },
+    addLocationToTopic: function() {
+      if(Ember.isEmpty(this.get('locationObject.title'))){
+        return;
+      };
+      if (this.get('locationObject')) {
+        this.set('model.locationObject', this.get('locationObject'));
+
+      };
+      // var self = this;
+      // debugger;
+      this.send('closeModal');
+
+    },
     topicSelected: function(topic) {
       // this.transitionToRoute('topic.fromParams', topic);
       // above doesn't work
