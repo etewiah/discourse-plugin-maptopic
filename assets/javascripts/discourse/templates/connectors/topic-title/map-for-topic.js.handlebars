@@ -1,10 +1,10 @@
 {{#if model.location}} 
 
-      <h2 style="line-height: 32px;margin-top:-15px;">
+      {{ topics-map action="postSelected" mapClickedAction="replyWithLocation" markers=model.markers }}
+
+      <h2 style="line-height: 32px;margin-top:0px;">
         <small>Conversation related to : ' {{ model.locationDetails.title }} ' </small>
       </h2>
-      {{ topics-map action="postSelected" markers=model.markers }}
-
 
 
 {{/if}} 

@@ -51,16 +51,31 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     var post_icon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
 
 
+    var styles = [{
+        "featureType": "poi",
+        "elementType": "labels",
+        "stylers": [{
+          "visibility": "off"
+        }]
+      }
+
+    ];
+
     var mapOptions = {
       zoom: zoom,
       center: mapCenter,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      styles: styles
     };
 
-    // debugger;
-    var map = new google.maps.Map(document.getElementById(
+    this.map = new google.maps.Map(document.getElementById(
         'topics-map-canvas'),
       mapOptions);
+
+
+    // this.map.setOptions({
+    //   styles: styles
+    // });
 
     var bounds = new google.maps.LatLngBounds();
     // TODO - ensure I have unique markers where location is same
@@ -68,7 +83,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // $.each(currentMarkerValues, function(index, value) {
     //  // console.log(uniqueMarkerValues);
     //  uniqueMarkerValues.push(value);
-    //  debugger;
 
     // });
     var that = this;
@@ -88,7 +102,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var dataObjectType = 'topic';
 
       } else {
-        debugger;
         return;
       };
 
@@ -100,60 +113,98 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       bounds.extend(myLatlng);
       var marker = new google.maps.Marker({
         position: myLatlng,
-        map: map,
+        map: that.map,
         title: title,
         icon: icon
         // address: value.title
       });
-
       var contentString = '<div id="content">' +
         '<div id="siteNotice">' +
         '</div>' +
         '<h5 id="firstHeading" class="firstHeading">' + title +
         '</h5>' +
         '<div id="bodyContent">' +
-        '<p>' + "userName" + '</p>' +
+        '<p>' + userName + '</p>' +
         '</div>' +
         '</div>';
 
       var infowindow = new google.maps.InfoWindow({
-        content: contentString
-        // dataObject: dataObject,
-        // dataObjectType: dataObjectType
+        content: contentString,
+        dataObject: dataObject,
+        dataObjectType: dataObjectType
 
       });
       google.maps.event.addListener(marker, 'mouseover', function() {
         setTimeout(function() {
           infowindow.close();
         }, 6000);
-        infowindow.open(map, marker);
+        infowindow.open(that.map, marker);
       });
 
       google.maps.event.addListener(marker, 'click', function(event) {
-        // debugger;
         if (infowindow.dataObjectType === 'topic') {
-          debugger;
           that.locationTopicSelected(event, infowindow.dataObject);
         }
       });
 
     });
 
-    map.fitBounds(bounds);
-    
-    // below needed for showing more than 1 marker on the map...
-    Ember.run.later(this, function() {
-      // if (this.get('markers.length') > 1) {
-      //   debugger;
-      //   map.fitBounds(bounds);
-      // } else {}
-      // google.maps.event.trigger(map, 'resize');
-      // map.setCenter(marker.getPosition());
+    if (this.get('markers.length') > 1) {
+      that.map.fitBounds(bounds);
+    }
 
-    }, 500);
+    // Ember.run.later(this, function() {
+    //   // if (this.get('markers.length') > 1) {
+    //   //   map.fitBounds(bounds);
+    //   // } else {}
+    //   // google.maps.event.trigger(map, 'resize');
+    //   // map.setCenter(marker.getPosition());
+
+    // }, 500);
+    google.maps.event.addListener(that.map, 'click', function(event) {
+      that.mapClicked(event.latLng.lat(), event.latLng.lng());
+    });
+
+  },
+  mapClicked: function(lat, lng) {
+    var latlng = new google.maps.LatLng(lat, lng);
+    var geocoder = new google.maps.Geocoder();
+    var that = this;
+
+    geocoder.geocode({
+      'latLng': latlng
+    }, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results[0]) {
+          // that.map.setZoom(11);
+          if (that.marker) {
+            debugger;
+            // if a marker has previously been set, clear it
+            that.marker.setMap(null);
+          }
+          that.marker = new google.maps.Marker({
+            position: latlng,
+            map: that.map
+          });
+          that.infowindow = new google.maps.InfoWindow({
+            // content: contentString
+          });
+          that.infowindow.setContent(results[0].formatted_address);
+          that.infowindow.open(that.map, that.marker);
+          debugger;
+          that.sendAction('action', latlng, results[0]);
+
+        } else {
+          alert("No results found");
+        }
+      } else {
+        alert("Geocoder failed due to: " + status);
+      }
+    });
+
+    // this.get("controller").addEvent(lat, lng);
   },
   locationTopicSelected: function(event, topic) {
-    // debugger
     this.sendAction('action', topic);
   }
 });
