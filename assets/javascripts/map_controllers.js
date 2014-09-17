@@ -1,17 +1,33 @@
 // Discourse.MapControllerMixin = Em.Mixin.create({
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
+  needs: ['composer'],
+
   actions: {
-    startLocationTopic:  function(latlng, geocodedLocation) {
-      debugger;
+    startLocationTopic: function(geocodedLocation, title) {
       var locationObject = {
-        formattedAddress: geocodedLocation.formatted_address,
-        latitude: latlng.lat(),
-        longitude: latlng.lng()
+          formattedAddress: geocodedLocation.formatted_address,
+          latitude: geocodedLocation.geometry.location.lat(),
+          longitude: geocodedLocation.geometry.location.lng(),
+          title: title
+        }
+        // this.set('locationObject', locationObject);
+      if (Discourse.User.current()) {
+        var composerController = this.get('controllers.composer');
+        var self = this;
+        composerController.open({
+          action: Discourse.Composer.CREATE_TOPIC,
+          draftKey: "new_topic"
+        }).then(function() {
+          composerController.content.set('locationObject', locationObject);
+        });
+      } else {
+        this.send('showLogin');
       }
-      this.set('locationObject', locationObject);
+      //return true to bubble up to route...
+      return false;
     },
     addLocationToTopic: function() {
-      if(Ember.isEmpty(this.get('locationObject.title'))){
+      if (Ember.isEmpty(this.get('locationObject.title'))) {
         return;
       };
       if (this.get('locationObject')) {

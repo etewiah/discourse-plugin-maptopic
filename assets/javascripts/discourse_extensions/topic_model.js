@@ -1,11 +1,51 @@
+require("discourse/controllers/topic")["default"].reopen({
+  actions: {
+    replyWithLocation: function(geocodedLocation, title) {
+      var locationObject = {
+          formattedAddress: geocodedLocation.formatted_address,
+          latitude: geocodedLocation.geometry.location.lat(),
+          longitude: geocodedLocation.geometry.location.lng(),
+          title: title
+
+        }
+        // this.set('locationObject', locationObject);
+      if (Discourse.User.current()) {
+        var composerController = this.get('controllers.composer');
+        var topic = this.get('model');
+        // var self = this;
+
+        var opts = {
+          action: Discourse.Composer.REPLY,
+          draftKey: topic.get('draft_key'),
+          draftSequence: topic.get('draft_sequence'),
+          topic: topic
+        };
+
+        // if(post && post.get("post_number") !== 1){
+        //   opts.post = post;
+        // } else {
+        //   opts.topic = topic;
+        // }
+
+        composerController.open(opts).then(function() {
+          composerController.content.set('locationObject', locationObject);
+        });
+      } else {
+        this.send('showLogin');
+      }
+      //return true to bubble up to route...
+      return false;
+    }
+  }
+});
+
 Discourse.Topic.reopen({
 
   hasLocation: function() {
     // debugger;
-    if(this.get('location')){
+    if (this.get('location')) {
       return true;
-    }
-    else{
+    } else {
       return false;
     }
   }.property('location'),
@@ -42,19 +82,19 @@ Discourse.Topic.reopen({
       // var latitude = this.get('location.latitude');
 
       // if (latitude && latitude != "unknown") {
-        var markerInfo = {
-          topic: this,
-          location: this.get('location'),
-          // latitude: latitude,
-          // longitude: longitude,
-          // // title: show_time.title,
-          // start_time_string: this.get('start_time_string'),
-          // title: this.get('title'),
-          // venueAddress: this.get('venue_address'),
-          // venueName: this.get('venue_name')
+      var markerInfo = {
+        topic: this,
+        location: this.get('location'),
+        // latitude: latitude,
+        // longitude: longitude,
+        // // title: show_time.title,
+        // start_time_string: this.get('start_time_string'),
+        // title: this.get('title'),
+        // venueAddress: this.get('venue_address'),
+        // venueName: this.get('venue_name')
 
-        };
-        currentMarkerValues.push(markerInfo);
+      };
+      currentMarkerValues.push(markerInfo);
       // }
     }
     return currentMarkerValues;

@@ -107,11 +107,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var dataObjectType = 'post';
       } else if (value.topic) {
         var icon = topic_icon;
-        var userName = value.topic.get('details.created_by.username');
+        var userName = value.topic.get('posters.firstObject.user.username') || value.topic.get('details.created_by.username');
         var title = value.location.title;
         var dataObject = value.topic;
         var dataObjectType = 'topic';
-
       } else {
         return;
       };
@@ -222,21 +221,51 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[0]) {
           // that.map.setZoom(11);
-          if (that.marker) {
-            debugger;
+          if (that.markerForClickedLocation) {
             // if a marker has previously been set, clear it
-            that.marker.setMap(null);
+            that.markerForClickedLocation.setMap(null);
           }
-          that.marker = new google.maps.Marker({
+          that.markerForClickedLocation = new google.maps.Marker({
             position: latlng,
             map: that.map
           });
-          that.infowindow = new google.maps.InfoWindow({
-            // content: contentString
+
+          var contentString = '<div id="map-clickedlocation-content" >' +
+            '<h5>' +
+            results[0].formatted_address +
+            '</h5>' +
+            '<form id="clickedlocation-form">' +
+            '<div id="clickedlocation-name-prompt" class="warning">Enter the name of this location:</div>' +
+            '<input id="clickedlocation-name" type="text" />' +
+            '<input type="submit" id="map-go" value="Go" />' +
+            '</form>' +
+            '</div>';
+
+          infowindowForClickedLocation = new google.maps.InfoWindow({
+            content: contentString
           });
-          that.infowindow.setContent(results[0].formatted_address);
-          that.infowindow.open(that.map, that.marker);
-          debugger;
+          // infowindowForClickedLocation.setContent(results[0].formatted_address);
+          infowindowForClickedLocation.open(that.map, that.markerForClickedLocation);
+
+          google.maps.event.addListener(infowindowForClickedLocation, 'domready', function() {
+            document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {
+              e.stopPropagation();
+              e.preventDefault();
+              var locationName = e.srcElement.elements['clickedlocation-name'].value;
+              if (Ember.isBlank(locationName)) {
+                debugger;
+              } else {
+                // clear marker;
+                that.markerForClickedLocation.setMap(null);
+                // that.locationInfoWindowSelected(results[0], locationName);
+                that.sendAction('mapClickedAction', results[0], locationName);
+
+              }
+
+            });
+          });
+
+
           // that.sendAction('mapClickedAction', latlng, results[0]);
 
         } else {
@@ -249,11 +278,15 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     // this.get("controller").addEvent(lat, lng);
   },
+  // locationInfoWindowSelected: function(selectedLocation) {
+  //   this.sendAction('mapClickedAction', selectedLocation);
+  // },
   locationTopicSelected: function(event, topic) {
     this.sendAction('action', topic);
   },
-  locationPostSelected: function(event, topic) {
+  locationPostSelected: function(event, post) {
+    // TODO implement scrollTO
     debugger;
-    this.sendAction('action', topic);
+    // this.sendAction('action', post);
   }
 });
