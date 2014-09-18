@@ -7,17 +7,29 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   // isCenteredBinding: 'controller.activePost',
   onActivePostChange: function() {
     var activePost = this.get('activePost');
-    debugger;
-    var userName = activePost.name;
-    var title = activePost.location.title;
-    var dataObject = activePost;
-    var dataObjectType = 'post';
-    var myLatlng = new google.maps.LatLng(activePost.location.latitude, activePost.location.longitude);
+    // debugger;
+    if (this.get('activePost.post_number') === 1) {
+      var icon = this.topic_icon;
+      var userName = activePost.topic.get('posters.firstObject.user.username') || activePost.topic.get('details.created_by.username');
+      var title = activePost.topic.get('title') + "( " + activePost.topic.get('location.title') + " )";
+      var dataObject = activePost.topic;
+      var dataObjectType = 'topic';
+      var myLatlng = new google.maps.LatLng(activePost.topic.location.latitude, activePost.topic.location.longitude);
+      var address = activePost.topic.location.address;
+    } else {
+      var icon = this.post_icon;
+      var userName = activePost.name;
+      var title = activePost.location.title;
+      var dataObject = activePost;
+      var dataObjectType = 'post';
+      var myLatlng = new google.maps.LatLng(activePost.location.latitude, activePost.location.longitude);
+      var address = activePost.location.address;
+    }
     var marker = new google.maps.Marker({
       position: myLatlng,
       map: this.map,
       title: title,
-      icon: this.highlighted_icon
+      icon: icon
       // address: value.title
     });
 
@@ -26,12 +38,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
 
     var contentString = '<div id="map-infowindow-content" >' +
-      '<div id="siteNotice">' +
-      '</div>' +
-      '<h5 id="firstHeading" class="firstHeading">' + title +
-      '</h5>' +
+      '<h4 class="infowindow-heading">' + title +
+      '</h4>' +
+      '<p class="infowindow-address">' + address +
+      '</p>' +
       '<div id="bodyContent">' +
-      '<p>' + userName + '</p>' +
+      '<small>By: ' + userName + '</small>' +
       '</div>' +
       '</div>';
 
@@ -51,17 +63,17 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     infowindowInstance.open(this.map, marker);
 
 
-      google.maps.event.addListener(infowindowInstance, 'domready', function() {
-        document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
-          e.stopPropagation();
-          this.locationPostSelected(e, infowindowInstance.dataObject);
-
-        });
+    var that = this;
+    google.maps.event.addListener(infowindowInstance, 'domready', function() {
+      document.getElementById("map-infowindow-content").addEventListener("click", function(event) {
+        event.stopPropagation();
+        that.locationPostSelected(event, infowindowInstance.dataObject);
       });
+    });
 
-      google.maps.event.addListener(marker, 'click', function(event) {
-        this.locationPostSelected(event, infowindowInstance.dataObject);
-      });
+    google.maps.event.addListener(marker, 'click', function(event) {
+      that.locationPostSelected(event, infowindowInstance.dataObject);
+    });
 
 
     //do your thing
@@ -115,7 +127,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     }
   },
 
-  highlighted_icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+  // highlighted_icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
   topic_icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
   post_icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
 
@@ -177,7 +189,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       } else if (value.topic) {
         var icon = that.topic_icon;
         var userName = value.topic.get('posters.firstObject.user.username') || value.topic.get('details.created_by.username');
-        var title = value.location.title;
+        var title = value.topic.get('title') + "( " + value.location.title + " )";
         var dataObject = value.topic;
         var dataObjectType = 'topic';
       } else {
@@ -199,10 +211,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       var contentString = '<div id="map-infowindow-content" >' +
         '<div id="siteNotice">' +
         '</div>' +
-        '<h5 id="firstHeading" class="firstHeading">' + title +
-        '</h5>' +
+        '<h4 id="firstHeading" class="firstHeading">' + title +
+        '</h4>' +
         '<div id="bodyContent">' +
-        '<p>' + userName + '</p>' +
+        '<small>By: ' + userName + '</small>' +
         '</div>' +
         '</div>';
 
@@ -354,7 +366,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
   locationPostSelected: function(event, post) {
     // TODO implement scrollTO
-    debugger;
     Discourse.URL.jumpToPost(post.post_number);
     // this.sendAction('action', post);
   }

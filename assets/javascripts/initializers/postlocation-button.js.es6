@@ -29,6 +29,7 @@
 // adding button as per:
 // https://meta.discourse.org/t/plugin-tutorial-3-how-to-add-a-button-after-every-posts/11050
 // naming is key.  buttonFor... and click... methods have to have the name of this view in it
+// also relies on adding the name of this ('postlocation') to the post-menu list in settings...
 import {
   Button
 }
@@ -44,10 +45,10 @@ default {
     PostMenuView.reopen({
       shouldRerenderPostlocationButton: Discourse.View.renderIfChanged("post.temporarily_hidden"),
       buttonForPostlocation: function(post, buffer) {
-        // var direction = !!post.getWithDefault("temporarily_hidden", false) ? "down" : "up";
         var locationTitle = this.get('post.location.title');
         if (Ember.isEmpty(locationTitle)) {
-          debugger;
+          // for topic post, the location is associated with the topic not the post
+          // might be an idea to change this...
           if (this.get('post.post_number') === 1 && this.get('post.topic.location.title')) {
             locationTitle = this.get('post.topic.location.title');
           } else {
@@ -57,7 +58,7 @@ default {
         }
         // buffer.push('<button title="Mark this post as solving your initial question" data-action="correct">Mark as correct</button>');
 
-        var innerHTML = "<a> Show " + locationTitle + " on map</a>";
+        var innerHTML = "<a> Show '" + locationTitle + "' on map</a>";
         var opts = {
           innerHTML: innerHTML
         }
@@ -68,7 +69,6 @@ default {
       clickPostlocation: function() {
         var post = this.get('post');
         var controller = this.get('controller');
-        debugger;
         controller.set('activePost', post);
         Discourse.URL.jumpToPost(1);
 
