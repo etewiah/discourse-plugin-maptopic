@@ -35,7 +35,6 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
 
       };
       // var self = this;
-      // debugger;
       this.send('closeModal');
 
     },
@@ -71,7 +70,8 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   }.property()
 });
 
-Discourse.MapController = Discourse.ObjectController.extend({
+// not using object controller as I won't be setting its content..
+Discourse.MapController = Discourse.Controller.extend({
   // need to add composer to be able to start a conversation from here.
   // needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
   needs: ['composer'],
@@ -90,15 +90,48 @@ Discourse.MapController = Discourse.ObjectController.extend({
           // composerController.content.set('gig', {
           //   id: 0
           // });
-          // debugger;
         });
       } else {
         this.send('showLogin');
       }
       //return true to bubble up to route...
       return false;
+    },
+    cityChanged: function(newCity) {
+      var params = {
+        currentCity: newCity
+      }
+
+      var topiclist = Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.currentCity, params);
+      this.transitionTo('map.fromOneParam', topiclist);
     }
-  }
+  },
+
+  currentCitySelection: function() {
+    var currentCity = this.get('currentCity') || Discourse.SiteSettings.maptopic.defaultCityName;
+    return this.get('citySelectionItemsWithUrls').findBy('value', currentCity);
+  }.property('currentCity', 'citySelectionItemsWithUrls'),
+
+
+  citySelectionItemsWithUrls: function() {
+    var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+    selectionItems.forEach(function(item) {
+      item.url = this.get('target').generate('map.fromOneParam', {
+        currentCity: item.value
+      });
+      // "http://google.com";
+    }, this);
+    // below will add a city from the url that is not in the list:
+    // if(!selectionItems.findBy('value', this.get('currentCity').toLowerCase())){
+    //   selectionItems.pushObject({
+    //     displayString: this.get('currentCity').capitalize(),
+    //     value: this.get('currentCity').toLowerCase()
+
+    //   });
+    // }
+    return selectionItems;
+  }.property(),
+
 
 });
 

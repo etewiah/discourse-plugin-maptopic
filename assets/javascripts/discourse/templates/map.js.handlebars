@@ -1,15 +1,17 @@
 <div class="container">
 
-  <h2 style="text-align:center;margin:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
-    Map overview of conversations
-  </h2>
 
-  <div style="display: inline-block;width:100%;">
-    <div style="margin-bottom:10px;">
-      <button class="ember-view btn btn-primary create standard" {{action startConversation }} title="begin a conversation about this gig">
-        <i class="fa fa-plus"></i>Start a conversation</button>
-    </div>
-  </div>
+  <h1 style="text-align:center;margin-top:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
+
+        Recent conversations about 
+        {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls'
+        action='cityChanged' currentSelectionItem=currentCitySelection }}
+
+      <a style="padding: 8px 10px 3px 10px;" >
+      </a>
+    </h1>
+
+
 
   <div class='container'>
     {{custom-html "top"}} {{Discourse.globalNotice}} {{discourse-banner user=currentUser banner=Discourse.banner}}
@@ -17,7 +19,7 @@
     <div class="row">
       <div class="full-width">
         <div id='header-list-area'>
-          outlet for map is here:
+          Click on a location to start a conversation there:
           {{ outlet }}
         </div>
       </div>

@@ -30,10 +30,12 @@ Discourse.TopicList.reopenClass({
     });
   },
 
-  fromWhereLocationPresent: function(result, filter, params) {
+  fromWhereLocationPresent: function(result, filter_url, params) {
+    // debugger;
+    // todo - find out what params is used for in original implementation 
     var topicList = Discourse.TopicList.create({
       inserted: Em.A(),
-      filter: filter,
+      filter: filter_url,
       params: params || {},
       topics: Discourse.TopicList.topicsFromWhereLocationPresent(result),
       can_create_topic: result.topic_list.can_create_topic,
@@ -41,7 +43,8 @@ Discourse.TopicList.reopenClass({
       draft_key: result.topic_list.draft_key,
       draft_sequence: result.topic_list.draft_sequence,
       draft: result.topic_list.draft,
-      loaded: true
+      loaded: true,
+      currentCity: params.currentCity
     });
 
     if (result.topic_list.filtered_category) {
@@ -50,15 +53,15 @@ Discourse.TopicList.reopenClass({
     return topicList;
   },
 
-  findWhereLocationPresent: function(filter, params) {
-    var url = Discourse.getURL("/") + filter + ".json";
+  findWhereLocationPresent: function(filter_url, params) {
+    var url = Discourse.getURL("/") + filter_url + ".json";
     return Discourse.ajax(url).then(function(result) {
-      return Discourse.TopicList.fromWhereLocationPresent(result, filter, params);
+      return Discourse.TopicList.fromWhereLocationPresent(result, filter_url, params);
     });
     // original method below would sometimes retrieve topic_list
     // from PreloadStore which obviously would not have my gig_list
-    // return PreloadStore.getAndRemove("topic_list", finderFor(filter, params)).then(function(result) {
-    //   return Discourse.TopicList.fromWhereLocationPresent(result, filter, params);
+    // return PreloadStore.getAndRemove("topic_list", finderFor(filter_url, params)).then(function(result) {
+    //   return Discourse.TopicList.fromWhereLocationPresent(result, filter_url, params);
     // });
   }
 

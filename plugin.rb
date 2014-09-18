@@ -14,6 +14,8 @@ register_asset "javascripts/discourse/templates/connectors/composer-open/compose
 register_asset "javascripts/discourse/templates/modal/select_location.js.handlebars"
 register_asset "javascripts/discourse/templates/components/selectable-map.js.handlebars"
 register_asset "javascripts/discourse/templates/components/topics-map.js.handlebars"
+register_asset "javascripts/discourse/templates/components/simple-dropdown.js.handlebars"
+register_asset "javascripts/discourse/components/simple-dropdown.js"
 register_asset "javascripts/discourse/components/topics-map.js"
 register_asset "javascripts/discourse/components/selectable-map.js"
 register_asset "javascripts/discourse_extensions/composer_controller.js"
@@ -35,6 +37,7 @@ register_asset "javascripts/discourse/templates/map_from_one_param.js.handlebars
 
 
 register_asset "stylesheets/desktop/maptopic.scss", :desktop
+register_asset "stylesheets/desktop/simple-dropdown.scss", :desktop
 
 # And mount the engine
 Discourse::Application.routes.append do

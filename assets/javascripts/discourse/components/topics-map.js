@@ -311,14 +311,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           });
 
           var contentString = '<div id="map-clickedlocation-content" >' +
-            '<h5>' +
+            '<h4>' +
             results[0].formatted_address +
-            '</h5>' +
+            '</h4>' +
             '<form id="clickedlocation-form">' +
-            '<div id="clickedlocation-name-prompt" class="warning">Enter the name of this location:</div>' +
-            '<input id="clickedlocation-name" type="text" />' +
-            '<input type="submit" id="map-go" value="Go" />' +
-            '</form>' +
+            '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start talking:</div>' +
+            '<input id="clickedlocation-name" type="text" /><br>' +
+            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+            'Go</button></form>' +
             '</div>';
 
           infowindowForClickedLocation = new google.maps.InfoWindow({
@@ -326,6 +326,13 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           });
           // infowindowForClickedLocation.setContent(results[0].formatted_address);
           infowindowForClickedLocation.open(that.map, that.markerForClickedLocation);
+
+          for (var i = 0; i < that.infoWindows.length; i++) {
+            that.infoWindows[i].close();
+          }
+          that.infoWindows = [];
+          that.infoWindows.push(infowindowForClickedLocation);
+
 
           google.maps.event.addListener(infowindowForClickedLocation, 'domready', function() {
             document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {

@@ -36,9 +36,13 @@ Discourse.MapRootRoute = Discourse.Route.extend({
     // appController.set('activeSubnav', 'gigs');
   },
   beforeModel: function(transition) {
+    var currentCity = Discourse.SiteSettings.maptopic.defaultCityName;
+    var params = {
+      currentCity: currentCity
+    }
     // TODO - figure out default city bases 
-    var defaultCity = "madrid";
-    var convModel = Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + defaultCity, {});
+    // var defaultCity = "madrid";
+    var convModel = Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.currentCity, params);
     this.transitionTo('map.fromOneParam', convModel);
   }
 
@@ -48,13 +52,16 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
 
   model: function(params) {
     // TODO make use of params to return either venue conversations or gig conversations
-    return Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.city, {});
+    return Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.currentCity, params);
     // return Discourse.TopicList.findWhereLocationPresent("h/visitor_topics/" + params.tag, {});
   },
-  serialize: function(model) {
-    return { val: 'recent' };
-  },
+  // serialize: function(model) {
+  //   return { val: 'recent' };
+  // },
   setupController: function(controller, model) {
+    var mapController = this.controllerFor('map');
+    mapController.set('currentCity', model.params.currentCity);
+    debugger;
     controller.set('content',model);
   }
 
@@ -71,7 +78,7 @@ Discourse.Route.buildRoutes(function() {
     });
     // :val can be gigs, artists (performers??) or venues
     this.route('fromOneParam', {
-      path: '/:city'
+      path: '/:currentCity'
     });
 
   });
