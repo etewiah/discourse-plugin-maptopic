@@ -3,6 +3,71 @@
 
 Discourse.TopicsMapComponent = Ember.Component.extend({
 
+
+  // isCenteredBinding: 'controller.activePost',
+  onActivePostChange: function() {
+    var activePost = this.get('activePost');
+    debugger;
+    var userName = activePost.name;
+    var title = activePost.location.title;
+    var dataObject = activePost;
+    var dataObjectType = 'post';
+    var myLatlng = new google.maps.LatLng(activePost.location.latitude, activePost.location.longitude);
+    var marker = new google.maps.Marker({
+      position: myLatlng,
+      map: this.map,
+      title: title,
+      icon: this.highlighted_icon
+      // address: value.title
+    });
+
+    this.map.setCenter(myLatlng);
+    this.map.setZoom(15);
+
+
+    var contentString = '<div id="map-infowindow-content" >' +
+      '<div id="siteNotice">' +
+      '</div>' +
+      '<h5 id="firstHeading" class="firstHeading">' + title +
+      '</h5>' +
+      '<div id="bodyContent">' +
+      '<p>' + userName + '</p>' +
+      '</div>' +
+      '</div>';
+
+    var infowindowInstance = new google.maps.InfoWindow({
+      content: contentString,
+      dataObject: dataObject,
+      dataObjectType: dataObjectType
+
+    });
+
+
+    for (var i = 0; i < this.infoWindows.length; i++) {
+      this.infoWindows[i].close();
+    }
+    this.infoWindows = [];
+    this.infoWindows.push(infowindowInstance);
+    infowindowInstance.open(this.map, marker);
+
+
+      google.maps.event.addListener(infowindowInstance, 'domready', function() {
+        document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
+          e.stopPropagation();
+          this.locationPostSelected(e, infowindowInstance.dataObject);
+
+        });
+      });
+
+      google.maps.event.addListener(marker, 'click', function(event) {
+        this.locationPostSelected(event, infowindowInstance.dataObject);
+      });
+
+
+    //do your thing
+  }.observes('activePost'),
+
+
   doubleClicked: false,
   clickEvent: null,
 
@@ -50,6 +115,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     }
   },
 
+  highlighted_icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",
+  topic_icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
+  post_icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+
   initiateMaps: function() {
     var currentMarkerValues = this.get('markers');
     var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
@@ -62,18 +131,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // }
 
     var zoom = 15;
-    var topic_icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
-    var post_icon = "http://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-
 
     var styles = [{
-        "featureType": "poi",
-        "elementType": "labels",
-        "stylers": [{
-          "visibility": "off"
-        }]
-      }
-    ];
+      "featureType": "poi",
+      "elementType": "labels",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }];
 
     var mapOptions = {
       zoom: zoom,
@@ -104,13 +169,13 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     $.each(currentMarkerValues, function(index, value) {
       if (value.post) {
-        var icon = post_icon;
+        var icon = that.post_icon;
         var userName = value.post.name;
         var title = value.location.title;
         var dataObject = value.post;
         var dataObjectType = 'post';
       } else if (value.topic) {
-        var icon = topic_icon;
+        var icon = that.topic_icon;
         var userName = value.topic.get('posters.firstObject.user.username') || value.topic.get('details.created_by.username');
         var title = value.location.title;
         var dataObject = value.topic;
@@ -119,7 +184,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         return;
       };
 
-      console.log(value);
 
       var myLatlng = new google.maps.LatLng(value.location.latitude, value.location.longitude);
       // (52.519171, 13.4060912);
@@ -291,6 +355,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   locationPostSelected: function(event, post) {
     // TODO implement scrollTO
     debugger;
+    Discourse.URL.jumpToPost(post.post_number);
     // this.sendAction('action', post);
   }
 });
