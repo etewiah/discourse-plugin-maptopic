@@ -5,7 +5,7 @@
 
 # load the engine
 load File.expand_path('../lib/map_topic/engine.rb', __FILE__)
-
+gem 'geocoder', '1.2.4'
 
 # register_asset "javascripts/discourse/templates/post.js.handlebars"
 register_asset "javascripts/discourse/templates/connectors/topic-title/map-for-topic.js.handlebars"

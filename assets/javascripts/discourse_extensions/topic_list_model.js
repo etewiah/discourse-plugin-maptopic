@@ -10,7 +10,7 @@ Discourse.TopicList.reopenClass({
       var location_topic = location_topics.findBy('topic_id', t.id);
       // t.gig_id = location_topic.gig_id;
       if (location_topic) {
-        t.location = locations.findBy('id',location_topic.location_id);
+        t.location = locations.findBy('id', location_topic.location_id);
         // t.excerpt = location_topic.location_title;
         // t.location_title = location_topic.location_title;
         // t.latitude = location_topic.latitude;
@@ -54,8 +54,16 @@ Discourse.TopicList.reopenClass({
   },
 
   findWhereLocationPresent: function(filter_url, params) {
-    var url = Discourse.getURL("/") + filter_url + ".json";
-    return Discourse.ajax(url).then(function(result) {
+    var url = Discourse.getURL("/location_topics/get_for_city") ;
+    var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value',params.currentCity);
+    var latitude = cityObject.latitude || 0;
+    var longitude = cityObject.longitude || 0;
+    return Discourse.ajax(url, {
+      data: {
+        longitude: longitude,
+        latitude: latitude
+      }
+    }).then(function(result) {
       return Discourse.TopicList.fromWhereLocationPresent(result, filter_url, params);
     });
     // original method below would sometimes retrieve topic_list

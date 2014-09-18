@@ -3,7 +3,7 @@ MapTopic::Engine.routes.draw do
   # get "/location_topics" => "location_topics#index"
   get "/location_posts/set_location" => "location_posts#set_location"
   get "/location_topics/set_location" => "location_topics#set_location"
-  get "/location_topics/get_for_city/:city" => "location_topics#get_for_city"
+  get "/location_topics/get_for_city" => "location_topics#get_for_city"
 
 
   # end point for routes that are only implemented client side

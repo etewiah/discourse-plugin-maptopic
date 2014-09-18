@@ -42,7 +42,7 @@ Discourse.MapRootRoute = Discourse.Route.extend({
     }
     // TODO - figure out default city bases 
     // var defaultCity = "madrid";
-    var convModel = Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.currentCity, params);
+    var convModel = Discourse.TopicList.findWhereLocationPresent("", params);
     this.transitionTo('map.fromOneParam', convModel);
   }
 
@@ -52,7 +52,7 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
 
   model: function(params) {
     // TODO make use of params to return either venue conversations or gig conversations
-    return Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.currentCity, params);
+    return Discourse.TopicList.findWhereLocationPresent("", params);
     // return Discourse.TopicList.findWhereLocationPresent("h/visitor_topics/" + params.tag, {});
   },
   // serialize: function(model) {
@@ -61,7 +61,6 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
   setupController: function(controller, model) {
     var mapController = this.controllerFor('map');
     mapController.set('currentCity', model.params.currentCity);
-    debugger;
     controller.set('content',model);
   }
 

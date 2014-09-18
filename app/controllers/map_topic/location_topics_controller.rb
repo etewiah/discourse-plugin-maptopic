@@ -20,8 +20,18 @@ module MapTopic
       # else
       #   @location_topic_ids = MapTopic::GigTopic.limit(50).pluck('topic_id')
       # end
+      longitude = params[:longitude]
+      latitude = params[:latitude]
+      distance = 20
+      center_point = [latitude,longitude]
+      # [40.4167754, -3.7037902]
+      # longitude: "-3.7037902",
+      # latitude: "40.4167754",
 
-      @location_topic_ids = MapTopic::LocationTopic.limit(50).pluck('topic_id')
+      box = Geocoder::Calculations.bounding_box(center_point, distance)
+      @location_topic_ids = MapTopic::LocationTopic.within_bounding_box(box).limit(50).pluck('topic_id')
+      # using bounding_box only because pluck does not seem to work with near:
+      # MapTopic::LocationTopic.near('berlin').limit(50).pluck('topic_id')
 
       list = TopicList.new(:tag, current_user, location_topics_query)
       render_serialized(list, MapTopic::LocationTopicListSerializer,  root: 'topic_list')

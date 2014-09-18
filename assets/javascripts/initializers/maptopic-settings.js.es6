@@ -24,6 +24,8 @@ default {
         value: 'london'
       }, {
         displayString: 'Madrid',
+        longitude: "-3.7037902",
+        latitude: "40.4167754",
         value: 'madrid'
       }]
 

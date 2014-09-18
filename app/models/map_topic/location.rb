@@ -2,6 +2,8 @@ module MapTopic
     class Location < ActiveRecord::Base
         self.table_name = "locations"
 
+        reverse_geocoded_by :latitude, :longitude
+
         has_many :location_topics
         # , class_name: "::Blog::GigTopic"
         has_many :topics, through: :location_topics

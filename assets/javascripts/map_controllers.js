@@ -102,8 +102,9 @@ Discourse.MapController = Discourse.Controller.extend({
         currentCity: newCity
       }
 
-      var topiclist = Discourse.TopicList.findWhereLocationPresent("location_topics/get_for_city/" + params.currentCity, params);
-      this.transitionTo('map.fromOneParam', topiclist);
+      var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
+      debugger;
+      this.transitionToRoute('map.fromOneParam', topiclist);
     }
   },
 
@@ -113,6 +114,7 @@ Discourse.MapController = Discourse.Controller.extend({
   }.property('currentCity', 'citySelectionItemsWithUrls'),
 
 
+// below updates the citySelectionItems
   citySelectionItemsWithUrls: function() {
     var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
     selectionItems.forEach(function(item) {
