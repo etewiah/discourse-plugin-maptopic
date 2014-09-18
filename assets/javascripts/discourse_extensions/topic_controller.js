@@ -1,10 +1,10 @@
 require("discourse/controllers/topic")["default"].reopen({
   actions: {
-    showOnMap: function(post){
-      Discourse.URL.jumpToPost(1);
-      // debugger;
-      this.set('activePost',post);
-    },
+    // showOnMap: function(post){
+    //   Discourse.URL.jumpToPost(1);
+    //   // debugger;
+    //   this.set('activePost',post);
+    // },
     replyWithLocation: function(geocodedLocation, title) {
       var locationObject = {
           formattedAddress: geocodedLocation.formatted_address,

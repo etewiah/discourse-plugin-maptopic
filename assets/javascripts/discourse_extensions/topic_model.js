@@ -1,14 +1,38 @@
-Discourse.Post.reopen({
-  // locationCount
 
-  hasLocation: function() {
-    if (this.get('location')) {
-      return true;
-    } else {
-      return false;
-    }
-  }.property()
-});
+
+
+// require("discourse/views/post-menu")["default"].reopen({
+
+//       shouldRerenderPostlocationButton: Discourse.View.renderIfChanged("post.temporarily_hidden"),
+//       buttonForPostlocation: function(post, buffer) {
+//         // var direction = !!post.getWithDefault("temporarily_hidden", false) ? "down" : "up";
+//         // return new Button("postlocation", "go_to_location", "chevron-up");
+// debugger;
+//         buffer.push('<button title="Mark this post as solving your initial question" data-action="correct">Mark as correct</button>');
+
+
+//       },
+
+//       clickPostlocation: function() {
+//         Discourse.URL.jumpToPost(1);
+//         debugger;
+//         this.set('activePost', post);
+//         // $("#post_" + this.get("post.post_number") + " .cooked").toggle();
+//         // this.toggleProperty("post.temporarily_hidden");
+//       }
+//     });
+
+// Discourse.Post.reopen({
+//   // locationCount
+
+//   hasLocation: function() {
+//     if (this.get('location')) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   }.property()
+// });
 
 Discourse.Topic.reopen({
   // locationCount
