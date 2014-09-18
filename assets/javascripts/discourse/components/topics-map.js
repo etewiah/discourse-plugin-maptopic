@@ -83,16 +83,16 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   doubleClicked: false,
   clickEvent: null,
 
-  // markersChanged: function() {
-  //   debugger;
-  //   // for re-rendering as I browse
-  //   this.displayMapIfNeeded();
-  // }.observes('markers'),
-
+  markersChanged: function() {
+    debugger;
+    // for re-rendering as I browse
+    this.triggerMapAsNeeded();
+  }.observes('markers','currentCity'),
+  // TODO - check if below is redundant
   markerAdded: function() {
     // debugger;
     // for re-rendering as I browse
-    this.displayMapIfNeeded();
+    this.triggerMapAsNeeded();
   }.observes('markers.length'),
   // hasMarkers: function() {
   //   if(this.get('markers') && this.get('markers').length > 0){
@@ -105,25 +105,51 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
   didInsertElement: function() {
     this._super();
-    this.displayMapIfNeeded();
+    this.triggerMapAsNeeded();
   },
 
-  displayMapIfNeeded: function() {
+  triggerMapAsNeeded: function() {
+    if (typeof google === "undefined") {
+      var self = this;
+      window.map_callback = function() {
+        self.renderMap();
+      }
+      $.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=map_callback');
+    } else {
+      this.renderMap();
+    }
+
+  },
+
+  cityDetails: function() {
+    var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
+    // debugger;
+    var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value',currentCity);
+    return cityObject;
+    // return {
+    //   longitude: "13.4060912", 
+    //   latitude: "52.519171",
+    // } 
+    // {
+    //   longitude: "-3.7037902",
+    //   latitude: "40.4167754"
+    // }
+  }.property('currentCity'),
+
+  renderMap: function() {
     var currentMarkerValues = this.get('markers');
     var markersFound = currentMarkerValues && currentMarkerValues.length > 0;
     // if (markersFound && !_mobile_device_) {
     // might need to reintroduce logic of detecting _mobile_device_
+    // this.renderMap(currentMarkerValues);
+
     if (markersFound) {
-      // this.initiateMaps(currentMarkerValues);
-      if (typeof google === "undefined") {
-        var self = this;
-        window.map_callback = function() {
-          self.initiateMaps();
-        }
-        $.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=map_callback');
-      } else {
-        this.initiateMaps();
-      }
+      this.renderMapWithMarkers();
+    } else {
+      this.renderMapWithoutMarkers();
+        // "40.4167754", "-3.7037902");
+      // longitude: "-3.7037902",
+      // # latitude: "40.4167754)
     }
   },
 
@@ -131,7 +157,45 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   topic_icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
   post_icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
 
-  initiateMaps: function() {
+  renderMapWithoutMarkers: function() {
+    var cityDetails = this.get('cityDetails');
+    var mapCenter = new google.maps.LatLng(cityDetails.latitude, cityDetails.longitude);
+    // no longer need this as I will not display map where there are no markers...
+    // if (currentMarkerValues && currentMarkerValues.length > 0) {
+    //  mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude, currentMarkerValues[0].longitude);
+    // } else {
+    //  mapCenter = new google.maps.LatLng(Discourse.Constants.DEFAULT_CITY_DETAILS.lat, Discourse.Constants.DEFAULT_CITY_DETAILS.lon);
+    // }
+
+    var zoom = 15;
+
+    var styles = [{
+      "featureType": "poi",
+      "elementType": "labels",
+      "stylers": [{
+        "visibility": "off"
+      }]
+    }];
+
+    var mapOptions = {
+      zoom: zoom,
+      center: mapCenter,
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      styles: styles
+    };
+
+    this.map = new google.maps.Map(document.getElementById(
+        'topics-map-canvas'),
+      mapOptions);
+    var that = this;
+    google.maps.event.addListener(this.map, 'click', function(event) {
+      that.mapClicked(event.latLng.lat(), event.latLng.lng());
+    });
+
+
+  },
+
+  renderMapWithMarkers: function() {
     var currentMarkerValues = this.get('markers');
     var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
       currentMarkerValues[0].longitude);
@@ -163,19 +227,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         'topics-map-canvas'),
       mapOptions);
 
-
-    // this.map.setOptions({
-    //   styles: styles
-    // });
-
     var bounds = new google.maps.LatLngBounds();
     // TODO - ensure I have unique markers where location is same
-    // var uniqueMarkerValues = [];
-    // $.each(currentMarkerValues, function(index, value) {
-    //  // console.log(uniqueMarkerValues);
-    //  uniqueMarkerValues.push(value);
 
-    // });
     this.infoWindows = [];
     var that = this;
 
@@ -285,7 +339,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     //   // map.setCenter(marker.getPosition());
 
     // }, 500);
-    google.maps.event.addListener(that.map, 'click', function(event) {
+    google.maps.event.addListener(this.map, 'click', function(event) {
       that.mapClicked(event.latLng.lat(), event.latLng.lng());
     });
 

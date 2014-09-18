@@ -6,22 +6,28 @@ default {
 
   initialize: function() {
     Discourse.SiteSettings.maptopic = {
-      defaultCity: {
-        city_name: "madrid",
-        longitude: "-3.7037902",
-        latitude: "40.4167754",
-        country: "Spain",
-      },
+      // defaultCity: {
+      //   city_name: "madrid",
+      //   longitude: "-3.7037902",
+      //   latitude: "40.4167754",
+      //   country: "Spain",
+      // },
       defaultCityName: 'madrid',
       citySelectionItems: [{
         displayString: 'Berlin',
-        value: 'berlin'
+        value: 'berlin',
+        longitude: "13.4060912", 
+        latitude: "52.519171"
       }, {
         displayString: 'Birmingham',
-        value: 'birmingham'
+        value: 'birmingham',
+        longitude: "-1.890401", 
+        latitude: "52.48624299999999"
       }, {
         displayString: 'London',
-        value: 'london'
+        value: 'london',
+        longitude: "-0.1198244", 
+        latitude: "51.51121389999999"
       }, {
         displayString: 'Madrid',
         longitude: "-3.7037902",

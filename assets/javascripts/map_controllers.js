@@ -67,7 +67,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       // p.user = users[p.user_id];
     });
     return currentMarkerValues;
-  }.property()
+  }.property('content')
 });
 
 // not using object controller as I won't be setting its content..
@@ -103,7 +103,6 @@ Discourse.MapController = Discourse.Controller.extend({
       }
 
       var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
-      debugger;
       this.transitionToRoute('map.fromOneParam', topiclist);
     }
   },
