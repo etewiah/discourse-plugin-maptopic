@@ -29,3 +29,9 @@
 .tall-maps {
   height:900px;
 }
+
+#map-infowindow-content{
+  cursor: pointer;
+  cursor: hand;
+  min-height: 50px;
+}

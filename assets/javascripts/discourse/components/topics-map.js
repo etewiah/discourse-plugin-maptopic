@@ -265,13 +265,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         // address: value.title
       });
       var contentString = '<div id="map-infowindow-content" >' +
-        '<div id="siteNotice">' +
-        '</div>' +
+        '<a>' +
         '<h4 id="firstHeading" class="firstHeading">' + title +
         '</h4>' +
         '<div id="bodyContent">' +
         '<small>By: ' + userName + '</small>' +
-        '</div>' +
+        '</div></a>' +
         '</div>';
 
       var infowindowInstance = new google.maps.InfoWindow({
@@ -292,10 +291,16 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         infowindowInstance.open(that.map, marker);
       });
 
-      // google.maps.event.addListener(infowindowInstance, 'click', function(event) {
-      //   debugger;
 
-      // });
+      google.maps.event.addListener(marker, 'click', function(event) {
+        // TODO - DRY this code:
+        for (var i = 0; i < that.infoWindows.length; i++) {
+          that.infoWindows[i].close();
+        }
+        that.infoWindows = [];
+        that.infoWindows.push(infowindowInstance);
+        infowindowInstance.open(that.map, marker);
+      });
 
       google.maps.event.addListener(infowindowInstance, 'domready', function() {
         document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
@@ -311,14 +316,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         });
       });
 
-      google.maps.event.addListener(marker, 'click', function(event) {
-        if (infowindowInstance.dataObjectType === 'topic') {
-          that.locationTopicSelected(event, infowindowInstance.dataObject);
-        } else if (infowindowInstance.dataObjectType === 'post') {
-          that.locationPostSelected(event, infowindowInstance.dataObject);
-        }
-
-      });
 
     });
 
