@@ -7,7 +7,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   // isCenteredBinding: 'controller.activePost',
   onActivePostChange: function() {
     var activePost = this.get('activePost');
-    // debugger;
     if (this.get('activePost.post_number') === 1) {
       var icon = this.topic_icon;
       var userName = activePost.topic.get('posters.firstObject.user.username') || activePost.topic.get('details.created_by.username');
@@ -84,7 +83,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   clickEvent: null,
 
   markersChanged: function() {
-    debugger;
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
   }.observes('markers','currentCity'),

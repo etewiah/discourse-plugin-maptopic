@@ -1,21 +1,21 @@
 Discourse.MapMixin = Em.Mixin.create({
     
-  activate: function(transition) {
-    this._super()
-    // ensure conversations nav is not shown in app handlebars
-    var appController = this.controllerFor('application');
-    // console.log('conv route setting activeSubnav to conversations');
-    appController.set('showSubnav', true);
-    appController.set('activeSubnav', 'conversations');
-  },
-  deactivate: function(transition) {
-    this._super()
-    // ensure conversations nav is shown in app handlebars
-    var appController = this.controllerFor('application');
-    // console.log('conv route setting activeSubnav to gigs');
-    appController.set('showSubnav', false);
-    // appController.set('activeSubnav', 'gigs');
-  }
+  // activate: function(transition) {
+  //   this._super()
+  //   // ensure conversations nav is not shown in app handlebars
+  //   var appController = this.controllerFor('application');
+  //   // console.log('conv route setting activeSubnav to conversations');
+  //   appController.set('showSubnav', true);
+  //   appController.set('activeSubnav', 'conversations');
+  // },
+  // deactivate: function(transition) {
+  //   this._super()
+  //   // ensure conversations nav is shown in app handlebars
+  //   var appController = this.controllerFor('application');
+  //   // console.log('conv route setting activeSubnav to gigs');
+  //   appController.set('showSubnav', false);
+  //   // appController.set('activeSubnav', 'gigs');
+  // }
 });
 
 Discourse.MapRootRoute = Discourse.Route.extend({
@@ -36,7 +36,8 @@ Discourse.MapRootRoute = Discourse.Route.extend({
     // appController.set('activeSubnav', 'gigs');
   },
   beforeModel: function(transition) {
-    var currentCity = Discourse.SiteSettings.maptopic.defaultCityName;
+    var controller = this.controllerFor('map');
+    var currentCity = controller.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
     var params = {
       currentCity: currentCity
     }

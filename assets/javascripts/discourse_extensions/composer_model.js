@@ -16,8 +16,6 @@ Discourse.Composer.reopen({
           var lastPostInTopic = pstrPosts.findBy('id', post_result.post.id);
           // for replies, this ensures location is available for map markers:
           lastPostInTopic.set('location',locationObject);
-          debugger;
-
         }
         var set_location_endpoint = '/location_topics/set_location';
         // if the post is a reply, we associate location to post rather than topic..
@@ -33,9 +31,7 @@ Discourse.Composer.reopen({
             topic_id: post_result.post.topic_id
           }
         });
-        debugger;
         map_topic.then(function(set_location_result) {
-          debugger;
           return post_result;
         });
         return map_topic;
