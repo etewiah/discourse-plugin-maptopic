@@ -1,6 +1,6 @@
 {{#if model.hasLocation}} 
 
-      {{ topics-map action="postSelected" mapClickedAction="replyWithLocation" markers=model.markers activePostBinding="controller.activePost" }}
+      {{ topics-map action="postSelected" mapClickedAction="replyWithLocation" markers=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }}
 
       <h2 style="line-height: 32px;margin-top:0px;">
         <small>Conversation related to : ' {{ model.locationDetails.title }} ' </small>

@@ -1,14 +1,15 @@
-.reply-area .reply-to{
-  display:none;
-}
 
-.reply-area .location-aware-reply-to{
-  margin-bottom:10px;
-}
-.composer-location-selector{
-	text-decoration: underline;
-}
-
+//colors
+$color_alizarin_crimson_approx: #ea2725;
+$white: #fff;
+//var is already set
+//$white: white;
+$color_picton_blue_approx: #4cbeff;
+$black_20: rgba(0,0,0,0.2);
+$color_mine_shaft_approx: #333;
+$color_gray_nurse_approx: #e6e8ea;
+$color_shakespeare_approx: #57a9d9;
+$color_malibu_approx: #82d1ff;
 
 
 
@@ -110,33 +111,6 @@ $nav-tabs-active-link-hover-border-color:  #A8A8A8;
 $nav-tabs-active-link-hover-bg: #d5d5d5;
 */
 
-
-.site-nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-  background-color: white;
-}
-
-.site-nav-tabs > li > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-  cursor: pointer;
-}
-
-
-
-
-//colors
-$color_alizarin_crimson_approx: #ea2725;
-$white: #fff;
-//var is already set
-//$white: white;
-$color_picton_blue_approx: #4cbeff;
-$black_20: rgba(0,0,0,0.2);
-$color_mine_shaft_approx: #333;
-$color_gray_nurse_approx: #e6e8ea;
-$color_shakespeare_approx: #57a9d9;
-$color_malibu_approx: #82d1ff;
-
-#facebook-event-url {
-  width: 90%;
-}
 
 
 .wrapper-dropdown-5 {

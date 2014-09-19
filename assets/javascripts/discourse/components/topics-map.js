@@ -2,7 +2,11 @@
 // Discourse.LastSelectedLatLng = {};
 
 Discourse.TopicsMapComponent = Ember.Component.extend({
-
+  // classNameBindings: ['mapsClass'],
+  // mapsClass: function() {
+  //   debugger;
+  //   return 'tall-maps';
+  // }.property(),
 
   // isCenteredBinding: 'controller.activePost',
   onActivePostChange: function() {
@@ -85,7 +89,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   markersChanged: function() {
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
-  }.observes('markers','currentCity'),
+  }.observes('markers', 'currentCity'),
   // TODO - check if below is redundant
   markerAdded: function() {
     // debugger;
@@ -122,7 +126,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   cityDetails: function() {
     var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
     // debugger;
-    var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value',currentCity);
+    var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
     return cityObject;
     // return {
     //   longitude: "13.4060912", 
@@ -145,7 +149,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       this.renderMapWithMarkers();
     } else {
       this.renderMapWithoutMarkers();
-        // "40.4167754", "-3.7037902");
+      // "40.4167754", "-3.7037902");
       // longitude: "-3.7037902",
       // # latitude: "40.4167754)
     }

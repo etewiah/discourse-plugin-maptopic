@@ -33,6 +33,11 @@ default {
         longitude: "-3.7037902",
         latitude: "40.4167754",
         value: 'madrid'
+      },{
+        displayString: 'Porto',
+        longitude: "-8.6239254",
+        latitude: "41.1566892",
+        value: 'porto'
       }]
 
     };
