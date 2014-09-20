@@ -9,6 +9,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   // }.property(),
 
   // isCenteredBinding: 'controller.activePost',
+  infoWindows: [],
   onActivePostChange: function() {
     var activePost = this.get('activePost');
     if (this.get('activePost.post_number') === 1) {
@@ -380,19 +381,22 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           // infowindowForClickedLocation.setContent(results[0].formatted_address);
           infowindowForClickedLocation.open(that.map, that.markerForClickedLocation);
 
-          for (var i = 0; i < that.infoWindows.length; i++) {
-            that.infoWindows[i].close();
-          }
+          // if (that.infoWindows) {
+            for (var i = 0; i < that.infoWindows.length; i++) {
+              that.infoWindows[i].close();
+            }
+          // }
           that.infoWindows = [];
           that.infoWindows.push(infowindowForClickedLocation);
 
 
           google.maps.event.addListener(infowindowForClickedLocation, 'domready', function() {
             document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {
-              e.stopPropagation();
+              // e.stopPropagation();
               e.preventDefault();
               var locationName = e.srcElement.elements['clickedlocation-name'].value;
               if (Ember.isBlank(locationName)) {
+                // TODO - warn about empty name
                 debugger;
               } else {
                 // clear marker;

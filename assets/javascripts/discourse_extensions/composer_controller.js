@@ -2,16 +2,16 @@
 require("discourse/controllers/composer")["default"].reopen({
   setLocationPrompt: function() {
     if (this.get('model.locationObject')) {
-      return " Change location";
+      return " change location";
     } else {
-      return " Associate with a location";
+      return " select a location";
     };
   }.property('model.locationObject'),
   locationTitle: function() {
     if (this.get('model.locationObject')) {
-      return "This topic is associated with ' " + this.get('model.locationObject.title') + " '";
+      return "associated location is: ' " + this.get('model.locationObject.title') + " '";
     } else {
-      return "This topic is not associated with a location.";
+      return "not associated with a location.";
     };
   }.property('model.locationObject.title'),
   actions: {
