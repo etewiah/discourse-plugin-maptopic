@@ -123,6 +123,7 @@ Discourse.MapController = Discourse.Controller.extend({
       // "http://google.com";
     }, this);
     // below will add a city from the url that is not in the list:
+    // now doing that closer to the bone (in topic_list_model where I get city long etc from server..)
     // if(!selectionItems.findBy('value', this.get('currentCity').toLowerCase())){
     //   selectionItems.pushObject({
     //     displayString: this.get('currentCity').capitalize(),

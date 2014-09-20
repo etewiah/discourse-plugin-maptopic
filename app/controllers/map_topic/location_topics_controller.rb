@@ -25,7 +25,7 @@ module MapTopic
       #   latitude = params[:latitude]
       #   center_point = [latitude,longitude]
       if params[:city]
-        location = get_location_from_city_name(params[:city])
+        location = get_location_from_city_name(params[:city].downcase)
       else
         location = get_nearest_location_to_request
       end
@@ -117,14 +117,14 @@ module MapTopic
 
 
     def get_location_from_city_name(city_name)
-      location_topic = MapTopic::LocationTopic.where(:location_title => city_name,:location_id => 0).first
+      location_topic = MapTopic::LocationTopic.where(:location_title => city_name.downcase,:location_id => 0).first
       if location_topic
         return location_topic
       else
         location_coordinates = Geocoder.coordinates(city_name)
         if location_coordinates
           location_topic = MapTopic::LocationTopic.create({
-                                                            location_title: city_name,
+                                                            location_title: city_name.downcase,
                                                             longitude: location_coordinates[1],
                                                             latitude: location_coordinates[0],
                                                             location_id: 0,
