@@ -33,6 +33,12 @@ Discourse.TopicList.reopenClass({
   fromWhereLocationPresent: function(result, filter_url, params) {
     // debugger;
     // todo - find out what params is used for in original implementation 
+    // here, if we don't know which haven't a city client-side server will calculate that 
+    // and pass it back
+    if(!params.currentCity){
+      debugger;
+      params.currentCity = result.topic_list.city_name;
+    }
     var topicList = Discourse.TopicList.create({
       inserted: Em.A(),
       filter: filter_url,
@@ -54,15 +60,17 @@ Discourse.TopicList.reopenClass({
   },
 
   findWhereLocationPresent: function(filter_url, params) {
-    var url = Discourse.getURL("/location_topics/get_for_city") ;
-    var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value',params.currentCity);
-    var latitude = cityObject.latitude || 0;
-    var longitude = cityObject.longitude || 0;
+    var data = {}
+    var url = Discourse.getURL("/location_topics/get_for_city");
+    if (params.currentCity) {
+      // var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', params.currentCity);
+      // data.latitude = cityObject.latitude || 0;
+      // data.longitude = cityObject.longitude || 0;
+      data.city = params.currentCity;
+    }
+    debugger;
     return Discourse.ajax(url, {
-      data: {
-        longitude: longitude,
-        latitude: latitude
-      }
+      data: data
     }).then(function(result) {
       return Discourse.TopicList.fromWhereLocationPresent(result, filter_url, params);
     });

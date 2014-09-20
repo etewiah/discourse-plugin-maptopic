@@ -37,12 +37,13 @@ Discourse.MapRootRoute = Discourse.Route.extend({
   },
   beforeModel: function(transition) {
     var controller = this.controllerFor('map');
-    var currentCity = controller.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
-    var params = {
-      currentCity: currentCity
+    // defaultCity now gets calculated server side
+    // var currentCity = controller.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
+    var params = {};
+        // only set currentCity if user is arriving at root route for the 1st time:
+    if(controller.currentCity){
+      params.currentCity = controller.currentCity;
     }
-    // TODO - figure out default city bases 
-    // var defaultCity = "madrid";
     var convModel = Discourse.TopicList.findWhereLocationPresent("", params);
     this.transitionTo('map.fromOneParam', convModel);
   }

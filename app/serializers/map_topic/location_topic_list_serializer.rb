@@ -7,7 +7,8 @@ module MapTopic
                :draft_key,
                :draft_sequence,
                :location_topics,
-               :locations
+               :locations,
+               :city_info
 
     has_many :topics, serializer: TopicListItemSerializer, embed: :objects
 

@@ -15,19 +15,22 @@ module MapTopic
     end
 
     def get_nl
-      render json: get_nearest_location
+      render json: get_nearest_location_to_request
     end
 
     def get_for_city
       distance = 20
-      if params[:longitude] && params[:latitude]
-        longitude = params[:longitude]
-        latitude = params[:latitude]
-        center_point = [latitude,longitude]
+      # if params[:longitude] && params[:latitude]
+      #   longitude = params[:longitude]
+      #   latitude = params[:latitude]
+      #   center_point = [latitude,longitude]
+      if params[:city]
+        location = get_location_from_city_name(params[:city])
       else
-        nearest_location = get_nearest_location
-        center_point = [nearest_location.latitude,nearest_location.longitude]
+        location = get_nearest_location_to_request
       end
+      center_point = [location.latitude,location.longitude]
+
       #       if params[:filter_key] && params[:filter_value]
       #   if params[:filter_key] == 'city'
       #     @location_topic_ids = ::MapTopic::GigTopic.where("gig_city = ?", params[:filter_value]).limit(50).pluck('topic_id')
@@ -47,7 +50,10 @@ module MapTopic
       # using bounding_box only because pluck does not seem to work with near:
       # MapTopic::LocationTopic.near('berlin').limit(50).pluck('topic_id')
 
-      list = TopicList.new(:tag, current_user, location_topics_query)
+      list = TopicList.new(:blaa, current_user, location_topics_query)
+      # dynamically adding an extra attribute - could get me into trouble as serializer now expects this..
+      list.class.module_eval { attr_accessor :city_info}
+      list.city_info = location.to_json
       render_serialized(list, MapTopic::LocationTopicListSerializer,  root: 'topic_list')
 
       # render list
@@ -97,7 +103,7 @@ module MapTopic
 
     private
 
-    def get_nearest_location
+    def get_nearest_location_to_request
       if request.location && request.location.data['longitude'] != "0"
         #         longitude = params[:longitude]
         # latitude = params[:latitude]
@@ -106,6 +112,28 @@ module MapTopic
         return MapTopic::LocationTopic.where(:location_id => 0).near(center_point,5000).first
       else
         return MapTopic::LocationTopic.where(:location_title =>'berlin',:location_id => 0).first
+      end
+    end
+
+
+    def get_location_from_city_name(city_name)
+      location_topic = MapTopic::LocationTopic.where(:location_title => city_name,:location_id => 0).first
+      if location_topic
+        return location_topic
+      else
+        location_coordinates = Geocoder.coordinates(city_name)
+        if location_coordinates
+          location_topic = MapTopic::LocationTopic.create({
+                                                            location_title: city_name,
+                                                            longitude: location_coordinates[1],
+                                                            latitude: location_coordinates[0],
+                                                            location_id: 0,
+                                                            topic_id: 0
+          })
+          return location_topic
+        else
+          return MapTopic::LocationTopic.where(:location_title =>'london',:location_id => 0).first
+        end
       end
     end
 
