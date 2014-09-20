@@ -10,7 +10,24 @@ module MapTopic
       render json: { status: 'ok'}
     end
 
+    def get_location
+      return render json: request.location
+    end
+
+    def get_nl
+      render json: get_nearest_location
+    end
+
     def get_for_city
+      distance = 20
+      if params[:longitude] && params[:latitude]
+        longitude = params[:longitude]
+        latitude = params[:latitude]
+        center_point = [latitude,longitude]
+      else
+        nearest_location = get_nearest_location
+        center_point = [nearest_location.latitude,nearest_location.longitude]
+      end
       #       if params[:filter_key] && params[:filter_value]
       #   if params[:filter_key] == 'city'
       #     @location_topic_ids = ::MapTopic::GigTopic.where("gig_city = ?", params[:filter_value]).limit(50).pluck('topic_id')
@@ -20,10 +37,7 @@ module MapTopic
       # else
       #   @location_topic_ids = MapTopic::GigTopic.limit(50).pluck('topic_id')
       # end
-      longitude = params[:longitude]
-      latitude = params[:latitude]
-      distance = 20
-      center_point = [latitude,longitude]
+
       # [40.4167754, -3.7037902]
       # longitude: "-3.7037902",
       # latitude: "40.4167754",
@@ -83,6 +97,17 @@ module MapTopic
 
     private
 
+    def get_nearest_location
+      if request.location && request.location.data['longitude'] != "0"
+        #         longitude = params[:longitude]
+        # latitude = params[:latitude]
+        # center_point = ["52.519171","13.4060912"]
+        center_point = [request.location.data['latitude'],request.location.data['longitude']]
+        return MapTopic::LocationTopic.where(:location_id => 0).near(center_point,5000).first
+      else
+        return MapTopic::LocationTopic.where(:location_title =>'berlin',:location_id => 0).first
+      end
+    end
 
     def location_topics_query(options={})
       Topic.where("deleted_at" => nil)

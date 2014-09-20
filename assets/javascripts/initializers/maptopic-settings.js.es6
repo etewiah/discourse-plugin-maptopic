@@ -23,11 +23,11 @@ default {
         value: 'birmingham',
         longitude: "-1.890401", 
         latitude: "52.48624299999999"
-      }, {
-        displayString: 'London',
-        value: 'london',
-        longitude: "-0.1198244", 
-        latitude: "51.51121389999999"
+      // }, {
+      //   displayString: 'London',
+      //   value: 'london',
+      //   longitude: "-0.1198244", 
+      //   latitude: "51.51121389999999"
       }, {
         displayString: 'Madrid',
         longitude: "-3.7037902",
