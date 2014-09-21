@@ -19,31 +19,19 @@ Discourse.MapMixin = Em.Mixin.create({
 });
 
 Discourse.MapRootRoute = Discourse.Route.extend({
-  activate: function(transition) {
-    this._super()
-    // ensure conversations nav is not shown in app handlebars
-    var appController = this.controllerFor('application');
-    // console.log('conv route setting activeSubnav to conversations');
-    appController.set('showSubnav', true);
-    appController.set('activeSubnav', 'conversations');
-  },
-  deactivate: function(transition) {
-    this._super()
-    // ensure conversations nav is shown in app handlebars
-    var appController = this.controllerFor('application');
-    // console.log('conv route setting activeSubnav to gigs');
-    appController.set('showSubnav', false);
-    // appController.set('activeSubnav', 'gigs');
-  },
+
   beforeModel: function(transition) {
     var controller = this.controllerFor('map');
     // defaultCity now gets calculated server side
     // var currentCity = controller.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
     var params = {};
-        // only set currentCity if user is arriving at root route for the 1st time:
+        // only set currentCity if user is arriving at root route after 
     if(controller.currentCity){
       params.currentCity = controller.currentCity;
     }
+            // where user is arriving for the 1st time, will be calculated server side:
+// unless there is a preferred_city set for this user
+// else if (Discourse.currentuser....) {};
     var convModel = Discourse.TopicList.findWhereLocationPresent("", params);
     this.transitionTo('map.fromOneParam', convModel);
   }

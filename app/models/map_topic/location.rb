@@ -4,6 +4,14 @@ module MapTopic
 
         reverse_geocoded_by :latitude, :longitude
 
+        geocoded_by :full_address
+        after_validation :reverse_geocode
+
+        # the full_address method
+        def full_address
+            "#{address}, #{postal_code}, #{city}, #{country}"
+        end
+
         has_many :location_topics
         # , class_name: "::Blog::GigTopic"
         has_many :topics, through: :location_topics
