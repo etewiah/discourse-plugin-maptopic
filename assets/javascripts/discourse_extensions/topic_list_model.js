@@ -37,7 +37,6 @@ Discourse.TopicList.reopenClass({
     var cityInfo = JSON.parse(result.topic_list.city_info);
 
     if (cityInfo.location_title !== params.currentCity) {
-      debugger;
       params.currentCity = cityInfo.location_title;
     }
     var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;

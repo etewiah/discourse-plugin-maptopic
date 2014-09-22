@@ -16,6 +16,7 @@ require("discourse/controllers/composer")["default"].reopen({
   }.property('model.locationObject.title'),
   actions: {
     showLocationSelector: function() {
+      // below calls method defined in application_route
       this.send('showLocationSelectorModal', this.get('model'));
 
     }

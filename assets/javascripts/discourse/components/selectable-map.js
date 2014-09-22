@@ -22,7 +22,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     //   path: google.maps.SymbolPath.CIRCLE,
     //   scale: 20
     // }
-
   },
 
   displayMapIfNeeded: function() {
@@ -45,16 +44,15 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
 
   initiateMaps: function() {
     // var currentMarkerValues = this.get('markers');
-    var defaultCity = {
-      city_name: "madrid",
-      songkick_id: "28755",
-      longitude: "-3.7037902",
-      latitude: "40.4167754",
-      country: "Spain",
-      range: "15"
+
+    if(this.get('defaultLocation.latitude')){
+      var defaultLocation = this.get('defaultLocation');
+    }else{
+      debugger;
+      // var defaultLocation = defaultCity;
     }
-    var mapCenter = new google.maps.LatLng(defaultCity.latitude,
-      defaultCity.longitude);
+    var mapCenter = new google.maps.LatLng(defaultLocation.latitude,
+      defaultLocation.longitude);
 
 
     var zoom = 15;
