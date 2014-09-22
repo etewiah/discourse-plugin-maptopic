@@ -3,7 +3,7 @@
       <span class="dd-current" style="min-width: 50px;display: inline-block;" >
         {{ currentSelectionItem.displayString }}</span>
       <ul  class="dropdown">
-        {{#each item in selectionItems }}
+        {{#each item in sortedSelectionItems }}
           <li {{ bind-attr class=item.class }}><a {{ bind-attr href=item.url }} {{ bind-attr data-val=item.value }}  >{{ item.displayString }}</a></li>
         {{/each}}
       </ul>

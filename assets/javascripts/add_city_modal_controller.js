@@ -1,6 +1,9 @@
 Discourse.AddCityModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
   needs: ['map'],
   cityName: "",
+  onShow: function(){
+    this.set('cityName','');
+  },
   readyToAdd: function() {
     if (Ember.isBlank(this.get('cityName'))) {
       return false;

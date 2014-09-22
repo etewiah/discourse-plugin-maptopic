@@ -4,8 +4,20 @@ Discourse.SimpleDropdownComponent = Ember.Component.extend({
   // dropdownId: 'dd',
   tagName: 'span',
 
+  resortSelectionItems: function(){
+    var selectionItems = this.get('selectionItems');
+    if(selectionItems){
+      var selectionItemsWithoutNcPrompt = selectionItems.rejectBy('value','new_city');
+      var sortedSelectionItems = selectionItemsWithoutNcPrompt.sortBy('value');
+      sortedSelectionItems.push({displayString: "Add a new city",value: "new_city"})
+      this.set('sortedSelectionItems',sortedSelectionItems);
+      // this.set
+    }
+  }.observes('selectionItems.@each').on('init'),
 
   didInsertElement: function() {
+    var selectionItems = this.get('sortedSelectionItems');
+    // selectionItems.push({displayString: "Add a new city 2",value: "new_city2"})
     // this.set('currentSelectionItem', currentSelectionItem);
     this.set('currentSelectionItem.class', 'hidden');
 
@@ -39,7 +51,6 @@ Discourse.SimpleDropdownComponent = Ember.Component.extend({
         if (event.target.dataset.val === "new_city") {
           self.sendAction('newLocationAction');
         } else {
-          debugger;
           self.set('currentSelectionItem.class', 'visible');
           // $(this).find('.hidden').toggleClass();
           // $(this).toggleClass('hidden');
@@ -48,7 +59,6 @@ Discourse.SimpleDropdownComponent = Ember.Component.extend({
           self.set('currentSelectionItem', currentSelectionItem);
           self.set('currentSelectionItem.class', 'hidden');
           event.preventDefault();
-          // debugger;
           self.sendAction('action', currentSelectionItem.value);
         }
       }

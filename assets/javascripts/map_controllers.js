@@ -144,7 +144,6 @@ Discourse.MapController = Discourse.ObjectController.extend({
 
     //   });
     // }
-    selectionItems.push({displayString: "Add a new city",value: "new_city"})
     return selectionItems;
   }.property(),
 
