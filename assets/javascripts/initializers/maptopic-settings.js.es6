@@ -16,7 +16,7 @@ default {
       citySelectionItems: [{
         displayString: 'Belfast',
         value: 'belfast',
-        latitude: '54.59728500000001'
+        latitude: '54.59728500000001',
         longitude: '-5.93012'
       },{
         displayString: 'Berlin',
