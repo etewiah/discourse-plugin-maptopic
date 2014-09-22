@@ -1,0 +1,46 @@
+{{#unless complete}}
+<div class="modal-body">
+  <div>
+    <div>
+    </div>
+  </div>
+
+  <form {{action "addNewCity" on="submit"}}>
+    <table>
+      <tr>
+        <td style="" class="label">
+          <label for='location-city-name'>
+          </label>
+        </td>
+      </tr>
+      <tr class="input">
+        <td style="">
+          {{text-field value=cityName id="location-city-name" autofocus="autofocus"}}
+        </td>
+        <td>
+
+        </td>
+      </tr>
+
+      <tr class="instructions">
+        <td>
+          <label>Name of the new city</label>
+        </td>
+      </tr>
+    </table>
+  </form>
+
+
+</div>
+
+<div class="modal-footer">
+    {{#if readyToAdd}}
+          <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addNewCity}}>
+            Add
+          </button>
+    {{/if}}
+          {{#if formSubmitted}} &nbsp; <i class='fa fa-spinner fa-spin'></i>
+          {{else}} &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
+          {{/if}}
+</div>
+{{/unless}}

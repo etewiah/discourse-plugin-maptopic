@@ -18,7 +18,6 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
       if (this.get('controllers.map.currentCity')) {
         var currentCity = this.get('controllers.map.currentCity');
         var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
-        debugger;
         return selectionItems.findBy('value', currentCity);
       } else {
         // fuck it

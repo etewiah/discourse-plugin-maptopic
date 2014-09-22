@@ -51,7 +51,8 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
   setupController: function(controller, model) {
     var mapController = this.controllerFor('map');
     // debugger;
-    // mapController.set('currentCityObject', model.currentCityObject);
+    mapController.set('content', model);
+    // set above just to satisfy objectcontroller need for content....
     mapController.set('currentCity', model.params.currentCity);
     controller.set('content',model);
   }

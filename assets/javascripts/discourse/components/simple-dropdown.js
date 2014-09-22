@@ -36,17 +36,21 @@ Discourse.SimpleDropdownComponent = Ember.Component.extend({
 
     ddElement.on('click', function(event) {
       if (event.target.dataset.val) {
-        // debugger;
-        self.set('currentSelectionItem.class', 'visible');
-        // $(this).find('.hidden').toggleClass();
-        // $(this).toggleClass('hidden');
+        if (event.target.dataset.val === "new_city") {
+          self.sendAction('newLocationAction');
+        } else {
+          debugger;
+          self.set('currentSelectionItem.class', 'visible');
+          // $(this).find('.hidden').toggleClass();
+          // $(this).toggleClass('hidden');
 
-        var currentSelectionItem = self.get('selectionItems').findBy('value', event.target.dataset.val )
-        self.set('currentSelectionItem', currentSelectionItem);
-        self.set('currentSelectionItem.class', 'hidden');
-        event.preventDefault();
-        // debugger;
-        self.sendAction('action', currentSelectionItem.value);
+          var currentSelectionItem = self.get('selectionItems').findBy('value', event.target.dataset.val)
+          self.set('currentSelectionItem', currentSelectionItem);
+          self.set('currentSelectionItem.class', 'hidden');
+          event.preventDefault();
+          // debugger;
+          self.sendAction('action', currentSelectionItem.value);
+        }
       }
       $(this).toggleClass('active');
       event.stopPropagation();

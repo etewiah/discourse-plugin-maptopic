@@ -71,10 +71,10 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
 });
 
 // not using object controller as I won't be setting its content..
-Discourse.MapController = Discourse.Controller.extend({
+Discourse.MapController = Discourse.ObjectController.extend({
   // need to add composer to be able to start a conversation from here.
   // needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
-  needs: ['composer'],
+  needs: ['composer','map-from-one-param'],
 
   actions: {
     startConversation: function() {
@@ -97,6 +97,8 @@ Discourse.MapController = Discourse.Controller.extend({
       //return true to bubble up to route...
       return false;
     },
+    // below is primary action passed into simple-dropdown component
+    // but is also called by add_city_modal directly
     cityChanged: function(newCity) {
       var params = {
         currentCity: newCity
@@ -104,8 +106,19 @@ Discourse.MapController = Discourse.Controller.extend({
 
       var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
       this.transitionToRoute('map.fromOneParam', topiclist);
+    },
+    addLocation: function(newLocation){
+      // var mfopController = this.get('controllers.map-from-one-param');
+       // mfopController.get('model')
+       // not entire sure why above always returns null :(
+            // below calls method defined in application_route
+      this.send('showAddCityModal');
+
     }
+
   },
+
+
 
   currentCitySelection: function() {
     var currentCity = this.get('currentCity') || Discourse.SiteSettings.maptopic.defaultCityName;
@@ -131,6 +144,7 @@ Discourse.MapController = Discourse.Controller.extend({
 
     //   });
     // }
+    selectionItems.push({displayString: "Add a new city",value: "new_city"})
     return selectionItems;
   }.property(),
 

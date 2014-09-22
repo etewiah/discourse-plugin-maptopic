@@ -42,6 +42,7 @@ Discourse.TopicList.reopenClass({
     var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
     // where a random city (passed by url for eg) is being used, below will add that city 
     if (!selectionItems.findBy('value', params.currentCity.toLowerCase())) {
+      debugger;
       selectionItems.pushObject({
         displayString: cityInfo.location_title.capitalize(),
         value: cityInfo.location_title.toLowerCase(),
