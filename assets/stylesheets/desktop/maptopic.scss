@@ -1,5 +1,9 @@
+/* hide  category selector */
+#reply-control .category-input{
+  display: none !important;
+}
 .category-input{
-  display: none
+  display: none !important;
 }
 /*hide default reply in composer*/
 .reply-area .reply-to{

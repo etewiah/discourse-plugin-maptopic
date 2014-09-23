@@ -99,6 +99,16 @@ module MapTopic
 
       location_topic.save!
 
+# TODO - set a location_post as well
+      # location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
+      # location_post.location_title = location.title
+      # location_post.longitude = location.longitude
+      # location_post.latitude = location.latitude
+      # location_post.location_id = location.id
+
+      # location_post.save!
+
+
       return render json: location.to_json
 
       # render json: @topic
