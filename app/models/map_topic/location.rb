@@ -5,6 +5,8 @@ module MapTopic
         # geocoded_by :full_address
         after_validation :reverse_geocode
 
+        after_create :create_slug
+
         # http://stackoverflow.com/questions/13433865/geocoding-addresses-with-geocoder-gem-and-postgis-database-with-rgeo
         reverse_geocoded_by :latitude, :longitude do |obj, results|
             # get here when I run
@@ -16,7 +18,7 @@ module MapTopic
                 # geo.street_address
                 obj.country = geo.country
                 obj.postal_code = geo.postal_code
-                obj.region = geo.state            
+                obj.region = geo.state
             end
         end
 
@@ -39,6 +41,22 @@ module MapTopic
         has_many :topics, through: :location_topics
         has_many :location_posts
         has_many :posts, through: :location_posts
+
+        def create_slug
+            if self.title
+              self.slug = [self.id, self.title.parameterize].join("-")
+            end
+            self.save
+        end
+
+        # def update_location_topic
+        #     location_topic = self.location_topics.last
+        #     if location_topic
+        #         location_topic.city = self.city
+        #         location_topic.country = self.country
+        #         location_topic.save
+        #     end
+        # end
 
         #     t.string :title
         # t.text :description

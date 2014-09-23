@@ -77,7 +77,7 @@ module MapTopic
 
 
       # TODO - find location which is close enough to be considered the same..
-      location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_create
+      location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
       location.title = params[:location][:title] || ""
       location.address = params[:location][:formattedAddress] || ""
 
@@ -88,7 +88,10 @@ module MapTopic
       location.save!
 
 
-      location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_create
+      location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_initialize
+      location_topic.city = location.city
+      location_topic.country = location.country
+
       location_topic.location_title = location.title
       location_topic.longitude = location.longitude
       location_topic.latitude = location.latitude
