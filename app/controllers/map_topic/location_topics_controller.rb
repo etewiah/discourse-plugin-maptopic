@@ -89,8 +89,8 @@ module MapTopic
 
 
       location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_initialize
-      location_topic.city = location.city
-      location_topic.country = location.country
+      location_topic.city = location.city.downcase
+      location_topic.country = location.country.downcase
 
       location_topic.location_title = location.title
       location_topic.longitude = location.longitude
