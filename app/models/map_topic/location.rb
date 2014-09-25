@@ -12,6 +12,7 @@ module MapTopic
             # get here when I run
             # rake geocode:all CLASS=MapTopic::Location SLEEP=2.25 BATCH=5
             if geo = results.first
+                binding.pry
                 # obj.latlon = Location.rgeo_factory_for_column(:latlon).point(geo.longitude, geo.latitude)
                 obj.city = geo.city.downcase
                 obj.address = geo.formatted_address

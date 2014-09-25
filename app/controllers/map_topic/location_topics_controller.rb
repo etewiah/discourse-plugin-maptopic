@@ -10,8 +10,21 @@ module MapTopic
       render json: { status: 'ok'}
     end
 
-    def get_location
+    def get_req_location
       return render json: request.location
+    end
+
+    def get_geocoder_location
+      return render json: Geocoder.search(request.remote_ip).first
+    end
+
+
+    def get_remote_ip
+      return render json: { remote_ip: request.remote_ip, x_real_ip_env: request.env['HTTP_X_REAL_IP'] }
+    end
+
+    def get_remote_addr
+      return render json: { remote_addr: request.remote_addr, x_real_ip_hd: request.headers["X-Real-IP"] }
     end
 
     def get_nl
@@ -117,15 +130,24 @@ module MapTopic
     private
 
     def get_nearest_location_to_request
-      if request.location && request.location.data['longitude'] != "0"
-        #         longitude = params[:longitude]
-        # latitude = params[:latitude]
-        # center_point = ["52.519171","13.4060912"]
-        center_point = [request.location.data['latitude'],request.location.data['longitude']]
-        return MapTopic::LocationTopic.where(:location_id => 0).near(center_point,5000).first
-      else
+      # if request.location && request.location.data['longitude'] != "0"
+      #   center_point = [request.location.data['latitude'],request.location.data['longitude']]
+      #   return MapTopic::LocationTopic.where(:location_id => 0).near(center_point,5000).first
+      # else
+      #   return MapTopic::LocationTopic.where(:location_title =>'berlin',:location_id => 0).first
+      # end
+      request_location = Geocoder.search(request.remote_ip).first
+
+      unless request_location && request_location.data['longitude'] != "0"
         return MapTopic::LocationTopic.where(:location_title =>'berlin',:location_id => 0).first
+
+      else
+        center_point = [request_location.data['latitude'],request_location.data['longitude']]
+        return MapTopic::LocationTopic.where(:location_id => 0).near(center_point,5000).first
+    
       end
+
+
     end
 
 
