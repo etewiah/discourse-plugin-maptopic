@@ -51,9 +51,9 @@ require("discourse/controllers/topic")["default"].reopen({
         formattedAddress: geocodedLocation.formatted_address,
         latitude: geocodedLocation.geometry.location.lat(),
         longitude: geocodedLocation.geometry.location.lng(),
-        title: title
-        // city: city,
-        // country: country
+        title: title,
+        city: city,
+        country: country
       };
       debugger;
 

@@ -12,14 +12,13 @@ module MapTopic
             # get here when I run
             # rake geocode:all CLASS=MapTopic::Location SLEEP=2.25 BATCH=5
             if geo = results.first
-                binding.pry
                 # obj.latlon = Location.rgeo_factory_for_column(:latlon).point(geo.longitude, geo.latitude)
-                obj.city = geo.city.downcase
-                obj.address = geo.formatted_address
+                obj.city = geo.city ?  geo.city.downcase : obj.city
+                obj.address = geo.formatted_address ? geo.formatted_address : obj.address
                 # geo.street_address
-                obj.country = geo.country.downcase
-                obj.postal_code = geo.postal_code
-                obj.region = geo.state
+                obj.country = geo.country ? geo.country.downcase : obj.country
+                obj.postal_code = geo.postal_code ? geo.postal_code : obj.postal_code
+                obj.region = geo.state ? geo.state : obj.region
             end
         end
 

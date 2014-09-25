@@ -92,6 +92,8 @@ module MapTopic
       # TODO - find location which is close enough to be considered the same..
       location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
       location.title = params[:location][:title] || ""
+      location.city = params[:location][:city] || ""
+      location.country = params[:location][:country] || ""
       location.address = params[:location][:formattedAddress] || ""
 
       # below will not update if already exists:
