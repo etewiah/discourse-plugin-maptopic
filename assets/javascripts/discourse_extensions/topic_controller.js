@@ -3,12 +3,11 @@ require("discourse/controllers/topic")["default"].reopen({
   setUserPreferredCity: function() {
     // TODO set currentCity for map here (and also as custom user field)
     // need to get geocoder working first though..
-    debugger;
     if (this.get('location.city')) {
       var mapController = this.get('controllers.map');
-      debugger;
+      // debugger;
       // setting below should ensure that map.route uses this as default city..
-      mapController.set('currentCity', this.get('location.city'));
+      mapController.set('currentCity', this.get('location.city').toLowerCase() );
     }
     // this._super();
   }.observes('location'),

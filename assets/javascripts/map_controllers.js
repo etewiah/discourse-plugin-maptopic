@@ -68,10 +68,6 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         topic: t,
         location: t.get('location')
         // latitude: t.get('latitude'),
-        // longitude: t.get('longitude'),
-        // // title: show_time.title,
-        // // start_time_string: t.get('start_time_string'),
-        // title: t.get('title'),
         // // venueAddress: t.get('excerpt'),
         // venueName: t.get('location_title')
 
@@ -84,7 +80,10 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
 });
 
 // not using object controller as I won't be setting its content..
-Discourse.MapController = Discourse.ObjectController.extend({
+Discourse.MapController = Discourse.Controller.extend({
+  // went back to objectcontroller at some point when I was worried it might be needed
+  // to ensure observers triggered - that wasn't necessary though
+// Discourse.MapController = Discourse.ObjectController.extend({
   // need to add composer to be able to start a conversation from here.
   // needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
   needs: ['composer', 'map-from-one-param'],
