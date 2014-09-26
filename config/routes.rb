@@ -9,6 +9,7 @@ MapTopic::Engine.routes.draw do
   get "/location_topics/get_nl" => "location_topics#get_nl"
   get "/location_topics/get_remote_ip" => "location_topics#get_remote_ip"
   get "/location_topics/get_remote_addr" => "location_topics#get_remote_addr"
+  # get "/location_topics/get_location" => "location_topics#get_location"
 
 
   # end point for routes that are only implemented client side

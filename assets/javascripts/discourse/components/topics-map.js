@@ -324,11 +324,16 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       this.map.fitBounds(bounds);
     } else {
       // if there is only one marker, set center to be that one
-      // even though I initialized the map with this center, it seems necessary to call this again
+      // this.map.setZoom(zoom);
       // this.map.setCenter(mapCenter);
       // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
       this.map.fitBounds(bounds);
-      this.map.setZoom(zoom);
+      // seems silly but I really have to do all this to get the zoom looking half decent
+      google.maps.event.addListenerOnce(this.map, 'bounds_changed', function(event) {
+        if (this.getZoom() > 15) {
+          this.setZoom(15);
+        }
+      });
     }
 
     // Ember.run.later(this, function() {
@@ -382,9 +387,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           infowindowForClickedLocation.open(that.map, that.markerForClickedLocation);
 
           // if (that.infoWindows) {
-            for (var i = 0; i < that.infoWindows.length; i++) {
-              that.infoWindows[i].close();
-            }
+          for (var i = 0; i < that.infoWindows.length; i++) {
+            that.infoWindows[i].close();
+          }
           // }
           that.infoWindows = [];
           that.infoWindows.push(infowindowForClickedLocation);
