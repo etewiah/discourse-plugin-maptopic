@@ -182,7 +182,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
             // address: value.title
           });
           that.markers.pushObject(marker);
-          var contentString = '<div id="map-infowindow-content" >' +
+          var contentString = '<div id="smap-infowindow-content" >' +
             '<a>' +
             '<h4 id="firstHeading" class="firstHeading">' + value.name +
             '</h4>' +
@@ -208,7 +208,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
           });
 
           google.maps.event.addListener(infowindowInstance, 'domready', function() {
-            document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
+            document.getElementById("smap-infowindow-content").addEventListener("click", function(e) {
               e.stopPropagation();
               //action is locationFinalezed in sel loc modal ctrlr
               that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
@@ -269,6 +269,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
         }
       }
     });
-
   }
+
+  
 });

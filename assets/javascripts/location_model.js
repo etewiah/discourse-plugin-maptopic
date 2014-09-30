@@ -14,10 +14,11 @@ Discourse.Location.reopenClass({
       locationObject.city = city;
     }
     // latlng = result.geometry.location
-    debugger;
     return locationObject;
   },
-  locationFromGmap: function(result) {
+  locationFromGmap: function(result, city, country) {
+    // TODO - check if I already have city and country as result from Gmap
+    // can be dodgy (eg Balsall Heath for birmingham)
     var locationObject = {
         formattedAddress: result.formatted_address,
         latitude: result.geometry.location.lat(),
@@ -38,7 +39,6 @@ Discourse.Location.reopenClass({
       //return false; // break the loop   
     });
 
-    debugger;
     return locationObject;
   }
 });

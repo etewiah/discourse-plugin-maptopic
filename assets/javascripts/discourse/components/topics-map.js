@@ -41,7 +41,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     this.map.setZoom(15);
 
 
-    var contentString = '<div id="map-infowindow-content" >' +
+    var contentString = '<div id="tmap-infowindow-content" >' +
       '<h4 class="infowindow-heading">' + title +
       '</h4>' +
       '<p class="infowindow-address">' + address +
@@ -69,7 +69,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     var that = this;
     google.maps.event.addListener(infowindowInstance, 'domready', function() {
-      document.getElementById("map-infowindow-content").addEventListener("click", function(event) {
+      document.getElementById("tmap-infowindow-content").addEventListener("click", function(event) {
         event.stopPropagation();
         that.locationPostSelected(event, infowindowInstance.dataObject);
       });
@@ -87,16 +87,16 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   doubleClicked: false,
   clickEvent: null,
 
-  markersChanged: function() {
+  markerValuesChanged: function() {
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
-  }.observes('markers', 'currentCity'),
+  }.observes('markerValues', 'currentCity'),
   // TODO - check if below is redundant
   markerAdded: function() {
     // debugger;
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
-  }.observes('markers.length'),
+  }.observes('markerValues.length'),
   // hasMarkers: function() {
   //   if(this.get('markers') && this.get('markers').length > 0){
   //     return true;
@@ -132,7 +132,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   }.property('currentCity'),
 
   renderMap: function() {
-    var currentMarkerValues = this.get('markers');
+    var currentMarkerValues = this.get('markerValues');
     var markersFound = currentMarkerValues && currentMarkerValues.length > 0;
     // if (markersFound && !_mobile_device_) {
     // might need to reintroduce logic of detecting _mobile_device_
@@ -155,7 +155,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   renderMapWithoutMarkers: function() {
     var cityDetails = this.get('cityDetails');
     var mapCenter = new google.maps.LatLng(cityDetails.latitude, cityDetails.longitude);
-    // no longer need this as I will not display map where there are no markers...
+    // no longer need this as I will not display map where there are no markerValues...
     // if (currentMarkerValues && currentMarkerValues.length > 0) {
     //  mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude, currentMarkerValues[0].longitude);
     // } else {
@@ -191,7 +191,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   renderMapWithMarkers: function() {
-    var currentMarkerValues = this.get('markers');
+    var currentMarkerValues = this.get('markerValues');
     var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
       currentMarkerValues[0].longitude);
     // no longer need this as I will not display map where there are no markers...
@@ -226,8 +226,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // TODO - ensure I have unique markers where location is same
 
     this.infoWindows = [];
+    this.markers = [];
     var that = this;
-
     $.each(currentMarkerValues, function(index, value) {
       if (value.post) {
         var icon = that.post_icon;
@@ -257,7 +257,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         icon: icon
         // address: value.title
       });
-      var contentString = '<div id="map-infowindow-content" >' +
+      that.markers.pushObject(marker);
+
+      var contentString = '<div id="tmap-infowindow-content" >' +
         '<a>' +
         '<h4 id="firstHeading" class="firstHeading">' + title +
         '</h4>' +
@@ -296,7 +298,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       });
 
       google.maps.event.addListener(infowindowInstance, 'domready', function() {
-        document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
+        document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
           e.stopPropagation();
           // console.log("hi!");
           // debugger;
@@ -398,8 +400,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
               } else {
                 // clear marker;
                 that.markerForClickedLocation.setMap(null);
-                // that.locationInfoWindowSelected(results[0], locationName);
-                that.sendAction('mapClickedAction', results[0], locationName);
+                // that.locationInfoWindowSelected(results[0], locationName); city param is blank:
+                that.sendAction('mapClickedAction', 'gmapLocation', results[0], '', locationName);
 
               }
 
@@ -429,5 +431,99 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // TODO implement scrollTO
     Discourse.URL.jumpToPost(post.post_number);
     // this.sendAction('action', post);
+  },
+
+
+  // places search functionality:
+
+  searchForLocation: function() {
+    if (Ember.isBlank(this.stringToSearch)) {
+      return;
+    };
+    var searchRequest = {
+      location: this.map.center,
+      radius: '50000',
+      keyword: this.stringToSearch
+      // types: ['store']
+    };
+    this.execPlaceSearch(searchRequest);
+  },
+  execPlaceSearch: function(searchRequest) {
+    var that = this;
+    service = new google.maps.places.PlacesService(this.map);
+    service.nearbySearch(searchRequest, function(results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        var bounds = new google.maps.LatLngBounds();
+
+        if (that.marker) {
+          // if a marker has previously been set, clear it
+          that.marker.setMap(null);
+        };
+        if (that.markers) {
+          $.each(that.markers, function(index, value) {
+            value.setMap(null);
+          });
+        };
+        that.markers = [];
+        results.forEach(function(value, index) {
+          var marker = new google.maps.Marker({
+            position: value.geometry.location,
+            map: that.map,
+            title: value.name
+            // icon: icon
+            // address: value.title
+          });
+          that.markers.pushObject(marker);
+          var contentString = '<div id="tmap-infowindow-content" >' +
+            '<a>' +
+            '<h4 id="firstHeading" class="firstHeading">' + value.name +
+            '</h4>' +
+            '<div id="bodyContent">' +
+            '<small>' + value.vicinity + '</small>' +
+            '</div></a>' +
+            '</div>';
+
+          var infowindowInstance = new google.maps.InfoWindow({
+            content: contentString,
+            searchResult: value
+          });
+          google.maps.event.addListener(marker, 'mouseover', function() {
+            // setTimeout(function() {
+            //   infowindowInstance.close();
+            // }, 6000);
+            for (var i = 0; i < that.infoWindows.length; i++) {
+              that.infoWindows[i].close();
+            }
+            that.infoWindows = [];
+            that.infoWindows.push(infowindowInstance);
+            infowindowInstance.open(that.map, marker);
+          });
+
+          google.maps.event.addListener(infowindowInstance, 'domready', function() {
+            document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
+              e.stopPropagation();
+              // debugger;
+              that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value'));
+
+            });
+          });
+          bounds.extend(value.geometry.location);
+        })
+        if (that.get('markers.length') > 1) {
+          that.map.fitBounds(bounds);
+        } else {
+          // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+          that.map.fitBounds(bounds);
+          // seems silly but I really have to do all that to get the zoom looking half decent
+          google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
+            if (this.getZoom() > 15) {
+              this.setZoom(15);
+            }
+          });
+        }
+
+      }
+    });
   }
+
 });

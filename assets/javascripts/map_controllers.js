@@ -3,26 +3,34 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   needs: ['composer'],
 
   actions: {
-    startLocationTopic: function(geocodedLocation, title) {
-      var city = '';
-      var country = '';
-      $.each(geocodedLocation.address_components, function(i, address_component) {
-        if (address_component.types[0] == "locality") {
-          city = address_component.long_name;
-        }
-        if (address_component.types[0] == "country") {
-          country = address_component.long_name;
-        }
-        //return false; // break the loop   
-      });
-      var locationObject = {
-          formattedAddress: geocodedLocation.formatted_address,
-          latitude: geocodedLocation.geometry.location.lat(),
-          longitude: geocodedLocation.geometry.location.lng(),
-          title: title,
-          city: city,
-          country: country
-        }
+    startLocationTopic: function(locationType, locationDetails, city, title) {
+      debugger;
+      if (locationType === "placeSearch") {
+        var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
+      } else if (locationType === "gmapLocation") {
+        var locationObject = Discourse.Location.locationFromGmap(locationDetails);
+        locationObject.title = title;
+      }
+      // var city = '';
+      // var country = '';
+      // $.each(geocodedLocation.address_components, function(i, address_component) {
+      //   if (address_component.types[0] == "locality") {
+      //     city = address_component.long_name;
+      //   }
+      //   if (address_component.types[0] == "country") {
+      //     country = address_component.long_name;
+      //   }
+      //   //return false; // break the loop   
+      // });
+      // var locationObject = {
+      //     formattedAddress: geocodedLocation.formatted_address,
+      //     latitude: geocodedLocation.geometry.location.lat(),
+      //     longitude: geocodedLocation.geometry.location.lng(),
+      //     title: title,
+      //     city: city,
+      //     country: country
+      //   }
+      debugger;
         // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
@@ -81,7 +89,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
 Discourse.MapController = Discourse.Controller.extend({
   // went back to objectcontroller at some point when I was worried it might be needed
   // to ensure observers triggered - that wasn't necessary though
-// Discourse.MapController = Discourse.ObjectController.extend({
+  // Discourse.MapController = Discourse.ObjectController.extend({
   // need to add composer to be able to start a conversation from here.
   // needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
   needs: ['composer', 'map-from-one-param'],

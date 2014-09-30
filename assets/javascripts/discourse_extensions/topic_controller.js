@@ -7,7 +7,7 @@ require("discourse/controllers/topic")["default"].reopen({
       var mapController = this.get('controllers.map');
       // debugger;
       // setting below should ensure that map.route uses this as default city..
-      mapController.set('currentCity', this.get('location.city').toLowerCase() );
+      mapController.set('currentCity', this.get('location.city').toLowerCase());
     }
     // this._super();
   }.observes('location'),
@@ -17,44 +17,51 @@ require("discourse/controllers/topic")["default"].reopen({
   // }.observes('topic'),
 
   actions: {
-    // showOnMap: function(post){
-    //   Discourse.URL.jumpToPost(1);
-    //   // debugger;
-    //   this.set('activePost',post);
-    // },
-    replyWithLocation: function(geocodedLocation, title) {
+    // replyWithLocation: function(geocodedLocation, title) {
+// when a location is double clicked and 'go' is clicked on the resulting infowindow
+    replyWithLocation: function(locationType, locationDetails, city, title) {
+      debugger;
+      if (locationType === "placeSearch") {
+        var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
+      } else if (locationType === "gmapLocation") {
+        var locationObject = Discourse.Location.locationFromGmap(locationDetails);
+        locationObject.title = title;
+      } else {
+        debugger;
+      }
+
       // http://stackoverflow.com/questions/6359995/get-city-from-geocoder-results
       // why does this have to be so hard!!!
-      var arrAddress = geocodedLocation.address_components;
-      // var itemRoute = '';
-      var city = '';
-      var country = '';
+      // var arrAddress = geocodedLocation.address_components;
+      // // var itemRoute = '';
+      // var city = '';
+      // var country = '';
 
-      // iterate through address_component array
-      $.each(arrAddress, function(i, address_component) {
-        // console.log('address_component:' + i);
+      // // iterate through address_component array
+      // $.each(arrAddress, function(i, address_component) {
+      //   // console.log('address_component:' + i);
 
-        if (address_component.types[0] == "locality") {
-          // console.log("town:" + address_component.long_name);
-          city = address_component.long_name;
-        }
+      //   if (address_component.types[0] == "locality") {
+      //     // console.log("town:" + address_component.long_name);
+      //     city = address_component.long_name;
+      //   }
 
-        if (address_component.types[0] == "country") {
-          // console.log("country:" + address_component.long_name);
-          country = address_component.long_name;
-        }
+      //   if (address_component.types[0] == "country") {
+      //     // console.log("country:" + address_component.long_name);
+      //     country = address_component.long_name;
+      //   }
 
-        //return false; // break the loop   
-      });
+      //   //return false; // break the loop   
+      // });
 
-      var locationObject = {
-        formattedAddress: geocodedLocation.formatted_address,
-        latitude: geocodedLocation.geometry.location.lat(),
-        longitude: geocodedLocation.geometry.location.lng(),
-        title: title,
-        city: city,
-        country: country
-      };
+      // var locationObject = {
+      //   formattedAddress: geocodedLocation.formatted_address,
+      //   latitude: geocodedLocation.geometry.location.lat(),
+      //   longitude: geocodedLocation.geometry.location.lng(),
+      //   title: title,
+      //   city: city,
+      //   country: country
+      // };
       debugger;
 
       // this.set('locationObject', locationObject);
