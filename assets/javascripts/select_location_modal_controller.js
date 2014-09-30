@@ -10,8 +10,12 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
   }.property('locationObject.title'),
 
   defaultLocation: function() {
+    if (this.get('model.locationObject')) {
+    debugger;
+      return this.get('model.locationObject');
+    }
     // if this is a reply to a topic we will use that topics location
-    if (this.get('model.topic.location')) {
+    else if (this.get('model.topic.location')) {
       return this.get('model.topic.location');
     } else {
       // if user has browsed map, we will have a currentCity
@@ -28,7 +32,7 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
         };
       }
     }
-  }.property('model'),
+  }.property('model','model.locationObject'),
 
 
   actions: {
@@ -40,6 +44,12 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
       }
       this.set('locationObject', locationObject);
     },
+    // called when i
+    locationFinalized: function(placeSearchResult) {
+      var locationObject = Discourse.Location.locationFromGmapResult(placeSearchResult);
+      this.set('model.locationObject', locationObject);
+      this.send('closeModal');
+    },
     addLocationToTopic: function() {
       if (Ember.isEmpty(this.get('locationObject.title'))) {
         return;
@@ -48,8 +58,6 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
         this.set('model.locationObject', this.get('locationObject'));
 
       };
-      // var self = this;
-      // debugger;
       this.send('closeModal');
 
     }

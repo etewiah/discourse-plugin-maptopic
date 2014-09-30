@@ -98,6 +98,15 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
         'selectable-map-canvas'),
       mapOptions);
 
+    if (defaultLocation.title) {
+      debugger;
+      // means location had been previously selected so mark it
+      this.marker = new google.maps.Marker({
+        position: mapCenter,
+        map: this.map
+      });
+    }
+
     var that = this;
     // debugger;
     google.maps.event.addListener(this.map, 'click', function(event) {
@@ -130,7 +139,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
           });
           that.infowindow.setContent(results[0].formatted_address);
           that.infowindow.open(that.map, that.marker);
-
+          // def action is locationSelected in sel loc modal ctrlr
           that.sendAction('action', latlng, results[0]);
 
         } else {
@@ -147,16 +156,23 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     if (Ember.isBlank(this.stringToSearch)) {
       return;
     };
-    var request = {
+    var searchRequest = {
       location: this.map.center,
-      radius: '10000',
+      radius: '50000',
       keyword: this.stringToSearch
       // types: ['store']
     };
+    this.execPlaceSearch(searchRequest);
+  },
+  execPlaceSearch: function(searchRequest) {
     var that = this;
     service = new google.maps.places.PlacesService(this.map);
-    service.nearbySearch(request, function(results, status) {
+    service.nearbySearch(searchRequest, function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
+        if (that.marker) {
+          // if a marker has previously been set, clear it
+          that.marker.setMap(null);
+        }
         results.forEach(function(value, index) {
           var marker = new google.maps.Marker({
             position: value.geometry.location,
@@ -193,12 +209,9 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
           google.maps.event.addListener(infowindowInstance, 'domready', function() {
             document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
               e.stopPropagation();
-              debugger;
-              if (infowindowInstance.dataObjectType === 'topic') {
-                that.locationTopicSelected(e, infowindowInstance.dataObject);
-              } else if (infowindowInstance.dataObjectType === 'post') {
-                that.locationPostSelected(e, infowindowInstance.dataObject);
-              }
+              //action is locationFinalezed in sel loc modal ctrlr
+              that.sendAction('infowindowAction', infowindowInstance.searchResult);
+
 
             });
           });
@@ -207,7 +220,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
         })
       }
     });
-
   },
   changeCity: function() {
     if (Ember.isBlank(this.cityToFind)) {
