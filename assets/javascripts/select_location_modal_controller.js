@@ -11,7 +11,6 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
 
   defaultLocation: function() {
     if (this.get('model.locationObject')) {
-    debugger;
       return this.get('model.locationObject');
     }
     // if this is a reply to a topic we will use that topics location
@@ -44,9 +43,9 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
       }
       this.set('locationObject', locationObject);
     },
-    // called when i
-    locationFinalized: function(placeSearchResult) {
-      var locationObject = Discourse.Location.locationFromGmapResult(placeSearchResult);
+    // called when i select infowindow from search result - TODO - allow editing of item in infowindow
+    locationFinalized: function(placeSearchResult, city) {
+      var locationObject = Discourse.Location.locationFromGmapResult(placeSearchResult, city);
       this.set('model.locationObject', locationObject);
       this.send('closeModal');
     },

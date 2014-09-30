@@ -21,14 +21,13 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     });
   }.on('didInsertElement'),
   cityToFind: "",
+  cityForMap: "",
   stringToSearch: "",
   infoWindows: [],
 
   // http://stackoverflow.com/questions/17075269/google-maps-load-api-script-and-initialize-inside-ember-js-view
-
   doubleClicked: false,
   clickEvent: null,
-
   // markersChanged: function() {
   //     // for re-rendering as I browse
   //     this.displayMapIfNeeded();
@@ -37,17 +36,9 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   didInsertElement: function() {
     this._super();
     this.displayMapIfNeeded();
-    // zoom = 8;
-    // icon = {
-    //   path: google.maps.SymbolPath.CIRCLE,
-    //   scale: 20
-    // }
   },
 
   displayMapIfNeeded: function() {
-    // var currentMarkerValues = this.get('markers');
-    // var markersFound = currentMarkerValues && currentMarkerValues.length > 0;
-
     // if (markersFound) {
     // this.initiateMaps(currentMarkerValues);
     if (typeof google === "undefined") {
@@ -59,12 +50,13 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     } else {
       this.initiateMaps();
     }
-    // }
   },
 
   initiateMaps: function() {
     // var currentMarkerValues = this.get('markers');
-
+    if (this.get('defaultLocation.city')) {
+      this.set('cityForMap',this.get('defaultLocation.city'));
+    }
     if (this.get('defaultLocation.latitude')) {
       var defaultLocation = this.get('defaultLocation');
     } else {
@@ -99,7 +91,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       mapOptions);
 
     if (defaultLocation.title) {
-      debugger;
       // means location had been previously selected so mark it
       this.marker = new google.maps.Marker({
         position: mapCenter,
@@ -169,10 +160,18 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     service = new google.maps.places.PlacesService(this.map);
     service.nearbySearch(searchRequest, function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
+        var bounds = new google.maps.LatLngBounds();
+
         if (that.marker) {
           // if a marker has previously been set, clear it
           that.marker.setMap(null);
-        }
+        };
+        if (that.markers) {
+          $.each(that.markers, function(index, value) {
+            value.setMap(null);
+          });
+        };
+        that.markers = [];
         results.forEach(function(value, index) {
           var marker = new google.maps.Marker({
             position: value.geometry.location,
@@ -181,6 +180,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
             // icon: icon
             // address: value.title
           });
+          that.markers.pushObject(marker);
           var contentString = '<div id="map-infowindow-content" >' +
             '<a>' +
             '<h4 id="firstHeading" class="firstHeading">' + value.name +
@@ -210,14 +210,26 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
             document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
               e.stopPropagation();
               //action is locationFinalezed in sel loc modal ctrlr
-              that.sendAction('infowindowAction', infowindowInstance.searchResult);
-
+              that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
 
             });
           });
-
-
+          bounds.extend(value.geometry.location);
         })
+        debugger;
+        if (that.get('markers.length') > 1) {
+          that.map.fitBounds(bounds);
+        } else {
+          // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+          that.map.fitBounds(bounds);
+          // seems silly but I really have to do all that to get the zoom looking half decent
+          google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
+            if (this.getZoom() > 15) {
+              this.setZoom(15);
+            }
+          });
+        }
+
       }
     });
   },
@@ -234,6 +246,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[0]) {
           var cityObject = results[0];
+          debugger;
           that.map.setCenter(cityObject.geometry.location);
           // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
           // this.map.fitBounds(bounds);
