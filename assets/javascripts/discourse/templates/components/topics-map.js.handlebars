@@ -1,8 +1,12 @@
+<div id="topics-map-canvas" {{bind-attr class="mapsClass"}} ></div>
+{{#if showSearchBox}}
 <div>
   <div style="float:left;width:50%">
 
-    {{text-field placeholder="City" value=cityToFind id="tmap-city-name" autofocus="autofocus"}}
-    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action changeCity}}>
+    {{text-field placeholder="address search string" value=addressStringToSearch
+     autofocus="autofocus" id="tmap-addresstosearch" }}
+
+    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchByAddress}}>
       Go
     </button>
   </div>
@@ -10,15 +14,14 @@
   <div style="">
 
 
-    {{text-field placeholder="Search string" value=stringToSearch id="tmap-placetosearch" }}
-    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchForLocation}}>
+    {{text-field placeholder="keyword search string" value=stringToSearch id="tmap-placetosearch" }}
+    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchByKeyword}}>
       Go
     </button>
   </div>
 
 </div>
 
-<label>Click any location below to select it or use the search box above to locate a place.</label>
+<label>Click any location on the map to select it or use the search boxes above to locate a place.</label>
+{{/if}}
 
-
-<div id="topics-map-canvas" {{bind-attr class="mapsClass"}} ></div>

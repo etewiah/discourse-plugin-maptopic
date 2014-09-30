@@ -38,6 +38,16 @@
   height:900px;
 }
 
+#tmap-infowindow-content{
+  cursor: pointer;
+  cursor: hand;
+  min-height: 50px;
+}
+#smap-infowindow-content{
+  cursor: pointer;
+  cursor: hand;
+  min-height: 50px;
+}
 #map-infowindow-content{
   cursor: pointer;
   cursor: hand;

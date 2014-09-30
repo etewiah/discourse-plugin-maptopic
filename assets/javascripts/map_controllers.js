@@ -3,8 +3,9 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   needs: ['composer'],
 
   actions: {
+    // can be triggered by clicking on infowindow after either doubleclicking map
+    // use hovering over marker from places search
     startLocationTopic: function(locationType, locationDetails, city, title) {
-      debugger;
       if (locationType === "placeSearch") {
         var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
       } else if (locationType === "gmapLocation") {
@@ -30,7 +31,6 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       //     city: city,
       //     country: country
       //   }
-      debugger;
         // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');

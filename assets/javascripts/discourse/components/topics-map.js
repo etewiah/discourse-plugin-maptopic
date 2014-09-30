@@ -435,14 +435,25 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
 
   // places search functionality:
-
-  searchForLocation: function() {
+  searchByAddress: function() {
+    if (Ember.isBlank(this.addressStringToSearch)) {
+      return;
+    };
+    var searchRequest = {
+      location: this.map.center,
+      radius: '10000',
+      address: this.addressStringToSearch
+      // types: ['store']
+    };
+    this.execPlaceSearch(searchRequest);
+  },
+  searchByKeyword: function() {
     if (Ember.isBlank(this.stringToSearch)) {
       return;
     };
     var searchRequest = {
       location: this.map.center,
-      radius: '50000',
+      radius: '10000',
       keyword: this.stringToSearch
       // types: ['store']
     };
@@ -480,6 +491,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             '</h4>' +
             '<div id="bodyContent">' +
             '<small>' + value.vicinity + '</small>' +
+            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+            'Use</button></form>' +
+
             '</div></a>' +
             '</div>';
 

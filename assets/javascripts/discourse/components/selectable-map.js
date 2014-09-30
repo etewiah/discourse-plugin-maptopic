@@ -150,7 +150,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     };
     var searchRequest = {
       location: this.map.center,
-      radius: '50000',
+      radius: '10000',
       keyword: this.stringToSearch
       // types: ['store']
     };
@@ -188,6 +188,8 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
             '</h4>' +
             '<div id="bodyContent">' +
             '<small>' + value.vicinity + '</small>' +
+            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+            'Use</button></form>' +
             '</div></a>' +
             '</div>';
 
