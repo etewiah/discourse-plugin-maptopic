@@ -117,7 +117,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       window.map_callback = function() {
         self.renderMap();
       }
-      $.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=map_callback');
+      $.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=map_callback&libraries=places');
     } else {
       this.renderMap();
     }
@@ -129,14 +129,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // debugger;
     var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
     return cityObject;
-    // return {
-    //   longitude: "13.4060912", 
-    //   latitude: "52.519171",
-    // } 
-    // {
-    //   longitude: "-3.7037902",
-    //   latitude: "40.4167754"
-    // }
   }.property('currentCity'),
 
   renderMap: function() {

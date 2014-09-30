@@ -9,7 +9,7 @@
 
 <div class="modal-footer">
   {{#if locationObject }}
-  <form>
+  <form {{action "addLocationToTopic" on="submit"}}>
     <table>
       <tr>
         <td style="" class="label">

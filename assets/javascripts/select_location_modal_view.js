@@ -1,7 +1,7 @@
 Discourse.SelectLocationModalView =  Discourse.ModalBodyView.extend({
   templateName: 'modal/select_location',
-  title: "Select the location to be associated with this topic",
-  classNames: ['create-account'],
+  title: "Select location",
+  // classNames: ['create-account'],
 
   // _setup: function() {
   //   // allows the submission the form when pressing 'ENTER' on *any* text input field

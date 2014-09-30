@@ -3,6 +3,26 @@ Discourse.LastSelectedLatLng = {};
 
 Discourse.SelectableMapComponent = Ember.Component.extend({
 
+  _setup: function() {
+    // allows  submission by pressing 'ENTER' 
+    // var selectLocationController = this.get('controller');
+    var that = this;
+    // debugger;
+    Em.run.schedule('afterRender', function() {
+      // $("input[type='text'], input[type='password']").keydown(function(e) {
+      $("#map-city-name,#place-to-search").keydown(function(e) {
+        if (e.keyCode === 13 && e.target.id === "place-to-search") {
+          that.send('searchForLocation');
+        } else if (e.keyCode === 13 && e.target.id === "map-city-name") {
+          that.send('changeCity');
+        }
+
+      });
+    });
+  }.on('didInsertElement'),
+  cityToFind: "",
+  stringToSearch: "",
+  infoWindows: [],
 
   // http://stackoverflow.com/questions/17075269/google-maps-load-api-script-and-initialize-inside-ember-js-view
 
@@ -35,7 +55,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       window.map_callback = function() {
         self.initiateMaps();
       }
-      $.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=map_callback');
+      $.getScript('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=map_callback&libraries=places');
     } else {
       this.initiateMaps();
     }
@@ -45,9 +65,9 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   initiateMaps: function() {
     // var currentMarkerValues = this.get('markers');
 
-    if(this.get('defaultLocation.latitude')){
+    if (this.get('defaultLocation.latitude')) {
       var defaultLocation = this.get('defaultLocation');
-    }else{
+    } else {
       debugger;
       // var defaultLocation = defaultCity;
     }
@@ -114,13 +134,106 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
           that.sendAction('action', latlng, results[0]);
 
         } else {
-          alert("No results found");
+          // alert("No results found");
         }
       } else {
-        alert("Geocoder failed due to: " + status);
+        // alert("Geocoder failed due to: " + status);
       }
     });
 
     // this.get("controller").addEvent(lat, lng);
+  },
+  searchForLocation: function() {
+    if (Ember.isBlank(this.stringToSearch)) {
+      return;
+    };
+    var request = {
+      location: this.map.center,
+      radius: '10000',
+      keyword: this.stringToSearch
+      // types: ['store']
+    };
+    var that = this;
+    service = new google.maps.places.PlacesService(this.map);
+    service.nearbySearch(request, function(results, status) {
+      if (status == google.maps.places.PlacesServiceStatus.OK) {
+        results.forEach(function(value, index) {
+          var marker = new google.maps.Marker({
+            position: value.geometry.location,
+            map: that.map,
+            title: value.name
+            // icon: icon
+            // address: value.title
+          });
+          var contentString = '<div id="map-infowindow-content" >' +
+            '<a>' +
+            '<h4 id="firstHeading" class="firstHeading">' + value.name +
+            '</h4>' +
+            '<div id="bodyContent">' +
+            '<small>' + value.vicinity + '</small>' +
+            '</div></a>' +
+            '</div>';
+
+          var infowindowInstance = new google.maps.InfoWindow({
+            content: contentString,
+            searchResult: value
+          });
+          google.maps.event.addListener(marker, 'mouseover', function() {
+            // setTimeout(function() {
+            //   infowindowInstance.close();
+            // }, 6000);
+            for (var i = 0; i < that.infoWindows.length; i++) {
+              that.infoWindows[i].close();
+            }
+            that.infoWindows = [];
+            that.infoWindows.push(infowindowInstance);
+            infowindowInstance.open(that.map, marker);
+          });
+
+          google.maps.event.addListener(infowindowInstance, 'domready', function() {
+            document.getElementById("map-infowindow-content").addEventListener("click", function(e) {
+              e.stopPropagation();
+              debugger;
+              if (infowindowInstance.dataObjectType === 'topic') {
+                that.locationTopicSelected(e, infowindowInstance.dataObject);
+              } else if (infowindowInstance.dataObjectType === 'post') {
+                that.locationPostSelected(e, infowindowInstance.dataObject);
+              }
+
+            });
+          });
+
+
+        })
+      }
+    });
+
+  },
+  changeCity: function() {
+    if (Ember.isBlank(this.cityToFind)) {
+      return;
+    };
+    var geocoder = new google.maps.Geocoder();
+    var that = this;
+
+    geocoder.geocode({
+      'address': this.cityToFind
+    }, function(results, status) {
+      if (status == google.maps.GeocoderStatus.OK) {
+        if (results[0]) {
+          var cityObject = results[0];
+          that.map.setCenter(cityObject.geometry.location);
+          // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+          // this.map.fitBounds(bounds);
+          // seems silly but I really have to do all this to get the zoom looking half decent
+          google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
+            if (this.getZoom() > 15) {
+              this.setZoom(15);
+            }
+          });
+        }
+      }
+    });
+
   }
 });
