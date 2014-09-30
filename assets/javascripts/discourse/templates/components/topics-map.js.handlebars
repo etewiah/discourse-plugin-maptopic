@@ -1,7 +1,7 @@
 <div>
   <div style="float:left;width:50%">
 
-    {{text-field placeholder="City" value=cityToFind id="map-city-name" autofocus="autofocus"}}
+    {{text-field placeholder="City" value=cityToFind id="tmap-city-name" autofocus="autofocus"}}
     <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action changeCity}}>
       Go
     </button>
@@ -10,7 +10,7 @@
   <div style="">
 
 
-    {{text-field placeholder="Search string" value=stringToSearch id="place-to-search" }}
+    {{text-field placeholder="Search string" value=stringToSearch id="tmap-placetosearch" }}
     <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchForLocation}}>
       Go
     </button>

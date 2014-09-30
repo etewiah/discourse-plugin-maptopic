@@ -22,6 +22,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   }.on('didInsertElement'),
   cityToFind: "",
   cityForMap: "",
+  countryForMap: "",
   stringToSearch: "",
   infoWindows: [],
 
@@ -55,7 +56,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   initiateMaps: function() {
     // var currentMarkerValues = this.get('markers');
     if (this.get('defaultLocation.city')) {
-      this.set('cityForMap',this.get('defaultLocation.city'));
+      this.set('cityForMap', this.get('defaultLocation.city'));
     }
     if (this.get('defaultLocation.latitude')) {
       var defaultLocation = this.get('defaultLocation');
@@ -216,7 +217,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
           });
           bounds.extend(value.geometry.location);
         })
-        debugger;
         if (that.get('markers.length') > 1) {
           that.map.fitBounds(bounds);
         } else {
@@ -246,7 +246,17 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[0]) {
           var cityObject = results[0];
+          $.each(cityObject.address_components, function(i, address_component) {
+            if (address_component.types[0] == "locality") {
+              // city = address_component.long_name;
+              that.set('cityForMap', address_component.long_name.toLowerCase());
+            }
+            if (address_component.types[0] == "country") {
+              that.set('countryForMap', address_component.long_name.toLowerCase());
+            }
+          });
           debugger;
+          // that.set('cityForMap', city);
           that.map.setCenter(cityObject.geometry.location);
           // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
           // this.map.fitBounds(bounds);

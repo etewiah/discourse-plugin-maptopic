@@ -47,9 +47,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         this.set('model.locationObject', this.get('locationObject'));
 
       };
-      // var self = this;
       this.send('closeModal');
-
     },
     topicSelected: function(topic) {
       // this.transitionToRoute('topic.fromParams', topic);

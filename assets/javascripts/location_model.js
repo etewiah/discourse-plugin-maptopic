@@ -2,7 +2,8 @@ Discourse.Location = Discourse.Model.extend({
 
 });
 Discourse.Location.reopenClass({
-  locationFromGmapResult: function(result, city) {
+  // TODO **  make use of result.place_id  (google place id...)
+  locationFromPlaceSearch: function(result, city) {
     var locationObject = {
       title: result.name,
       formattedAddress: result.vicinity,
@@ -14,7 +15,30 @@ Discourse.Location.reopenClass({
     }
     // latlng = result.geometry.location
     debugger;
+    return locationObject;
+  },
+  locationFromGmap: function(result) {
+    var locationObject = {
+        formattedAddress: result.formatted_address,
+        latitude: result.geometry.location.lat(),
+        longitude: result.geometry.location.lng()
+      };
+      // title will be provided through user input
+      // if (!Ember.isBlank(city)) {
+      //   locationObject.city = city;
+      // }
+      // latlng = result.geometry.location
+    $.each(result.address_components, function(i, address_component) {
+      if (address_component.types[0] == "locality") {
+        locationObject.city = address_component.long_name.toLowerCase();
+      }
+      if (address_component.types[0] == "country") {
+        locationObject.country = address_component.long_name.toLowerCase();
+      }
+      //return false; // break the loop   
+    });
 
+    debugger;
     return locationObject;
   }
 });
