@@ -1,12 +1,12 @@
 <div id="topics-map-canvas" {{bind-attr class="mapsClass"}} ></div>
 {{#if showSearchBox}}
-<div>
+<div style="margin-top:15px">
   <div style="float:left;width:50%">
 
-    {{text-field placeholder="address search string" value=addressStringToSearch
-     autofocus="autofocus" id="tmap-addresstosearch" }}
+    {{text-field placeholder="name search string" value=nameStringToSearch
+     autofocus="autofocus" id="tmap-nametosearch" }}
 
-    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchByAddress}}>
+    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchByName}}>
       Go
     </button>
   </div>

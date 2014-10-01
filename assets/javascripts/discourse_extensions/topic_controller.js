@@ -11,17 +11,55 @@ require("discourse/controllers/topic")["default"].reopen({
     }
     // this._super();
   }.observes('location'),
+  // below will trigger if a new location is set through select_location_modal
+  startLocationPost: function() {
+    if (this.get('model.locationObject')) {
+      if (Discourse.User.current()) {
+        var composerController = this.get('controllers.composer');
+        var locationObject = this.get('model.locationObject');
+        var topic = this.get('model');
+        // var self = this;
+
+        var opts = {
+          action: Discourse.Composer.REPLY,
+          draftKey: topic.get('draft_key'),
+          draftSequence: topic.get('draft_sequence'),
+          topic: topic
+        };
+        composerController.open(opts).then(function() {
+          composerController.content.set('locationObject', locationObject);
+        });
+      } else {
+        this.send('showLogin');
+      }
+
+    } else {
+      // return " select a location";
+    };
+  }.observes('model.locationObject'),
+
   // contextChanged2: function() {
   //   debugger;
   //   // this.set('controllers.search.searchContext', this.get('model.searchContext'));
   // }.observes('topic'),
 
   actions: {
+    showLocationSelector: function() {
+      if (Discourse.User.current()) {
+        // below calls method defined in application_route
+        this.send('showLocationSelectorModal', this.get('model'));
+      } else {
+        this.send('showLogin');
+      }
+
+    },
     // replyWithLocation: function(geocodedLocation, title) {
-// when a location is double clicked and 'go' is clicked on the resulting infowindow
+    // when a location is double clicked and 'go' is clicked on the resulting infowindow
     replyWithLocation: function(locationType, locationDetails, city, title) {
       debugger;
       if (locationType === "placeSearch") {
+        // currently placeSearch is disabled within topic map so should not end up here
+        debugger;
         var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
       } else if (locationType === "gmapLocation") {
         var locationObject = Discourse.Location.locationFromGmap(locationDetails);
@@ -62,7 +100,6 @@ require("discourse/controllers/topic")["default"].reopen({
       //   city: city,
       //   country: country
       // };
-      debugger;
 
       // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {

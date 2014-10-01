@@ -35,6 +35,8 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
 
 
   actions: {
+    // both topic and composer controllers are set to respond to 
+    // locationObject being changed on their model
     locationSelected: function(latlng, geocodedLocation) {
       var locationObject = Discourse.Location.locationFromGmap(geocodedLocation);
       // var locationObject = {

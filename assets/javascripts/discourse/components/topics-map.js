@@ -435,14 +435,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
 
   // places search functionality:
-  searchByAddress: function() {
-    if (Ember.isBlank(this.addressStringToSearch)) {
+  searchByName: function() {
+    if (Ember.isBlank(this.nameStringToSearch)) {
       return;
     };
     var searchRequest = {
       location: this.map.center,
       radius: '10000',
-      address: this.addressStringToSearch
+      name: this.nameStringToSearch
       // types: ['store']
     };
     this.execPlaceSearch(searchRequest);

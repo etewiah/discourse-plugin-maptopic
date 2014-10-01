@@ -1,8 +1,17 @@
 {{#if model.hasLocation}}
 
 <div>
-  <h2 style="line-height: 32px;margin-top:0px;">
-    <small>Conversation related to : {{ model.locationDetails.title }} </small>
+  <h2 style="line-height: 32px;margin-bottom:5px;">
+    <small>Conversation started with : {{ model.locationDetails.title }} </small>
+          <button class='btn btn-primary' {{action showLocationSelector}}>
+            Add location
+          </button>
+      {{#if details.can_edit}}
+          <button class='btn btn-primary' {{action startTopicLocationChange}}>
+            Change location
+          </button>
+      {{/if}}
+
   </h2>
 
 </div>
