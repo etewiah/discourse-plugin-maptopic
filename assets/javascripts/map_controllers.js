@@ -38,7 +38,8 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         composerController.open({
           action: Discourse.Composer.CREATE_TOPIC,
           draftKey: "new_topic"
-        }).then(function() {
+        }).then(function(value) {
+          debugger;
           composerController.content.set('locationObject', locationObject);
         });
       } else {

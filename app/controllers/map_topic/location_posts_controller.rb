@@ -24,7 +24,10 @@ module MapTopic
       # TODO - find location which is close enough to be considered the same..
       location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
       location.title = params[:location][:title] || ""
+      location.city = params[:location][:city] || ""
+      location.country = params[:location][:country] || ""
       location.address = params[:location][:formattedAddress] || ""
+      location.gplace_id = params[:location][:gplace_id] || ""
 
       # below will not update if already exists:
       # do |loc|
@@ -40,6 +43,22 @@ module MapTopic
       location_post.location_id = location.id
 
       location_post.save!
+
+      if @post.post_number == 1
+        # this is the post associated with the topic so its location should also 
+        # be associated with the topic
+        location_topic = MapTopic::LocationTopic.where(:topic_id => @post.topic_id).first_or_initialize
+        location_topic.city = location.city.downcase
+        location_topic.country = location.country.downcase
+
+        location_topic.location_title = location.title
+        location_topic.longitude = location.longitude
+        location_topic.latitude = location.latitude
+        location_topic.location_id = location.id
+
+        location_topic.save!
+
+      end
 
       return render json: location.to_json
 

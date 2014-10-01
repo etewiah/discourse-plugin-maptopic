@@ -6,11 +6,21 @@ Discourse.Composer.reopen({
     var topic = this.get('topic');
     var post = this.get('post');
     var dfr = this._super(opts);
-    debugger;
-    if (locationObject) {
 
+    var locationChanged = false;
+    if(post.location){
+     locationChanged = post.location.latitude !== locationObject.latitude || post.location.longitude !== locationObject.longitude;
+    }
+    else{
+      // if post does not have a location but a locationObject has been set
+      // location has changed
+      if (locationObject) {
+        locationChanged = true;
+      };
+    }
+    debugger;
+    if (locationChanged) {
       // dfr.then(function(post_result) {
-        
         if(topic){
           var topicLocationCount = topic.get('locationCount') || 0;
           // below triggers recalculation of markers on a topic
@@ -36,10 +46,10 @@ Discourse.Composer.reopen({
             topic_id: topic.id
           }
         });
-        map_topic.then(function(update_location_result) {
-          debugger;
-          // return post_result;
-        });
+        // map_topic.then(function(update_location_result) {
+        //   debugger;
+        //   // return post_result;
+        // });
         // return map_topic;
       // });
     }

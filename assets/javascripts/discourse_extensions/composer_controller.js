@@ -7,11 +7,11 @@ require("discourse/controllers/composer")["default"].reopen({
     var dfr = this._super(opts);
     if (opts.post && opts.post.location) {
       this.set('model.locationObject', opts.post.location);
-      dfr.then(function(post_result) {
-        // debugger;
-      });
+      // dfr.then(function(post_result) {
+      //   // debugger;
+      // });
     };
-
+    return dfr;
   },
   locationChanged: function() {
     debugger;
