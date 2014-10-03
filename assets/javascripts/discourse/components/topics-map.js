@@ -87,6 +87,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   doubleClicked: false,
   clickEvent: null,
 
+// in the case of index map, markerValues are the markers property on the map controller passed in through the component declaration
+// in the case of topic map, markerValues are the markers property on the map controller passed in through the component declaration
   markerValuesChanged: function() {
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
@@ -314,6 +316,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     });
 
+debugger;
     if (this.get('markers.length') > 1) {
       this.map.fitBounds(bounds);
     } else {

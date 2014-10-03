@@ -61,7 +61,6 @@ Discourse.Composer.reopen({
     // when replying to a topic, this will be available:
     var topic = this.get('topic');
     var dfr = this._super(opts);
-    debugger;
     if (locationObject) {
       dfr.then(function(post_result) {
         
@@ -74,12 +73,16 @@ Discourse.Composer.reopen({
           // for replies, this ensures location is available for map markers:
           lastPostInTopic.set('location',locationObject);
         }
-        var set_location_endpoint = '/location_topics/set_location';
-        // if the post is a reply, we associate location to post rather than topic..
-        if (post_result.post.post_number > 1) {
-          set_location_endpoint = '/location_posts/set_location';
-          // debugger;
-        }
+        // var set_location_endpoint = '/location_topics/set_location';
+        // // if the post is a reply, we associate location to post rather than topic..
+        // if (post_result.post.post_number > 1) {
+        //   set_location_endpoint = '/location_posts/set_location';
+        //   // debugger;
+        // }
+
+        // set_location below can figure out if topic should be updated too:
+        var set_location_endpoint = '/location_posts/set_location';
+
         var map_topic = Discourse.ajax(set_location_endpoint, {
           data: {
             location: locationObject,

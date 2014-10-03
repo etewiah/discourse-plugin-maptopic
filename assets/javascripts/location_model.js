@@ -4,12 +4,13 @@ Discourse.Location = Discourse.Model.extend({
 Discourse.Location.reopenClass({
   // TODO **  make use of result.place_id  (google place id...)
   locationFromPlaceSearch: function(result, city) {
-    debugger;
+    // debugger;
     var locationObject = {
       title: result.name,
       formattedAddress: result.vicinity,
       latitude: result.geometry.location.lat(),
-      longitude: result.geometry.location.lng()
+      longitude: result.geometry.location.lng(),
+      gplace_id: result.place_id
     }
     if (!Ember.isBlank(city)) {
       locationObject.city = city;
