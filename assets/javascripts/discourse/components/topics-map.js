@@ -18,8 +18,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       var title = activePost.topic.get('title') + "( " + activePost.topic.get('location.title') + " )";
       var dataObject = activePost.topic;
       var dataObjectType = 'topic';
-      var myLatlng = new google.maps.LatLng(activePost.topic.location.latitude, activePost.topic.location.longitude);
-      var address = activePost.topic.location.address;
+      var myLatlng = new google.maps.LatLng(activePost.location.latitude, activePost.location.longitude);
+      var address = activePost.location.address;
     } else {
       var icon = this.post_icon;
       var userName = activePost.name;

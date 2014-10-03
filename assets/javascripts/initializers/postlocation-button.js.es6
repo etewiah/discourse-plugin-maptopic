@@ -67,7 +67,6 @@ default {
       },
 
       clickPostlocation: function() {
-        debugger;
         var post = this.get('post');
         var controller = this.get('controller');
         controller.set('activePost', post);
