@@ -316,7 +316,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     });
 
-debugger;
     if (this.get('markers.length') > 1) {
       this.map.fitBounds(bounds);
     } else {

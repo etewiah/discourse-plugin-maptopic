@@ -58,7 +58,6 @@ Discourse.Topic.reopen({
     var currentMarkerValues = [];
     if (this.get('postStream.posts')) {
       var posts = this.get('postStream.posts');
-      debugger;
       posts.forEach(function(p) {
         if (p.get('location')) {
           var markerInfo = {
