@@ -12,14 +12,17 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   infoWindows: [],
   onActivePostChange: function() {
     var activePost = this.get('activePost');
+    debugger;
     if (this.get('activePost.post_number') === 1) {
       var icon = this.topic_icon;
       var userName = activePost.topic.get('posters.firstObject.user.username') || activePost.topic.get('details.created_by.username');
-      var title = activePost.topic.get('title') + "( " + activePost.topic.get('location.title') + " )";
+      var title = activePost.topic.get('title') + "( " +  activePost.location.title + " )";
       var dataObject = activePost.topic;
       var dataObjectType = 'topic';
       var myLatlng = new google.maps.LatLng(activePost.location.latitude, activePost.location.longitude);
-      var address = activePost.location.address;
+      // if topic location has just been changed, object will have formattedAddress instead of addrees
+      // TODO - make address everywhere
+      var address = activePost.location.address || activePost.location.formattedAddress;
     } else {
       var icon = this.post_icon;
       var userName = activePost.name;

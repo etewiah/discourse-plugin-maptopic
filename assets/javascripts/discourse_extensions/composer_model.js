@@ -41,7 +41,9 @@ Discourse.Composer.reopen({
           // longitude: locationObject.longitude,
           post_id: post.id,
           topic_id: topic.id
-        }
+        },
+        method: 'POST'
+
       });
       // need to make sure map_topic update happens first - this._super will then refresh the post object
       // after I have set the new locationObject on the server
@@ -99,7 +101,9 @@ Discourse.Composer.reopen({
             // longitude: locationObject.longitude,
             post_id: post_result.post.id,
             topic_id: post_result.post.topic_id
-          }
+          },
+          method: 'POST'
+
         });
         map_topic.then(function(set_location_result) {
           return post_result;
