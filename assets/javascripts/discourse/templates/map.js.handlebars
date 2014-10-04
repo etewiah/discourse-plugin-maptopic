@@ -3,13 +3,13 @@
 
   <h1 style="text-align:center;margin-top:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
 
-        Recent conversations about 
-        {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls'
-        action='cityChanged' newLocationAction='addLocation' currentSelectionItem=currentCitySelection }}
-
-      <a style="padding: 8px 10px 3px 10px;" >
+    Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' action='cityChanged' newLocationAction='addLocation' currentSelectionItem=currentCitySelection }}
+    <small style="font-size: 70%;float:right">
+      <a style="padding: 8px 10px 3px 40px;text-decoration: underline;" {{ action addLocation }} >
+       search on map
       </a>
-    </h1>
+    </small>
+  </h1>
 
 
 
@@ -19,7 +19,13 @@
     <div class="row">
       <div class="full-width">
         <div id='header-list-area'>
-          Click on a location to start a conversation there:
+          <div class="alert alert-info" style="font-weight: normal;">Click any marker to see what is being said or click anywhere on the map to start a conversation.
+            <span>
+              <a style="text-decoration: underline;">
+               
+              </a>
+            </span>
+          </div>
           {{ outlet }}
         </div>
       </div>
