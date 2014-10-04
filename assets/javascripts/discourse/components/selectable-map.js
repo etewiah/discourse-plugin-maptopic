@@ -98,12 +98,16 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
         'selectable-map-canvas'),
       mapOptions);
 
+
+    this.markers = [];
     if (defaultLocation.title) {
       // means location had been previously selected so mark it
-      this.marker = new google.maps.Marker({
+      // TODO - add infowindow
+      var marker = new google.maps.Marker({
         position: mapCenter,
         map: this.map
       });
+      this.markers.pushObject(marker);
     }
 
     var that = this;
@@ -112,6 +116,98 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       that.locationSelected(event.latLng.lat(), event.latLng.lng());
     });
 
+    // add google autocomplete box
+
+    var input = /** @type {HTMLInputElement} */ (
+      document.getElementById('pac-input'));
+
+    // var types = document.getElementById('type-selector');
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
+
+    var autocomplete = new google.maps.places.Autocomplete(input);
+    autocomplete.bindTo('bounds', this.map);
+
+    google.maps.event.addListener(autocomplete, 'place_changed', function() {
+      debugger;
+      // infowindow.close();
+      // marker.setVisible(false);
+      var place = autocomplete.getPlace();
+      if (!place.geometry) {
+        return;
+      }
+
+      var marker = new google.maps.Marker({
+        position: place.geometry.location,
+        map: that.map,
+        title: place.name
+        // icon: icon
+        // address: place.title
+      });
+      if (that.markers) {
+        $.each(that.markers, function(index, value) {
+          value.setMap(null);
+        });
+      };
+      that.markers.pushObject(marker);
+      var contentString = '<div id="smap-infowindow-content" >' +
+        '<a>' +
+        '<h4 id="firstHeading" class="firstHeading">' + place.name +
+        '</h4>' +
+        '<div id="bodyContent">' +
+        '<small>' + place.vicinity + '</small>' +
+        // '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+        // 'Use</button></form>' +
+        '</div></a>' +
+        '</div>';
+
+      var infowindowInstance = new google.maps.InfoWindow({
+        content: contentString,
+        searchResult: place
+      });
+      infowindowInstance.open(that.map,marker);
+
+      var locationObject = Discourse.Location.locationFromPlaceSearch(place, that.cityForMap);
+      that.set('locationObject', locationObject);
+      // google.maps.event.addListener(marker, 'mouseover', function() {
+      //   for (var i = 0; i < that.infoWindows.length; i++) {
+      //     that.infoWindows[i].close();
+      //   }
+      //   that.infoWindows = [];
+      //   that.infoWindows.push(infowindowInstance);
+      //   infowindowInstance.open(that.map, marker);
+      // });
+      // google.maps.event.addListener(marker, 'click', function() {
+      //   var locationObject = Discourse.Location.locationFromPlaceSearch(
+      //     infowindowInstance.searchResult, that.cityForMap);
+      //   that.set('locationObject', locationObject);
+      // });
+
+      // google.maps.event.addListener(infowindowInstance, 'domready', function() {
+      //   document.getElementById("smap-infowindow-content").addEventListener("click", function(e) {
+      //     e.stopPropagation();
+      //     //action is locationFinalezed in sel loc modal ctrlr
+      //     // that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
+      //     var locationObject = Discourse.Location.locationFromPlaceSearch(
+      //       infowindowInstance.searchResult, that.cityForMap);
+      //     that.set('locationObject', locationObject);
+      //   });
+      // });
+
+      that.map.setCenter(place.geometry.location);
+      // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+      // this.map.fitBounds(bounds);
+      // seems silly but I really have to do all this to get the zoom looking half decent
+      google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
+        if (this.getZoom() > 15) {
+          this.setZoom(15);
+        }
+      });
+
+
+
+
+    });
 
   },
   locationSelected: function(lat, lng) {
@@ -125,20 +221,35 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[0]) {
           // that.map.setZoom(11);
-          if (that.marker) {
-            // if a marker has previously been set, clear it
-            that.marker.setMap(null);
-          }
-          that.marker = new google.maps.Marker({
+          // if (that.marker) {
+          //   // if a marker has previously been set, clear it
+          //   that.marker.setMap(null);
+          // }
+          if (that.markers) {
+            $.each(that.markers, function(index, value) {
+              value.setMap(null);
+            });
+          };
+          that.markers = [];
+          var marker = new google.maps.Marker({
             position: latlng,
             map: that.map
           });
-          that.infowindow = new google.maps.InfoWindow({
+          that.markers.pushObject(marker);
+          var infowindowInstance = new google.maps.InfoWindow({
             // content: contentString
           });
-          that.infowindow.setContent(results[0].formatted_address);
-          that.infowindow.open(that.map, that.marker);
-          debugger;
+          infowindowInstance.setContent(results[0].formatted_address);
+
+          for (var i = 0; i < that.infoWindows.length; i++) {
+            that.infoWindows[i].close();
+          }
+          that.infoWindows = [];
+          that.infoWindows.push(infowindowInstance);
+          infowindowInstance.open(that.map, marker);
+
+
+          // that.infowindow.open(that.map, that.marker);
           var locationObject = Discourse.Location.locationFromGmap(results[0]);
           that.set('locationObject', locationObject);
 
@@ -157,29 +268,34 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   },
   actions: {
     addLocationToTopic: function() {
-      debugger;
       if (Ember.isEmpty(this.get('locationObject.title'))) {
         return;
       };
       this.sendAction('locationAddedAction', this.get('locationObject'));
     },
-    unsetLocationobject: function(){
-      debugger;
-      this.set('locationObject',null);
+    unsetLocationobject: function() {
+      this.set('locationObject', null);
     }
   },
-  searchForLocation: function() {
-    if (Ember.isBlank(this.stringToSearch)) {
-      return;
-    };
-    var searchRequest = {
-      location: this.map.center,
-      radius: '10000',
-      keyword: this.stringToSearch
-      // types: ['store']
-    };
-    this.execPlaceSearch(searchRequest);
-  },
+  // searchForAddress: function() {
+  //   if (Ember.isBlank(this.stringToSearch)) {
+  //     return;
+  //   };
+  //   debugger;
+  // },
+  // searchForLocation: function() {
+  //   if (Ember.isBlank(this.stringToSearch)) {
+  //     return;
+  //   };
+  //   var searchRequest = {
+  //     location: this.map.center,
+  //     radius: '10000',
+  //     keyword: this.stringToSearch
+  //     // types: ['store']
+  //   };
+  //   this.execPlaceSearch(searchRequest);
+  // },
+  // to take out - no longer used:
   execPlaceSearch: function(searchRequest) {
     var that = this;
     service = new google.maps.places.PlacesService(this.map);
@@ -198,49 +314,53 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
         };
         that.markers = [];
         results.forEach(function(value, index) {
-          var marker = new google.maps.Marker({
-            position: value.geometry.location,
-            map: that.map,
-            title: value.name
-            // icon: icon
-            // address: value.title
-          });
-          that.markers.pushObject(marker);
-          var contentString = '<div id="smap-infowindow-content" >' +
-            '<a>' +
-            '<h4 id="firstHeading" class="firstHeading">' + value.name +
-            '</h4>' +
-            '<div id="bodyContent">' +
-            '<small>' + value.vicinity + '</small>' +
-            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-            'Use</button></form>' +
-            '</div></a>' +
-            '</div>';
+          // var marker = new google.maps.Marker({
+          //   position: value.geometry.location,
+          //   map: that.map,
+          //   title: value.name
+          //   // icon: icon
+          //   // address: value.title
+          // });
+          // that.markers.pushObject(marker);
+          // var contentString = '<div id="smap-infowindow-content" >' +
+          //   '<a>' +
+          //   '<h4 id="firstHeading" class="firstHeading">' + value.name +
+          //   '</h4>' +
+          //   '<div id="bodyContent">' +
+          //   '<small>' + value.vicinity + '</small>' +
+          //   // '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+          //   // 'Use</button></form>' +
+          //   '</div></a>' +
+          //   '</div>';
 
-          var infowindowInstance = new google.maps.InfoWindow({
-            content: contentString,
-            searchResult: value
-          });
-          google.maps.event.addListener(marker, 'mouseover', function() {
-            // setTimeout(function() {
-            //   infowindowInstance.close();
-            // }, 6000);
-            for (var i = 0; i < that.infoWindows.length; i++) {
-              that.infoWindows[i].close();
-            }
-            that.infoWindows = [];
-            that.infoWindows.push(infowindowInstance);
-            infowindowInstance.open(that.map, marker);
-          });
+          // var infowindowInstance = new google.maps.InfoWindow({
+          //   content: contentString,
+          //   searchResult: value
+          // });
+          // google.maps.event.addListener(marker, 'mouseover', function() {
+          //   for (var i = 0; i < that.infoWindows.length; i++) {
+          //     that.infoWindows[i].close();
+          //   }
+          //   that.infoWindows = [];
+          //   that.infoWindows.push(infowindowInstance);
+          //   infowindowInstance.open(that.map, marker);
+          // });
+          // google.maps.event.addListener(marker, 'click', function() {
+          //   var locationObject = Discourse.Location.locationFromPlaceSearch(
+          //     infowindowInstance.searchResult, that.cityForMap);
+          //   that.set('locationObject', locationObject);
+          // });
 
-          google.maps.event.addListener(infowindowInstance, 'domready', function() {
-            document.getElementById("smap-infowindow-content").addEventListener("click", function(e) {
-              e.stopPropagation();
-              //action is locationFinalezed in sel loc modal ctrlr
-              that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
-
-            });
-          });
+          // google.maps.event.addListener(infowindowInstance, 'domready', function() {
+          //   document.getElementById("smap-infowindow-content").addEventListener("click", function(e) {
+          //     e.stopPropagation();
+          //     //action is locationFinalezed in sel loc modal ctrlr
+          //     // that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
+          //     var locationObject = Discourse.Location.locationFromPlaceSearch(
+          //       infowindowInstance.searchResult, that.cityForMap);
+          //     that.set('locationObject', locationObject);
+          //   });
+          // });
           bounds.extend(value.geometry.location);
         })
         if (that.get('markers.length') > 1) {
@@ -281,7 +401,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
               that.set('countryForMap', address_component.long_name.toLowerCase());
             }
           });
-          debugger;
           // that.set('cityForMap', city);
           that.map.setCenter(cityObject.geometry.location);
           // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3

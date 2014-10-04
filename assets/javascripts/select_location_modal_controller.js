@@ -1,13 +1,13 @@
 Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
   needs: ['map'],
 
-  readyToSelect: function() {
-    if (this.get('locationObject.title')) {
-      return true;
-    } else {
-      return false;
-    }
-  }.property('locationObject.title'),
+  // readyToSelect: function() {
+  //   if (this.get('locationObject.title')) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }.property('locationObject.title'),
 
   defaultLocation: function() {
     if (this.get('model.locationObject')) {
@@ -31,7 +31,7 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
         };
       }
     }
-  }.property('model','model.locationObject'),
+  }.property('model', 'model.locationObject'),
 
 
   actions: {
@@ -44,22 +44,14 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
     //   this.set('locationObject', locationObject);
     // },
     // called when i select infowindow from search result - TODO - allow editing of item in infowindow
-    locationFinalized: function(placeSearchResult, city) {
-      var locationObject = Discourse.Location.locationFromPlaceSearch(placeSearchResult, city);
+    // locationFinalized: function(placeSearchResult, city) {
+    //   var locationObject = Discourse.Location.locationFromPlaceSearch(placeSearchResult, city);
+    //   this.set('model.locationObject', locationObject);
+    //   this.send('closeModal');
+    // },
+    addLocationToTopic: function(locationObject) {
       this.set('model.locationObject', locationObject);
       this.send('closeModal');
-    },
-    addLocationToTopic: function(locationObject) {
-      // if (Ember.isEmpty(this.get('locationObject.title'))) {
-      //   return;
-      // };
-      // if (this.get('locationObject')) {
-        this.set('model.locationObject', locationObject);
-         // this.get('locationObject'));
-
-      // };
-      this.send('closeModal');
-
     }
   }
 });

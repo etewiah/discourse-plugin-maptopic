@@ -2,7 +2,7 @@
 <div class="modal-body">
   <div>
     <div>
-      {{ selectable-map action="locationSelected" infowindowAction="locationFinalized"      
+      {{ selectable-map     
       locationAddedAction="addLocationToTopic" defaultLocation=defaultLocation }}
     </div>
   </div>
@@ -10,12 +10,6 @@
 
 <div class="modal-footer">
 
-
-  {{#if readyToSelect}}
-  <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addLocationToTopic}}>
-    Select
-  </button>
-  {{/if}}
   {{#if formSubmitted}} &nbsp; <i class='fa fa-spinner fa-spin'></i>
   {{else}} &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
   {{/if}}
