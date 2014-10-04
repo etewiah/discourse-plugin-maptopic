@@ -29,8 +29,25 @@ module MapTopic
             porto = MapTopic::LocationTopic.where({location_title: 'porto', longitude: "-8.6239254",
                                                  latitude: "41.1566892", location_id: 0, topic_id: 0}).first_or_initialize
             porto.save!
+        end
 
+# only need to run this once to correct error in setting primary_post location
+        def self.ensure_each_location_topic_has_location_post
+            # MapTopic::LocationTopic.all.each{ |l| p l.location_title}
+            MapTopic::LocationTopic.all.each do |location_topic|
+                if location_topic.topic
+                    primary_post = location_topic.topic.posts.where(:post_number == 1).first
+                    unless primary_post.location
+                        location_post = MapTopic::LocationPost.where(:post_id => primary_post.id).first_or_initialize
+                        location_post.location_title = location_topic.location_title
+                        location_post.longitude = location_topic.longitude
+                        location_post.latitude = location_topic.latitude
+                        location_post.location_id = location_topic.location_id
 
+                        location_post.save!
+                    end
+                end
+            end
         end
 
     end

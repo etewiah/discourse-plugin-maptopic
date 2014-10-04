@@ -10,8 +10,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
   // isCenteredBinding: 'controller.activePost',
   infoWindows: [],
+  // below highlights the marker for a given posts location
+  // activePost will change when 'show .. on map' button for post is clicked
   onActivePostChange: function() {
     var activePost = this.get('activePost');
+    if(!this.get('activePost.location')){
+      debugger;
+      return;
+    }
     debugger;
     if (this.get('activePost.post_number') === 1) {
       var icon = this.topic_icon;
