@@ -12,7 +12,9 @@ module MapTopic
         # t.float :longitude
         # t.float :latitude
 
-
+# below only needs to be run once
+# get_nearest_location_to_request to find out which of the valid locations is closest
+# to current user based on ip address
         def self.create_index_locations()
             berlin = MapTopic::LocationTopic.where({location_title: 'berlin', longitude: "13.4060912",
                                                     location_id: 0, topic_id: 0,  latitude: "52.519171"}).first_or_initialize

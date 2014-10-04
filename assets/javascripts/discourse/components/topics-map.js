@@ -14,7 +14,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   // activePost will change when 'show .. on map' button for post is clicked
   onActivePostChange: function() {
     var activePost = this.get('activePost');
-    if(!this.get('activePost.location')){
+    if (!this.get('activePost.location')) {
       debugger;
       return;
     }
@@ -22,7 +22,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     if (this.get('activePost.post_number') === 1) {
       var icon = this.topic_icon;
       var userName = activePost.topic.get('posters.firstObject.user.username') || activePost.topic.get('details.created_by.username');
-      var title = activePost.topic.get('title') + "( " +  activePost.location.title + " )";
+      var title = activePost.topic.get('title') + "( " + activePost.location.title + " )";
       var dataObject = activePost.topic;
       var dataObjectType = 'topic';
       var myLatlng = new google.maps.LatLng(activePost.location.latitude, activePost.location.longitude);
@@ -96,8 +96,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   doubleClicked: false,
   clickEvent: null,
 
-// in the case of index map, markerValues are the markers property on the map controller passed in through the component declaration
-// in the case of topic map, markerValues are the markers property on the map controller passed in through the component declaration
+  // in the case of index map, markerValues are the markers property on the map controller passed in through the component declaration
+  // in the case of topic map, markerValues are the markers property on the map controller passed in through the component declaration
   markerValuesChanged: function() {
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
@@ -299,13 +299,17 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
 
       google.maps.event.addListener(marker, 'click', function(event) {
-        // TODO - DRY this code:
-        for (var i = 0; i < that.infoWindows.length; i++) {
-          that.infoWindows[i].close();
+        if (infowindowInstance.dataObjectType === 'topic') {
+          that.locationTopicSelected(event, infowindowInstance.dataObject);
+        } else if (infowindowInstance.dataObjectType === 'post') {
+          that.locationPostSelected(event, infowindowInstance.dataObject);
         }
-        that.infoWindows = [];
-        that.infoWindows.push(infowindowInstance);
-        infowindowInstance.open(that.map, marker);
+        // for (var i = 0; i < that.infoWindows.length; i++) {
+        //   that.infoWindows[i].close();
+        // }
+        // that.infoWindows = [];
+        // that.infoWindows.push(infowindowInstance);
+        // infowindowInstance.open(that.map, marker);
       });
 
       google.maps.event.addListener(infowindowInstance, 'domready', function() {

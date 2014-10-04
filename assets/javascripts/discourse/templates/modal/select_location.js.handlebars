@@ -2,36 +2,14 @@
 <div class="modal-body">
   <div>
     <div>
-      {{ selectable-map action="locationSelected" infowindowAction="locationFinalized" defaultLocation=defaultLocation }}
+      {{ selectable-map action="locationSelected" infowindowAction="locationFinalized"      
+      locationAddedAction="addLocationToTopic" defaultLocation=defaultLocation }}
     </div>
   </div>
 </div>
 
 <div class="modal-footer">
-  {{#if locationObject }}
-  <form {{action "addLocationToTopic" on="submit"}}>
-    <table>
-      <tr>
-        <td style="" class="label">
-          <label for='location-title'>
-            What is the name for this location?
-          </label>
-        </td>
-      </tr>
-      <tr class="input">
-        <td style="">
-          {{text-field value=locationObject.title id="location-title" autofocus="autofocus"}}
-        </td>
-      </tr>
 
-      <tr class="instructions">
-        <td>
-          <label>{{ locationObject.formattedAddress }}</label>
-        </td>
-      </tr>
-    </table>
-  </form>
-  {{/if}}
 
   {{#if readyToSelect}}
   <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addLocationToTopic}}>

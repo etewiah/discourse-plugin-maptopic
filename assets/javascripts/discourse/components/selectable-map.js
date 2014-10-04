@@ -26,6 +26,13 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   stringToSearch: "",
   infoWindows: [],
 
+  readyToSelect: function() {
+    if (this.get('locationObject.title')) {
+      return true;
+    } else {
+      return false;
+    }
+  }.property('locationObject.title'),
   // http://stackoverflow.com/questions/17075269/google-maps-load-api-script-and-initialize-inside-ember-js-view
   doubleClicked: false,
   clickEvent: null,
@@ -131,8 +138,12 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
           });
           that.infowindow.setContent(results[0].formatted_address);
           that.infowindow.open(that.map, that.marker);
+          debugger;
+          var locationObject = Discourse.Location.locationFromGmap(results[0]);
+          that.set('locationObject', locationObject);
+
           // def action is locationSelected in sel loc modal ctrlr
-          that.sendAction('action', latlng, results[0]);
+          // that.sendAction('action', latlng, results[0]);
 
         } else {
           // alert("No results found");
@@ -143,6 +154,19 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     });
 
     // this.get("controller").addEvent(lat, lng);
+  },
+  actions: {
+    addLocationToTopic: function() {
+      debugger;
+      if (Ember.isEmpty(this.get('locationObject.title'))) {
+        return;
+      };
+      this.sendAction('locationAddedAction', this.get('locationObject'));
+    },
+    unsetLocationobject: function(){
+      debugger;
+      this.set('locationObject',null);
+    }
   },
   searchForLocation: function() {
     if (Ember.isBlank(this.stringToSearch)) {
@@ -273,5 +297,5 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     });
   }
 
-  
+
 });

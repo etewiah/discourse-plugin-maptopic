@@ -1,27 +1,58 @@
-<table>
-</table>
-
-<div>
-  <div style="float:left;width:50%">
-
-    {{text-field placeholder="City" value=cityToFind id="map-city-name" autofocus="autofocus"}}
-    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action changeCity}}>
-      Go
-    </button>
-  </div>
-
-  <div style="">
 
 
-    {{text-field placeholder="Search string" value=stringToSearch id="place-to-search" }}
-    <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchForLocation}}>
-      Go
-    </button>
-  </div>
+  {{#if locationObject }}
+  <form {{action "addLocationToTopic" on="submit"}}>
+    <table>
+      <tr>
+        <td style="" class="label">
+          <label for='location-title'>
+            What is the name for this location?
+          </label>
+        </td>
+      </tr>
+      <tr class="input">
+        <td style="">
+          {{text-field value=locationObject.title id="location-title" autofocus="autofocus"}}
+        </td>
+      </tr>
 
-</div>
+      <tr class="instructions">
+        <td>
+          <label>{{ locationObject.formattedAddress }}</label>
+        </td>
+      </tr>
+    </table>
+  </form>
+  {{else}}
+    <div>
+      <div style="float:left;width:50%">
+        {{text-field placeholder="City" value=cityToFind id="map-city-name" autofocus="autofocus"}}
+        <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action changeCity}}>
+          Go
+        </button>
+      </div>
+      <div style="">
+        {{text-field placeholder="Search string" value=stringToSearch id="place-to-search" }}
+        <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchForLocation}}>
+          Go
+        </button>
+      </div>
+    </div>
+  {{/if}}
 
-<label>Click any location below to select it or use the search box above to locate a place.</label>
+  {{#if readyToSelect}}
+  <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addLocationToTopic}}>
+    Select
+  </button>
+  &nbsp; <a {{action unsetLocationobject}}>{{i18n cancel}}</a>
+  {{else}}
+
+  {{/if}}
+
+  {{#unless locationObject }}
+      <label>Click any location below to select it or use the search box above to locate a place.</label>
+  {{/unless}}
+
 
 
 <div id="selectable-map-canvas" style="height:300px;"></div>

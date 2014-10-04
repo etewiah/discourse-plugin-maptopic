@@ -37,29 +37,27 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
   actions: {
     // both topic and composer controllers are set to respond to 
     // locationObject being changed on their model
-    locationSelected: function(latlng, geocodedLocation) {
-      var locationObject = Discourse.Location.locationFromGmap(geocodedLocation);
-      // var locationObject = {
-      //   formattedAddress: geocodedLocation.formatted_address,
-      //   latitude: latlng.lat(),
-      //   longitude: latlng.lng()
-      // }
-      this.set('locationObject', locationObject);
-    },
+
+    // below moved into selectable map:
+    // locationSelected: function(latlng, geocodedLocation) {
+    //   var locationObject = Discourse.Location.locationFromGmap(geocodedLocation);
+    //   this.set('locationObject', locationObject);
+    // },
     // called when i select infowindow from search result - TODO - allow editing of item in infowindow
     locationFinalized: function(placeSearchResult, city) {
       var locationObject = Discourse.Location.locationFromPlaceSearch(placeSearchResult, city);
       this.set('model.locationObject', locationObject);
       this.send('closeModal');
     },
-    addLocationToTopic: function() {
-      if (Ember.isEmpty(this.get('locationObject.title'))) {
-        return;
-      };
-      if (this.get('locationObject')) {
-        this.set('model.locationObject', this.get('locationObject'));
+    addLocationToTopic: function(locationObject) {
+      // if (Ember.isEmpty(this.get('locationObject.title'))) {
+      //   return;
+      // };
+      // if (this.get('locationObject')) {
+        this.set('model.locationObject', locationObject);
+         // this.get('locationObject'));
 
-      };
+      // };
       this.send('closeModal');
 
     }
