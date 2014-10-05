@@ -13,12 +13,16 @@ module MapTopic
             # rake geocode:all CLASS=MapTopic::Location SLEEP=2.25 BATCH=5
             if geo = results.first
                 # obj.latlon = Location.rgeo_factory_for_column(:latlon).point(geo.longitude, geo.latitude)
-                obj.city = geo.city ?  geo.city.downcase : obj.city
+                returned_city = geo.city || geo.state
+                # doing above because I found with St Helier for eg, it had it as state instead of city
+                # prefering returned results to previously set ones
+                obj.city = returned_city ?  returned_city.downcase : obj.city
                 obj.address = geo.formatted_address ? geo.formatted_address : obj.address
                 # geo.street_address
                 obj.country = geo.country ? geo.country.downcase : obj.country
                 obj.postal_code = geo.postal_code ? geo.postal_code : obj.postal_code
                 obj.region = geo.state ? geo.state : obj.region
+                # binding.pry
             end
         end
 

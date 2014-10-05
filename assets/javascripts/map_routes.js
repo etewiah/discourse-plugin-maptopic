@@ -55,8 +55,7 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
     // set above just to satisfy objectcontroller need for content....
     mapController.set('currentCity', model.params.currentCity);
     controller.set('content',model);
-    debugger;
-    Discourse.set('title', model.params.currentCity + ' - recent conversations');
+    Discourse.set('title', model.params.currentCity.capitalize + ' - recent conversations');
   }
 
 });

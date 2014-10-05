@@ -72,11 +72,11 @@ module MapTopic
 
     def ensure_category country, city, topic
       admin_user = User.where(:admin => true).last
-      cities_color = '92278F' # purple
+      # cities_color = '92278F' # purple
       countries_color = '8C6238' #brown
       # gigs_color = 'EA1D25' #red
 
-      country_cat = Category.where(:name => country.capitalize).first_or_initialize
+      country_cat = Category.where(:name => country.titleize).first_or_initialize
       unless country_cat.user
         country_cat.user_id = admin_user.id
         country_cat.color = countries_color
@@ -91,7 +91,7 @@ module MapTopic
 
 
 
-      city_cat = Category.where(:name => city.capitalize, :parent_category_id => country_cat.id).first_or_initialize
+      city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
       unless city_cat.user
         city_cat.user_id = admin_user.id
         city_cat.save!
