@@ -226,12 +226,13 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           // icon: icon
           // address: place.title
         });
-        if (that.markers) {
-          $.each(that.markers, function(index, value) {
+        if (that.searchResultMarkers) {
+          $.each(that.searchResultMarkers, function(index, value) {
             value.setMap(null);
           });
         };
-        that.markers.pushObject(marker);
+        that.searchResultMarkers = [];
+        that.searchResultMarkers.pushObject(marker);
 
             //   var contentString = '<div id="map-clickedlocation-content" >' +
             // '<h4>' +
@@ -247,7 +248,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var contentString = '<div id="tmap-infowindow-content" >' +
           '<h4 id="firstHeading" class="firstHeading">' + place.name +
           '</h4>' +
-          '<form id="map-search-result-form">' +
+          '<form id="tmap-search-result-form">' +
           '<div id="bodyContent">' +
           '<small>' + place.vicinity + '</small>' +
           '</div>' +
@@ -273,17 +274,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         });
 
         google.maps.event.addListener(infowindowInstance, 'domready', function() {
-          document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
-            e.stopPropagation();
-            console.log(infowindowInstance);
-
-            // debugger;
+          document.getElementById("tmap-search-result-form").addEventListener("submit", function(e) {
+            e.preventDefault();
+            // console.log(infowindowInstance);
             that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value') );
-            //action is locationFinalezed in sel loc modal ctrlr
-            // that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
-            // var locationObject = Discourse.Location.locationFromPlaceSearch(
-            //   infowindowInstance.searchResult, that.cityForMap);
-            // that.set('locationObject', locationObject);
           });
         });
 
