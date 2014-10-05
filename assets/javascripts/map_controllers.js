@@ -12,25 +12,6 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         var locationObject = Discourse.Location.locationFromGmap(locationDetails);
         locationObject.title = title;
       }
-      // var city = '';
-      // var country = '';
-      // $.each(geocodedLocation.address_components, function(i, address_component) {
-      //   if (address_component.types[0] == "locality") {
-      //     city = address_component.long_name;
-      //   }
-      //   if (address_component.types[0] == "country") {
-      //     country = address_component.long_name;
-      //   }
-      //   //return false; // break the loop   
-      // });
-      // var locationObject = {
-      //     formattedAddress: geocodedLocation.formatted_address,
-      //     latitude: geocodedLocation.geometry.location.lat(),
-      //     longitude: geocodedLocation.geometry.location.lng(),
-      //     title: title,
-      //     city: city,
-      //     country: country
-      //   }
         // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
@@ -125,14 +106,9 @@ Discourse.MapController = Discourse.Controller.extend({
       var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
-    addLocation: function(newLocation) {
-      // var mfopController = this.get('controllers.map-from-one-param');
-      // mfopController.get('model')
-      // not entire sure why above always returns null :(
-      // below calls method defined in application_route
-      this.send('showAddCityModal');
-
-    }
+    // addLocation: function(newLocation) {
+    //   this.send('showAddCityModal');
+    // }
 
   },
 

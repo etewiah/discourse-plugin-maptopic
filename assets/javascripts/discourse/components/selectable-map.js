@@ -129,7 +129,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     autocomplete.bindTo('bounds', this.map);
 
     google.maps.event.addListener(autocomplete, 'place_changed', function() {
-      debugger;
       // infowindow.close();
       // marker.setVisible(false);
       var place = autocomplete.getPlace();
@@ -165,10 +164,19 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
         content: contentString,
         searchResult: place
       });
-      infowindowInstance.open(that.map,marker);
+      infowindowInstance.open(that.map, marker);
 
       var locationObject = Discourse.Location.locationFromPlaceSearch(place, that.cityForMap);
+      debugger;
+
       that.set('locationObject', locationObject);
+      that.map.setCenter(place.geometry.location);
+      google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
+        if (this.getZoom() > 15) {
+          this.setZoom(15);
+        }
+      });
+
       // google.maps.event.addListener(marker, 'mouseover', function() {
       //   for (var i = 0; i < that.infoWindows.length; i++) {
       //     that.infoWindows[i].close();
@@ -193,20 +201,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       //     that.set('locationObject', locationObject);
       //   });
       // });
-
-      that.map.setCenter(place.geometry.location);
-      // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
-      // this.map.fitBounds(bounds);
-      // seems silly but I really have to do all this to get the zoom looking half decent
-      google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
-        if (this.getZoom() > 15) {
-          this.setZoom(15);
-        }
-      });
-
-
-
-
     });
 
   },

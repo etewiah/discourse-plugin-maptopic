@@ -73,61 +73,61 @@ module MapTopic
       # json: { status: 'ok'}
     end
 
-    def set_location
-      unless(params[:topic_id] && params[:location] )
-        render_error "incorrect params"
-        return
-      end
-      longitude = params[:location][:longitude]
-      latitude = params[:location][:latitude]
+#     def set_location
+#       unless(params[:topic_id] && params[:location] )
+#         render_error "incorrect params"
+#         return
+#       end
+#       longitude = params[:location][:longitude]
+#       latitude = params[:location][:latitude]
 
 
-      @topic = Topic.find(params[:topic_id])
-      if current_user.guardian.ensure_can_edit!(@topic)
-        render status: :forbidden, json: false
-        return
-      end
+#       @topic = Topic.find(params[:topic_id])
+#       if current_user.guardian.ensure_can_edit!(@topic)
+#         render status: :forbidden, json: false
+#         return
+#       end
 
 
-      # TODO - find location which is close enough to be considered the same..
-      location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
-      location.title = params[:location][:title] || ""
-      location.city = params[:location][:city] || ""
-      location.country = params[:location][:country] || ""
-      location.address = params[:location][:formattedAddress] || ""
+#       # TODO - find location which is close enough to be considered the same..
+#       location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
+#       location.title = params[:location][:title] || ""
+#       location.city = params[:location][:city] || ""
+#       location.country = params[:location][:country] || ""
+#       location.address = params[:location][:formattedAddress] || ""
 
-      # below will not update if already exists:
-      # do |loc|
-      #   loc.title = params[:location_title] || "ll"
-      # end
-      location.save!
-
-
-      location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_initialize
-      location_topic.city = location.city.downcase
-      location_topic.country = location.country.downcase
-
-      location_topic.location_title = location.title
-      location_topic.longitude = location.longitude
-      location_topic.latitude = location.latitude
-      location_topic.location_id = location.id
-
-      location_topic.save!
-
-# TODO - set a location_post as well
-      # location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
-      # location_post.location_title = location.title
-      # location_post.longitude = location.longitude
-      # location_post.latitude = location.latitude
-      # location_post.location_id = location.id
-
-      # location_post.save!
+#       # below will not update if already exists:
+#       # do |loc|
+#       #   loc.title = params[:location_title] || "ll"
+#       # end
+#       location.save!
 
 
-      return render json: location.to_json
+#       location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_initialize
+#       location_topic.city = location.city.downcase
+#       location_topic.country = location.country.downcase
 
-      # render json: @topic
-    end
+#       location_topic.location_title = location.title
+#       location_topic.longitude = location.longitude
+#       location_topic.latitude = location.latitude
+#       location_topic.location_id = location.id
+
+#       location_topic.save!
+
+# # TODO - set a location_post as well
+#       # location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
+#       # location_post.location_title = location.title
+#       # location_post.longitude = location.longitude
+#       # location_post.latitude = location.latitude
+#       # location_post.location_id = location.id
+
+#       # location_post.save!
+
+
+#       return render json: location.to_json
+
+#       # render json: @topic
+#     end
 
     private
 

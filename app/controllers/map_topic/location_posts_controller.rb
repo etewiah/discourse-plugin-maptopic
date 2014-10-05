@@ -26,7 +26,7 @@ module MapTopic
       location.title = params[:location][:title] || ""
       location.city = params[:location][:city] || ""
       location.country = params[:location][:country] || ""
-      location.address = params[:location][:formattedAddress] || ""
+      location.address = params[:location][:address] || ""
       location.gplace_id = params[:location][:gplace_id] || ""
 
       # below will not update if already exists:

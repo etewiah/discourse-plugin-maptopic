@@ -7,7 +7,7 @@ Discourse.Location.reopenClass({
     // debugger;
     var locationObject = {
       title: result.name,
-      formattedAddress: result.vicinity,
+      address: result.vicinity,
       latitude: result.geometry.location.lat(),
       longitude: result.geometry.location.lng(),
       gplace_id: result.place_id
@@ -22,7 +22,7 @@ Discourse.Location.reopenClass({
     // TODO - check if I already have city and country as result from Gmap
     // can be dodgy (eg Balsall Heath for birmingham)
     var locationObject = {
-        formattedAddress: result.formatted_address,
+        address: result.formatted_address,
         latitude: result.geometry.location.lat(),
         longitude: result.geometry.location.lng()
       };
