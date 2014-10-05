@@ -7,7 +7,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     // allows  submission by pressing 'ENTER' 
     // var selectLocationController = this.get('controller');
     var that = this;
-    // debugger;
     Em.run.schedule('afterRender', function() {
       // $("input[type='text'], input[type='password']").keydown(function(e) {
       $("#map-city-name,#place-to-search").keydown(function(e) {
@@ -167,7 +166,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       infowindowInstance.open(that.map, marker);
 
       var locationObject = Discourse.Location.locationFromPlaceSearch(place, that.cityForMap);
-      debugger;
 
       that.set('locationObject', locationObject);
       that.map.setCenter(place.geometry.location);
@@ -275,7 +273,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   //   if (Ember.isBlank(this.stringToSearch)) {
   //     return;
   //   };
-  //   debugger;
   // },
   // searchForLocation: function() {
   //   if (Ember.isBlank(this.stringToSearch)) {

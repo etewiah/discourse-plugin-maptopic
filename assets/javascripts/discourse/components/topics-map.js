@@ -18,7 +18,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       debugger;
       return;
     }
-    debugger;
     if (this.get('activePost.post_number') === 1) {
       var icon = this.topic_icon;
       var userName = activePost.topic.get('posters.firstObject.user.username') || activePost.topic.get('details.created_by.username');
@@ -104,7 +103,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   }.observes('markerValues', 'currentCity'),
   // TODO - check if below is redundant
   markerAdded: function() {
-    // debugger;
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
   }.observes('markerValues.length'),
@@ -137,7 +135,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
   cityDetails: function() {
     var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
-    // debugger;
     var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
     return cityObject;
   }.property('currentCity'),
@@ -198,7 +195,121 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       that.mapClicked(event.latLng.lat(), event.latLng.lng());
     });
 
+    this.displaySearchBox();
+  },
 
+  displaySearchBox: function() {
+    if (this.get('showSearchBox')) {
+      var input = /** @type {HTMLInputElement} */ (
+        document.getElementById('tmap-pac-input'));
+
+      // var types = document.getElementById('type-selector');
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+      // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
+
+      var autocomplete = new google.maps.places.Autocomplete(input);
+      autocomplete.bindTo('bounds', this.map);
+
+      var that = this;
+      google.maps.event.addListener(autocomplete, 'place_changed', function() {
+        // infowindow.close();
+        // marker.setVisible(false);
+        var place = autocomplete.getPlace();
+        if (!place.geometry) {
+          return;
+        }
+
+        var marker = new google.maps.Marker({
+          position: place.geometry.location,
+          map: that.map,
+          title: place.name
+          // icon: icon
+          // address: place.title
+        });
+        if (that.markers) {
+          $.each(that.markers, function(index, value) {
+            value.setMap(null);
+          });
+        };
+        that.markers.pushObject(marker);
+
+            //   var contentString = '<div id="map-clickedlocation-content" >' +
+            // '<h4>' +
+            // results[0].formatted_address +
+            // '</h4>' +
+            // '<form id="clickedlocation-form">' +
+            // '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start talking:</div>' +
+            // '<input id="clickedlocation-name" type="text" /><br>' +
+            // '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+            // 'Start talking</button></form>' +
+            // '</div>';
+
+        var contentString = '<div id="tmap-infowindow-content" >' +
+          '<h4 id="firstHeading" class="firstHeading">' + place.name +
+          '</h4>' +
+          '<form id="map-search-result-form">' +
+          '<div id="bodyContent">' +
+          '<small>' + place.vicinity + '</small>' +
+          '</div>' +
+          '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+          'Start talking</button>' +
+          '</form>' +
+          '</div>';
+
+        var infowindowInstance = new google.maps.InfoWindow({
+          content: contentString,
+          searchResult: place
+        });
+        infowindowInstance.open(that.map, marker);
+
+        // var locationObject = Discourse.Location.locationFromPlaceSearch(place, that.get('cityDetails.value'));
+        // that.set('locationObject', locationObject);
+
+        that.map.setCenter(place.geometry.location);
+        google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
+          if (this.getZoom() > 15) {
+            this.setZoom(15);
+          }
+        });
+
+        google.maps.event.addListener(infowindowInstance, 'domready', function() {
+          document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
+            e.stopPropagation();
+            console.log(infowindowInstance);
+
+            // debugger;
+            that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value') );
+            //action is locationFinalezed in sel loc modal ctrlr
+            // that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
+            // var locationObject = Discourse.Location.locationFromPlaceSearch(
+            //   infowindowInstance.searchResult, that.cityForMap);
+            // that.set('locationObject', locationObject);
+          });
+        });
+
+        // google.maps.event.addListener(infowindowForClickedLocation, 'domready', function() {
+        //   document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {
+        //     // e.stopPropagation();
+        //     e.preventDefault();
+        //     var locationName = e.srcElement.elements['clickedlocation-name'].value;
+        //     if (Ember.isBlank(locationName)) {
+        //       // TODO - warn about empty name
+        //       debugger;
+        //     } else {
+        //       // clear marker;
+        //       marker.setMap(null);
+        //       // that.locationInfoWindowSelected(results[0], locationName); city param is blank:
+        //       that.sendAction('mapClickedAction', 'gmapLocation', results[0], '', locationName);
+        //     }
+        //   });
+        // });
+
+
+      });
+
+
+
+    }
   },
 
   renderMapWithMarkers: function() {
@@ -316,7 +427,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
           e.stopPropagation();
           // console.log("hi!");
-          // debugger;
           if (infowindowInstance.dataObjectType === 'topic') {
             that.locationTopicSelected(e, infowindowInstance.dataObject);
           } else if (infowindowInstance.dataObjectType === 'post') {
@@ -345,17 +455,11 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       });
     }
 
-    // Ember.run.later(this, function() {
-    //   // if (this.get('markers.length') > 1) {
-    //   //   map.fitBounds(bounds);
-    //   // } else {}
-    //   // google.maps.event.trigger(map, 'resize');
-    //   // map.setCenter(marker.getPosition());
-
-    // }, 500);
     google.maps.event.addListener(this.map, 'click', function(event) {
       that.mapClicked(event.latLng.lat(), event.latLng.lng());
     });
+    this.displaySearchBox();
+
 
   },
   mapClicked: function(lat, lng) {
@@ -368,15 +472,22 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     }, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[0]) {
-          // that.map.setZoom(11);
-          if (that.markerForClickedLocation) {
-            // if a marker has previously been set, clear it
-            that.markerForClickedLocation.setMap(null);
-          }
-          that.markerForClickedLocation = new google.maps.Marker({
+          // if (marker) {
+          //   marker.setMap(null);
+          // }
+          var marker = new google.maps.Marker({
             position: latlng,
             map: that.map
           });
+
+
+          if (that.markers) {
+            $.each(that.markers, function(index, value) {
+              value.setMap(null);
+            });
+          };
+          that.markers = [];
+          that.markers.pushObject(marker);
 
           var contentString = '<div id="map-clickedlocation-content" >' +
             '<h4>' +
@@ -386,14 +497,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start talking:</div>' +
             '<input id="clickedlocation-name" type="text" /><br>' +
             '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-            'Go</button></form>' +
+            'Start talking</button></form>' +
             '</div>';
 
           infowindowForClickedLocation = new google.maps.InfoWindow({
             content: contentString
           });
           // infowindowForClickedLocation.setContent(results[0].formatted_address);
-          infowindowForClickedLocation.open(that.map, that.markerForClickedLocation);
+          infowindowForClickedLocation.open(that.map, marker);
 
           // if (that.infoWindows) {
           for (var i = 0; i < that.infoWindows.length; i++) {
@@ -414,12 +525,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
                 debugger;
               } else {
                 // clear marker;
-                that.markerForClickedLocation.setMap(null);
+                marker.setMap(null);
                 // that.locationInfoWindowSelected(results[0], locationName); city param is blank:
                 that.sendAction('mapClickedAction', 'gmapLocation', results[0], '', locationName);
-
               }
-
             });
           });
 
@@ -450,109 +559,109 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
 
   // places search functionality:
-  searchByName: function() {
-    if (Ember.isBlank(this.nameStringToSearch)) {
-      return;
-    };
-    var searchRequest = {
-      location: this.map.center,
-      radius: '10000',
-      name: this.nameStringToSearch
-      // types: ['store']
-    };
-    this.execPlaceSearch(searchRequest);
-  },
-  searchByKeyword: function() {
-    if (Ember.isBlank(this.stringToSearch)) {
-      return;
-    };
-    var searchRequest = {
-      location: this.map.center,
-      radius: '10000',
-      keyword: this.stringToSearch
-      // types: ['store']
-    };
-    this.execPlaceSearch(searchRequest);
-  },
-  execPlaceSearch: function(searchRequest) {
-    var that = this;
-    service = new google.maps.places.PlacesService(this.map);
-    service.nearbySearch(searchRequest, function(results, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        var bounds = new google.maps.LatLngBounds();
+  // searchByName: function() {
+  //   if (Ember.isBlank(this.nameStringToSearch)) {
+  //     return;
+  //   };
+  //   var searchRequest = {
+  //     location: this.map.center,
+  //     radius: '10000',
+  //     name: this.nameStringToSearch
+  //     // types: ['store']
+  //   };
+  //   this.execPlaceSearch(searchRequest);
+  // },
+  // searchByKeyword: function() {
+  //   if (Ember.isBlank(this.stringToSearch)) {
+  //     return;
+  //   };
+  //   var searchRequest = {
+  //     location: this.map.center,
+  //     radius: '10000',
+  //     keyword: this.stringToSearch
+  //     // types: ['store']
+  //   };
+  //   this.execPlaceSearch(searchRequest);
+  // },
+  // execPlaceSearch: function(searchRequest) {
+  //   var that = this;
+  //   service = new google.maps.places.PlacesService(this.map);
+  //   service.nearbySearch(searchRequest, function(results, status) {
+  //     if (status == google.maps.places.PlacesServiceStatus.OK) {
+  //       var bounds = new google.maps.LatLngBounds();
 
-        if (that.marker) {
-          // if a marker has previously been set, clear it
-          that.marker.setMap(null);
-        };
-        if (that.markers) {
-          $.each(that.markers, function(index, value) {
-            value.setMap(null);
-          });
-        };
-        that.markers = [];
-        results.forEach(function(value, index) {
-          var marker = new google.maps.Marker({
-            position: value.geometry.location,
-            map: that.map,
-            title: value.name
-            // icon: icon
-            // address: value.title
-          });
-          that.markers.pushObject(marker);
-          var contentString = '<div id="tmap-infowindow-content" >' +
-            '<a>' +
-            '<h4 id="firstHeading" class="firstHeading">' + value.name +
-            '</h4>' +
-            '<div id="bodyContent">' +
-            '<small>' + value.vicinity + '</small>' +
-            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-            'Use</button></form>' +
+  //       if (that.marker) {
+  //         // if a marker has previously been set, clear it
+  //         that.marker.setMap(null);
+  //       };
+  //       if (that.markers) {
+  //         $.each(that.markers, function(index, value) {
+  //           value.setMap(null);
+  //         });
+  //       };
+  //       that.markers = [];
+  //       results.forEach(function(value, index) {
+  //         var marker = new google.maps.Marker({
+  //           position: value.geometry.location,
+  //           map: that.map,
+  //           title: value.name
+  //           // icon: icon
+  //           // address: value.title
+  //         });
+  //         that.markers.pushObject(marker);
+  //         var contentString = '<div id="tmap-infowindow-content" >' +
+  //           '<a>' +
+  //           '<h4 id="firstHeading" class="firstHeading">' + value.name +
+  //           '</h4>' +
+  //           '<div id="bodyContent">' +
+  //           '<small>' + value.vicinity + '</small>' +
+  //           '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+  //           'Use</button></form>' +
 
-            '</div></a>' +
-            '</div>';
+  //           '</div></a>' +
+  //           '</div>';
 
-          var infowindowInstance = new google.maps.InfoWindow({
-            content: contentString,
-            searchResult: value
-          });
-          google.maps.event.addListener(marker, 'mouseover', function() {
-            // setTimeout(function() {
-            //   infowindowInstance.close();
-            // }, 6000);
-            for (var i = 0; i < that.infoWindows.length; i++) {
-              that.infoWindows[i].close();
-            }
-            that.infoWindows = [];
-            that.infoWindows.push(infowindowInstance);
-            infowindowInstance.open(that.map, marker);
-          });
+  //         var infowindowInstance = new google.maps.InfoWindow({
+  //           content: contentString,
+  //           searchResult: value
+  //         });
+  //         google.maps.event.addListener(marker, 'mouseover', function() {
+  //           // setTimeout(function() {
+  //           //   infowindowInstance.close();
+  //           // }, 6000);
+  //           for (var i = 0; i < that.infoWindows.length; i++) {
+  //             that.infoWindows[i].close();
+  //           }
+  //           that.infoWindows = [];
+  //           that.infoWindows.push(infowindowInstance);
+  //           infowindowInstance.open(that.map, marker);
+  //         });
 
-          google.maps.event.addListener(infowindowInstance, 'domready', function() {
-            document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
-              e.stopPropagation();
-              // debugger;
-              that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value'));
+  //         google.maps.event.addListener(infowindowInstance, 'domready', function() {
+  //           document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
+  //             e.stopPropagation();
+  //             // debugger;
+  //             that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value'));
 
-            });
-          });
-          bounds.extend(value.geometry.location);
-        })
-        if (that.get('markers.length') > 1) {
-          that.map.fitBounds(bounds);
-        } else {
-          // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
-          that.map.fitBounds(bounds);
-          // seems silly but I really have to do all that to get the zoom looking half decent
-          google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
-            if (this.getZoom() > 15) {
-              this.setZoom(15);
-            }
-          });
-        }
+  //           });
+  //         });
+  //         bounds.extend(value.geometry.location);
+  //       })
+  //       if (that.get('markers.length') > 1) {
+  //         that.map.fitBounds(bounds);
+  //       } else {
+  //         // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+  //         that.map.fitBounds(bounds);
+  //         // seems silly but I really have to do all that to get the zoom looking half decent
+  //         google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
+  //           if (this.getZoom() > 15) {
+  //             this.setZoom(15);
+  //           }
+  //         });
+  //       }
 
-      }
-    });
-  }
+  //     }
+  //   });
+  // }
 
 });

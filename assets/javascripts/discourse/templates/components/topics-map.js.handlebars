@@ -1,9 +1,10 @@
 <div id="topics-map-canvas" {{bind-attr class="mapsClass"}} ></div>
+
+{{#if showSearchBox}}
     <input id="tmap-pac-input" class="controls" type="text"
         placeholder="Enter a location">
 
-{{#if showSearchBox}}
-<div style="margin-top:15px">
+{{!-- <div style="margin-top:15px">
   <div style="float:left;width:50%">
 
     {{text-field placeholder="name search string" value=nameStringToSearch
@@ -25,6 +26,6 @@
 
 </div>
 
-<label>Click any location on the map to select it or use the search boxes above to locate a place.</label>
+<label>Click any location on the map to select it or use the search boxes above to locate a place.</label> --}}
 {{/if}}
 
