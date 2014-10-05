@@ -47,7 +47,6 @@ Discourse.Composer.reopen({
       });
       // need to make sure map_topic update happens first - this._super will then refresh the post object
       // after I have set the new locationObject on the server
-
       var dfr = this._super(opts);
       // dfr.then(function(result){
       //   debugger;

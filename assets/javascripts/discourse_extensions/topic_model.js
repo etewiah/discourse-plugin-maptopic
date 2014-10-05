@@ -1,5 +1,18 @@
 Discourse.Topic.reopen({
   // locationCount
+  // Save any changes we've made to the model
+  save: function() {
+    // I set category id automatically based on location and this messes with that
+    // will set title and category when setting/updating location
+    return;
+    // Don't save unless we can
+    // if (!this.get('details.can_edit')) return;
+
+    // return Discourse.ajax(this.get('url'), {
+    //   type: 'PUT',
+    //   data: { title: this.get('title'), category_id: this.get('category.id') }
+    // });
+  },
 
   hasLocation: function() {
     if (this.get('location')) {

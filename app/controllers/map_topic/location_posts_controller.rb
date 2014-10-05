@@ -45,7 +45,7 @@ module MapTopic
       location_post.save!
 
       if @post.post_number == 1
-        # this is the post associated with the topic so its location should also 
+        # this is the post associated with the topic so its location should also
         # be associated with the topic
         location_topic = MapTopic::LocationTopic.where(:topic_id => @post.topic_id).first_or_initialize
         location_topic.city = location.city.downcase
@@ -58,6 +58,9 @@ module MapTopic
 
         location_topic.save!
 
+        topic = @post.topic
+        ensure_category location.country, location.city, topic
+
       end
 
       return render json: location.to_json
@@ -66,6 +69,42 @@ module MapTopic
     end
 
     private
+
+    def ensure_category country, city, topic
+      admin_user = User.where(:admin => true).last
+      cities_color = '92278F' # purple
+      countries_color = '8C6238' #brown
+      # gigs_color = 'EA1D25' #red
+
+      country_cat = Category.where(:name => country.capitalize).first_or_initialize
+      unless country_cat.user
+        country_cat.user_id = admin_user.id
+        country_cat.color = countries_color
+        country_cat.save!
+        # below is the 'about category topic':
+        country_cat_topic = country_cat.topic
+        country_cat_topic.visible = false
+        country_cat_topic.save!
+
+      end
+      # create(:name => 'China', :color => '8C6238', :user_id => admin_user.id)
+
+
+
+      city_cat = Category.where(:name => city.capitalize, :parent_category_id => country_cat.id).first_or_initialize
+      unless city_cat.user
+        city_cat.user_id = admin_user.id
+        city_cat.save!
+        city_cat_topic = city_cat.topic
+        city_cat_topic.visible = false
+        city_cat_topic.save!
+      end
+
+      topic.category = city_cat
+      topic.save!
+
+
+    end
 
     def check_user
       if current_user.nil?
