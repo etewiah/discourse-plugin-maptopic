@@ -71,7 +71,6 @@ module MapTopic
     private
 
     def ensure_category country, city, topic
-      binding.pry
       admin_user = User.where(:admin => true).last
       # cities_color = '92278F' # purple
       countries_color = '8C6238' #brown
@@ -100,7 +99,6 @@ module MapTopic
         city_cat_topic.visible = false
         city_cat_topic.save!
       end
-binding.pry
       topic.category = city_cat
       topic.save!
 

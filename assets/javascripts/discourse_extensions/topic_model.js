@@ -15,6 +15,7 @@ Discourse.Topic.reopen({
   },
 
   hasLocation: function() {
+    debugger;
     if (this.get('location')) {
       return true;
     } else {

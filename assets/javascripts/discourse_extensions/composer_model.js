@@ -33,7 +33,6 @@ Discourse.Composer.reopen({
       // if the post is a reply, we associate location to post rather than topic..
       // if (post.post_number > 1) {
       //   update_location_endpoint = '/location_posts/set_location';
-      //   // debugger;
       // }
       var map_topic = Discourse.ajax(update_location_endpoint, {
         data: {
@@ -49,10 +48,8 @@ Discourse.Composer.reopen({
       // after I have set the new locationObject on the server
       var dfr = this._super(opts);
       // dfr.then(function(result){
-      //   debugger;
       //   map_topic.then(function(update_location_result) {
       //     // var dfr = that._super(opts);
-      //     debugger;
       //     // return dfr;
       //     return update_location_result;
       //   });

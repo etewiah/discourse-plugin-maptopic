@@ -43,7 +43,7 @@
 
 
     <input id="pac-input" class="controls" type="text"
-        placeholder="Enter a location">
+        placeholder="Enter a location" autofocus="autofocus">
 
 
 {{!--       <div style="float:left;width:50%">
@@ -51,12 +51,7 @@
         <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action searchForLocation}}>Find by name</button>
 
       </div> --}}
-      <div style="">
-        {{text-field placeholder="City" value=cityToFind id="map-city-name" autofocus="autofocus"}}
-        <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action changeCity}}>
-          Change City
-        </button>
-      </div>
+
     </div>
   {{/if}}
 
@@ -66,5 +61,13 @@
   {{/unless}}
 
 
-
 <div id="selectable-map-canvas" style="height:300px;"></div>
+
+
+      <div style="">
+        {{text-field placeholder="City" value=cityToFind id="map-city-name" }}
+        <button class='btn btn-primary' {{bind-attr disabled="submitDisabled" }} {{action changeCity}}>
+          Change City
+        </button>
+      </div>
+

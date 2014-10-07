@@ -200,7 +200,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
   displaySearchBox: function() {
     if (this.get('showSearchBox')) {
-      debugger;
       if (!$('#tmap-pac-input')[0]) {
         $('body').append('<input id="tmap-pac-input" class="controls" type="text" placeholder="Type the place you wish to talk about here" >');
       };
@@ -292,7 +291,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         //     var locationName = e.srcElement.elements['clickedlocation-name'].value;
         //     if (Ember.isBlank(locationName)) {
         //       // TODO - warn about empty name
-        //       debugger;
         //     } else {
         //       // clear marker;
         //       marker.setMap(null);
