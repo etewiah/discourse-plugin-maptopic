@@ -1,0 +1,60 @@
+<div>
+
+  <div style="width:70%;float:left">
+    {{ topics-map showSearchBox=true action="topicSelected" mapClickedAction="startLocationTopic" displayContext="topicsIndex" currentCity=currentCity markerValues=markers mapsClass="medium-maps" }}
+  </div>
+  <div style="width:28%;float:left">
+    How klavado works
+    <button {{ action showPost }}>show post</button>
+
+    <div class='user-stream'>
+      {{#each topic in model.topics itemController="group/post"}}
+
+      <div class='item'>
+        <div class='clearfix info'>
+          {{#link-to 'user' topic.user class="avatar-link"}}
+          <div class='avatar-wrapper'>{{avatar topic.user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}}
+          <span class='time'>{{format-date path="topic.created_at" leaveAgo="true"}}</span>
+          <span class="title">
+            <a href="{{unbound topic.url}}">{{unbound topic.title}}</a>
+          </span>
+          {{#if byName}}
+          <span class="name">
+            {{unbound byName}}
+          </span>
+          {{/if}}
+        </div>
+        <p class='excerpt'>
+          {{{unbound topic.cooked}}}
+        </p>
+      </div>
+
+      {{/each}}
+
+{{#if selectedTopicPost }}
+      <h4>selectedTopicPost:</h4>
+      <div class='item'>
+        <div class='clearfix info'>
+          {{#link-to 'user' selectedTopicPost.user class="avatar-link"}}
+          <div class='avatar-wrapper'>{{avatar selectedTopicPost.user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}}
+          <span class='time'>{{format-date path="selectedTopicPost.created_at" leaveAgo="true"}}</span>
+          <span class="title">
+            <a href="{{unbound selectedTopicPost.url}}">{{unbound selectedTopicPost.title}}</a>
+          </span>
+          {{#if byName}}
+          <span class="name">
+            {{unbound byName}}
+          </span>
+          {{/if}}
+        </div>
+        <p class='excerpt'>
+          {{{unbound selectedTopicPost.cooked}}}
+        </p>
+      </div>
+{{/if}}
+    </div>
+
+
+  </div>
+
+</div>

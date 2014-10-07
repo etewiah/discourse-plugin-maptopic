@@ -35,8 +35,10 @@ register_asset "javascripts/location_model.js"
 register_asset "javascripts/map_controllers.js"
 register_asset "javascripts/map_views.js"
 register_asset "javascripts/map_routes.js"
-register_asset "javascripts/discourse/templates/map.js.handlebars"
-register_asset "javascripts/discourse/templates/map_from_one_param.js.handlebars"
+register_asset "javascripts/discourse/templates/map_landing.js.handlebars"
+register_asset "javascripts/discourse/templates/map_with_sidebox_desktop.js.handlebars"
+register_asset "javascripts/discourse/templates/map_with_sidebox_mobile.js.handlebars"
+register_asset "javascripts/discourse/templates/map_full_page.js.handlebars"
 
 
 register_asset "stylesheets/desktop/maptopic.scss", :desktop

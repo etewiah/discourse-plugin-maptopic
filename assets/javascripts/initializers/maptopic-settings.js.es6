@@ -6,6 +6,8 @@ default {
 
   initialize: function() {
     Discourse.SiteSettings.maptopic = {
+      // TODO - allow configuration of these values from an admin page
+      showLocationsPreview: true,
       // defaultCity: {
       //   city_name: "madrid",
       //   longitude: "-3.7037902",

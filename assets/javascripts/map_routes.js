@@ -1,22 +1,6 @@
-Discourse.MapMixin = Em.Mixin.create({
-    
-  // activate: function(transition) {
-  //   this._super()
-  //   // ensure conversations nav is not shown in app handlebars
-  //   var appController = this.controllerFor('application');
-  //   // console.log('conv route setting activeSubnav to conversations');
-  //   appController.set('showSubnav', true);
-  //   appController.set('activeSubnav', 'conversations');
-  // },
-  // deactivate: function(transition) {
-  //   this._super()
-  //   // ensure conversations nav is shown in app handlebars
-  //   var appController = this.controllerFor('application');
-  //   // console.log('conv route setting activeSubnav to gigs');
-  //   appController.set('showSubnav', false);
-  //   // appController.set('activeSubnav', 'gigs');
-  // }
-});
+// Discourse.MapMixin = Em.Mixin.create({
+
+// });
 
 Discourse.MapRootRoute = Discourse.Route.extend({
 
@@ -38,7 +22,7 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 
 });
 
-Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
+Discourse.MapFromOneParamRoute = Discourse.Route.extend( {
 
   model: function(params) {
     // TODO make use of params to return either venue conversations or gig conversations
@@ -50,7 +34,8 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend(Discourse.MapMixin, {
   // },
   setupController: function(controller, model) {
     var mapController = this.controllerFor('map');
-    // debugger;
+   // debugger;
+
     // mapController.set('content', model);
     // set above just to satisfy objectcontroller need for content....
     mapController.set('currentCity', model.params.currentCity);

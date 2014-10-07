@@ -2,7 +2,26 @@
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   needs: ['composer'],
 
+  selectedTopicPost: function(){
+    if (this.get('selectedTopic')) {
+      var selectedTopicPost = this.get('selectedTopic.post_stream.posts').findBy('post_number', 1);
+      debugger;
+      return selectedTopicPost;
+    } else{
+      return false;
+    };
+  }.property('selectedTopic'),
+
   actions: {
+    showPost: function(){
+
+      var detailedTopic = Discourse.Topic.find(this.get('model.topics.firstObject.id'),{});
+      var that = this;
+      detailedTopic.then(function (result) {
+        that.set('selectedTopic',result);
+        debugger;
+      });
+    },
     // can be triggered by clicking on infowindow after either doubleclicking map
     // use hovering over marker from places search
     startLocationTopic: function(locationType, locationDetails, city, title) {
@@ -28,7 +47,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       //return true to bubble up to route...
       return false;
     },
-    addLocationToTopic: function() {
+    initiateAddLocationToTopic: function() {
       if (Ember.isEmpty(this.get('locationObject.title'))) {
         return;
       };
@@ -106,9 +125,9 @@ Discourse.MapController = Discourse.Controller.extend({
       var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
-    // addLocation: function(newLocation) {
-    //   this.send('showAddCityModal');
-    // }
+    initiateAddLocation: function(newLocation) {
+      this.send('showAddCityModal');
+    }
 
   },
 
