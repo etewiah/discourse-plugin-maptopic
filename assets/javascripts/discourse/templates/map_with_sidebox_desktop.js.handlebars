@@ -1,59 +1,23 @@
 <div>
 
   <div style="width:70%;float:left">
+      
+
     {{ topics-map showSearchBox=true action="topicSelected" mapClickedAction="startLocationTopic" displayContext="topicsIndex" currentCity=currentCity markerValues=markers mapsClass="medium-maps" }}
   </div>
   <div style="width:28%;float:left">
-    How klavado works
-    <button {{ action showPost }}>show post</button>
 
-    <div class='user-stream'>
-      {{#each topic in model.topics itemController="group/post"}}
+    <div class="alert alert-info" style="font-weight: normal;height:580px">
+    <p>Klavado is like a reddit for places - it lets you find and talk about places in a simple manner.</p>
+    <p>The markers on the map represent recent conversations about the place marked.  You can find more conversations by searching ( {{fa-icon search label="search.title"}} in the top right menu on this page ) or by browsing this {{#link-to "discovery.latest"}}list.{{/link-to}}</p>
 
-      <div class='item'>
-        <div class='clearfix info'>
-          {{#link-to 'user' topic.user class="avatar-link"}}
-          <div class='avatar-wrapper'>{{avatar topic.user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}}
-          <span class='time'>{{format-date path="topic.created_at" leaveAgo="true"}}</span>
-          <span class="title">
-            <a href="{{unbound topic.url}}">{{unbound topic.title}}</a>
-          </span>
-          {{#if byName}}
-          <span class="name">
-            {{unbound byName}}
-          </span>
-          {{/if}}
-        </div>
-        <p class='excerpt'>
-          {{{unbound topic.cooked}}}
-        </p>
-      </div>
+    <p>To start a conversation, just click anywhere on the map or use the searchbox on the map to find the place you want to talk about.</p>
 
-      {{/each}}
+    <p>Change to any city or town you wish by clicking <a {{ action showAddCityModal }}>here.</a> </p>
 
-{{#if selectedTopicPost }}
-      <h4>selectedTopicPost:</h4>
-      <div class='item'>
-        <div class='clearfix info'>
-          {{#link-to 'user' selectedTopicPost.user class="avatar-link"}}
-          <div class='avatar-wrapper'>{{avatar selectedTopicPost.user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}}
-          <span class='time'>{{format-date path="selectedTopicPost.created_at" leaveAgo="true"}}</span>
-          <span class="title">
-            <a href="{{unbound selectedTopicPost.url}}">{{unbound selectedTopicPost.title}}</a>
-          </span>
-          {{#if byName}}
-          <span class="name">
-            {{unbound byName}}
-          </span>
-          {{/if}}
-        </div>
-        <p class='excerpt'>
-          {{{unbound selectedTopicPost.cooked}}}
-        </p>
-      </div>
-{{/if}}
+    <p></p>
+
     </div>
-
 
   </div>
 

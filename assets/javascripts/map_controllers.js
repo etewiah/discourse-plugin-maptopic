@@ -2,26 +2,27 @@
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   needs: ['composer'],
 
-  selectedTopicPost: function(){
-    if (this.get('selectedTopic')) {
-      var selectedTopicPost = this.get('selectedTopic.post_stream.posts').findBy('post_number', 1);
-      debugger;
-      return selectedTopicPost;
-    } else{
-      return false;
-    };
-  }.property('selectedTopic'),
+  // selectedTopicPost: function(){
+  //   if (this.get('selectedTopic')) {
+  //     var selectedTopicPost = this.get('selectedTopic.post_stream.posts').findBy('post_number', 1);
+  //     debugger;
+  //     return selectedTopicPost;
+  //   } else{
+  //     return false;
+  //   };
+  // }.property('selectedTopic'),
 
   actions: {
-    showPost: function(){
+// had meant to show topic details next to index map - might come back to this
+    // showPost: function(){
 
-      var detailedTopic = Discourse.Topic.find(this.get('model.topics.firstObject.id'),{});
-      var that = this;
-      detailedTopic.then(function (result) {
-        that.set('selectedTopic',result);
-        debugger;
-      });
-    },
+    //   var detailedTopic = Discourse.Topic.find(this.get('model.topics.firstObject.id'),{});
+    //   var that = this;
+    //   detailedTopic.then(function (result) {
+    //     that.set('selectedTopic',result);
+    //     debugger;
+    //   });
+    // },
     // can be triggered by clicking on infowindow after either doubleclicking map
     // use hovering over marker from places search
     startLocationTopic: function(locationType, locationDetails, city, title) {
@@ -125,9 +126,9 @@ Discourse.MapController = Discourse.Controller.extend({
       var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
-    initiateAddLocation: function(newLocation) {
-      this.send('showAddCityModal');
-    }
+    // initiateAddLocation: function(newLocation) {
+    //   this.send('showAddCityModal');
+    // }
 
   },
 

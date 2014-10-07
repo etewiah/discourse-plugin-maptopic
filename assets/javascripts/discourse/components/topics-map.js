@@ -200,6 +200,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
   displaySearchBox: function() {
     if (this.get('showSearchBox')) {
+      debugger;
+      if (!$('#tmap-pac-input')[0]) {
+        $('body').append('<input id="tmap-pac-input" class="controls" type="text" placeholder="Type the place you wish to talk about here" >');
+      };
       var input = /** @type {HTMLInputElement} */ (
         document.getElementById('tmap-pac-input'));
 
@@ -234,18 +238,18 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         that.searchResultMarkers = [];
         that.searchResultMarkers.pushObject(marker);
 
-            //   var contentString = '<div id="map-clickedlocation-content" >' +
-            // '<h4>' +
-            // results[0].formatted_address +
-            // '</h4>' +
-            // '<form id="clickedlocation-form">' +
-            // '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start talking:</div>' +
-            // '<input id="clickedlocation-name" type="text" /><br>' +
-            // '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-            // 'Start talking</button></form>' +
-            // '</div>';
+        //   var contentString = '<div id="map-clickedlocation-content" >' +
+        // '<h4>' +
+        // results[0].formatted_address +
+        // '</h4>' +
+        // '<form id="clickedlocation-form">' +
+        // '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start talking:</div>' +
+        // '<input id="clickedlocation-name" type="text" /><br>' +
+        // '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
+        // 'Start talking</button></form>' +
+        // '</div>';
 
-        var contentString = '<div id="tmap-infowindow-content" >' +
+        var contentString = '<div id="tmap-infowindow-content" style="padding: 5px;" >' +
           '<h4 id="firstHeading" class="firstHeading">' + place.name +
           '</h4>' +
           '<form id="tmap-search-result-form">' +
@@ -277,7 +281,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           document.getElementById("tmap-search-result-form").addEventListener("submit", function(e) {
             e.preventDefault();
             // console.log(infowindowInstance);
-            that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value') );
+            that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value'));
           });
         });
 

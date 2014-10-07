@@ -1,7 +1,7 @@
 Discourse.AddCityModalView =  Discourse.ModalBodyView.extend({
   templateName: 'modal/add_city',
-  title: "Add a new city",
-  classNames: ['create-account'],
+  title: "New city",
+  // classNames: ['create-account'],
 
   // _setup: function() {
   //   // allows the submission the form when pressing 'ENTER' on *any* text input field
