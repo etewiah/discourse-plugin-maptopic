@@ -15,27 +15,55 @@ require("discourse/controllers/topic")["default"].reopen({
   startLocationPost: function() {
     if (this.get('model.locationObject')) {
       if (Discourse.User.current()) {
-        var composerController = this.get('controllers.composer');
-        var locationObject = this.get('model.locationObject');
-        var topic = this.get('model');
-        // var self = this;
 
-        var opts = {
-          action: Discourse.Composer.REPLY,
-          draftKey: topic.get('draft_key'),
-          draftSequence: topic.get('draft_sequence'),
-          topic: topic
-        };
-        composerController.open(opts).then(function() {
-          composerController.content.set('locationObject', locationObject);
+        var topic = this.get('model');
+        if (topic) {
+          var topicLocationCount = topic.get('locationCount') || 0;
+          // below triggers recalculation of markers on a topic
+          topic.set('locationCount', topicLocationCount + 1);
+          // var pstrPosts = topic.get('postStream.posts');
+          // var postInTopic = pstrPosts.findBy('id', post.id);
+          // // this ensures location is available for map markers:
+          // postInTopic.set('location', locationObject);
+        }
+        var update_location_endpoint = '/location_topics/set_location';
+        var map_topic = Discourse.ajax(update_location_endpoint, {
+          data: {
+            location: topic.locationObject,
+            // post_id: post.id,
+            topic_id: topic.id
+          },
+          method: 'POST'
         });
+        var locs = this.get('model.locations');
+        locs.pushObject(topic.locationObject);
+        var that = this;
+        map_topic.then(function(result){
+          debugger;
+        });
+        // TODO - handle errors
+
+
+
+        // var composerController = this.get('controllers.composer');
+        // var locationObject = this.get('model.locationObject');
+        // var topic = this.get('model');
+        // // var self = this;
+
+        // var opts = {
+        //   action: Discourse.Composer.REPLY,
+        //   draftKey: topic.get('draft_key'),
+        //   draftSequence: topic.get('draft_sequence'),
+        //   topic: topic
+        // };
+        // composerController.open(opts).then(function() {
+        //   composerController.content.set('locationObject', locationObject);
+        // });
       } else {
         this.send('showLogin');
       }
 
-    } else {
-      // return " select a location";
-    };
+    }
   }.observes('model.locationObject'),
 
   // contextChanged2: function() {

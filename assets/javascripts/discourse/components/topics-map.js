@@ -348,7 +348,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     var that = this;
     $.each(currentMarkerValues, function(index, value) {
       if (value.post) {
-        var icon = that.post_icon;
+        // using topic icon everywhere till I figure out a decent scheme...
+        var icon = that.topic_icon;
         var userName = value.post.name;
         var title = value.location.title;
         var dataObject = value.post;
@@ -360,7 +361,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var dataObject = value.topic;
         var dataObjectType = 'topic';
       } else {
-        return;
+        var icon = that.topic_icon;
+        var userName = "no one";
+        var title = value.location.title;
+        // return;
       };
 
 

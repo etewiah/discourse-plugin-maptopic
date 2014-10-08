@@ -18,6 +18,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
 
       });
     });
+    this.$('#pac-input').focus();
   }.on('didInsertElement'),
   cityToFind: "",
   cityForMap: "",
@@ -121,7 +122,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       document.getElementById('pac-input'));
 
     // var types = document.getElementById('type-selector');
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+    // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
     // this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(types);
 
     var autocomplete = new google.maps.places.Autocomplete(input);

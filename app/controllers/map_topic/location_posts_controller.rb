@@ -43,7 +43,7 @@ module MapTopic
       location_post.location_id = location.id
 
       location_post.save!
-
+# todo - ensure there is a location_post for each location topic
       if @post.post_number == 1
         # this is the post associated with the topic so its location should also
         # be associated with the topic
