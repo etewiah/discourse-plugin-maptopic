@@ -1,0 +1,17 @@
+{{#unless complete}}
+<div class="modal-body">
+  <div>
+    <div>
+      {{ selectable-map     
+      locationAddedAction="addLocationToTopic" defaultLocation=defaultLocation }}
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+
+  {{#if formSubmitted}} &nbsp; <i class='fa fa-spinner fa-spin'></i>
+  {{else}} &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
+  {{/if}}
+</div>
+{{/unless}}

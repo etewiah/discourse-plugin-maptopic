@@ -176,30 +176,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
         }
       });
 
-      // google.maps.event.addListener(marker, 'mouseover', function() {
-      //   for (var i = 0; i < that.infoWindows.length; i++) {
-      //     that.infoWindows[i].close();
-      //   }
-      //   that.infoWindows = [];
-      //   that.infoWindows.push(infowindowInstance);
-      //   infowindowInstance.open(that.map, marker);
-      // });
-      // google.maps.event.addListener(marker, 'click', function() {
-      //   var locationObject = Discourse.Location.locationFromPlaceSearch(
-      //     infowindowInstance.searchResult, that.cityForMap);
-      //   that.set('locationObject', locationObject);
-      // });
-
-      // google.maps.event.addListener(infowindowInstance, 'domready', function() {
-      //   document.getElementById("smap-infowindow-content").addEventListener("click", function(e) {
-      //     e.stopPropagation();
-      //     //action is locationFinalezed in sel loc modal ctrlr
-      //     // that.sendAction('infowindowAction', infowindowInstance.searchResult, that.cityForMap);
-      //     var locationObject = Discourse.Location.locationFromPlaceSearch(
-      //       infowindowInstance.searchResult, that.cityForMap);
-      //     that.set('locationObject', locationObject);
-      //   });
-      // });
     });
 
   },
@@ -264,6 +240,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
       if (Ember.isEmpty(this.get('locationObject.title'))) {
         return;
       };
+      // calls addLocationToTopic action in sel loc modal controller
       this.sendAction('locationAddedAction', this.get('locationObject'));
     },
     unsetLocationobject: function() {

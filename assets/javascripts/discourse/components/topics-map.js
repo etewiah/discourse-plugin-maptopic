@@ -346,29 +346,29 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     this.infoWindows = [];
     this.markers = [];
     var that = this;
-    $.each(currentMarkerValues, function(index, value) {
-      if (value.post) {
+    $.each(currentMarkerValues, function(index, detailsForMarker) {
+      if (detailsForMarker.post) {
         // using topic icon everywhere till I figure out a decent scheme...
         var icon = that.topic_icon;
-        var userName = value.post.name;
-        var title = value.location.title;
-        var dataObject = value.post;
+        var userName = detailsForMarker.post.name;
+        var title = detailsForMarker.location.title;
+        var dataObject = detailsForMarker.post;
         var dataObjectType = 'post';
-      } else if (value.topic) {
+      } else if (detailsForMarker.topic) {
         var icon = that.topic_icon;
-        var userName = value.topic.get('posters.firstObject.user.username') || value.topic.get('details.created_by.username');
-        var title = value.topic.get('title') + "( " + value.location.title + " )";
-        var dataObject = value.topic;
+        var userName = detailsForMarker.topic.get('posters.firstObject.user.username') || detailsForMarker.topic.get('details.created_by.username');
+        var title = detailsForMarker.topic.get('title') + "( " + detailsForMarker.location.title + " )";
+        var dataObject = detailsForMarker.topic;
         var dataObjectType = 'topic';
       } else {
         var icon = that.topic_icon;
         var userName = "no one";
-        var title = value.location.title;
+        var title = detailsForMarker.location.title;
         // return;
       };
 
 
-      var myLatlng = new google.maps.LatLng(value.location.latitude, value.location.longitude);
+      var myLatlng = new google.maps.LatLng(detailsForMarker.location.latitude, detailsForMarker.location.longitude);
       // (52.519171, 13.4060912);
       // latlngbounds.extend(latLng);
       bounds.extend(myLatlng);
@@ -377,7 +377,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         map: that.map,
         title: title,
         icon: icon
-        // address: value.title
+        // address: detailsForMarker.title
       });
       that.markers.pushObject(marker);
 
@@ -410,28 +410,19 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
 
       google.maps.event.addListener(marker, 'click', function(event) {
-        if (infowindowInstance.dataObjectType === 'topic') {
-          that.locationTopicSelected(event, infowindowInstance.dataObject);
-        } else if (infowindowInstance.dataObjectType === 'post') {
-          that.locationPostSelected(event, infowindowInstance.dataObject);
-        }
-        // for (var i = 0; i < that.infoWindows.length; i++) {
-        //   that.infoWindows[i].close();
-        // }
-        // that.infoWindows = [];
-        // that.infoWindows.push(infowindowInstance);
-        // infowindowInstance.open(that.map, marker);
+        console.log('val is', detailsForMarker);
+        that.placeSelected(event, detailsForMarker);
       });
 
       google.maps.event.addListener(infowindowInstance, 'domready', function() {
         document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
           e.stopPropagation();
-          // console.log("hi!");
-          if (infowindowInstance.dataObjectType === 'topic') {
-            that.locationTopicSelected(e, infowindowInstance.dataObject);
-          } else if (infowindowInstance.dataObjectType === 'post') {
-            that.locationPostSelected(e, infowindowInstance.dataObject);
-          }
+          that.placeSelected(event, detailsForMarker);
+          // if (infowindowInstance.dataObjectType === 'topic') {
+          //   that.locationTopicSelected(e, infowindowInstance.dataObject);
+          // } else if (infowindowInstance.dataObjectType === 'post') {
+          //   that.locationPostSelected(e, infowindowInstance.dataObject);
+          // }
 
         });
       });
@@ -548,14 +539,15 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   // locationInfoWindowSelected: function(selectedLocation) {
   //   this.sendAction('mapClickedAction', selectedLocation);
   // },
-  locationTopicSelected: function(event, topic) {
-    this.sendAction('action', topic);
+  placeSelected: function(event, detailsForMarker) {
+    debugger;
+    this.sendAction('markerSelectedAction', detailsForMarker);
   },
-  locationPostSelected: function(event, post) {
-    // TODO implement scrollTO
-    Discourse.URL.jumpToPost(post.post_number);
-    // this.sendAction('action', post);
-  },
+  // locationPostSelected: function(event, post) {
+  //   // TODO implement scrollTO
+  //   // Discourse.URL.jumpToPost(post.post_number);
+  //   this.sendAction('markerSelectedAction', topic);
+  // },
 
 
   // places search functionality:

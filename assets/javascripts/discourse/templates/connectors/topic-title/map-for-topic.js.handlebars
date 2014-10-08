@@ -16,7 +16,7 @@
 
 <div>
   
-{{ topics-map action="postSelected" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
+{{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
 </div>
 
 {{/if}}

@@ -39,7 +39,7 @@ require("discourse/controllers/topic")["default"].reopen({
         locs.pushObject(topic.locationObject);
         var that = this;
         map_topic.then(function(result){
-          debugger;
+          // debugger;
         });
         // TODO - handle errors
 
@@ -72,6 +72,11 @@ require("discourse/controllers/topic")["default"].reopen({
   // }.observes('topic'),
 
   actions: {
+    // called when marker on topics map is clicked:
+    showPlaceDetails: function(detailsForMarker){
+      debugger;
+      this.send('showLocationSelectorModal',detailsForMarker);
+    },
     showLocationSelector: function() {
       if (Discourse.User.current()) {
         // below calls method defined in application_route
