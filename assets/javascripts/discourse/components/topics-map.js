@@ -221,32 +221,26 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         if (!place.geometry) {
           return;
         }
+        if (that.newLocationMarker) {
+          that.newLocationMarker.setMap(null);
+        }
 
-        var marker = new google.maps.Marker({
+
+        that.newLocationMarker = new google.maps.Marker({
           position: place.geometry.location,
           map: that.map,
           title: place.name
             // icon: icon
             // address: place.title
         });
-        if (that.searchResultMarkers) {
-          $.each(that.searchResultMarkers, function(index, value) {
-            value.setMap(null);
-          });
-        };
-        that.searchResultMarkers = [];
-        that.searchResultMarkers.pushObject(marker);
+        // if (that.searchResultMarkers) {
+        //   $.each(that.searchResultMarkers, function(index, value) {
+        //     value.setMap(null);
+        //   });
+        // };
+        // that.searchResultMarkers = [];
+        // that.searchResultMarkers.pushObject(marker);
 
-        //   var contentString = '<div id="map-clickedlocation-content" >' +
-        // '<h4>' +
-        // results[0].formatted_address +
-        // '</h4>' +
-        // '<form id="clickedlocation-form">' +
-        // '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start talking:</div>' +
-        // '<input id="clickedlocation-name" type="text" /><br>' +
-        // '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-        // 'Start talking</button></form>' +
-        // '</div>';
 
         var contentString = '<div id="tmap-infowindow-content" style="padding: 5px;" >' +
           '<h4 id="firstHeading" class="firstHeading">' + place.name +
@@ -264,10 +258,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           content: contentString,
           searchResult: place
         });
-        infowindowInstance.open(that.map, marker);
-
-        // var locationObject = Discourse.Location.locationFromPlaceSearch(place, that.get('cityDetails.value'));
-        // that.set('locationObject', locationObject);
+        infowindowInstance.open(that.map, that.newLocationMarker);
 
         that.map.setCenter(place.geometry.location);
         google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
@@ -284,28 +275,25 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           });
         });
 
-        // google.maps.event.addListener(infowindowForClickedLocation, 'domready', function() {
-        //   document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {
-        //     // e.stopPropagation();
-        //     e.preventDefault();
-        //     var locationName = e.srcElement.elements['clickedlocation-name'].value;
-        //     if (Ember.isBlank(locationName)) {
-        //       // TODO - warn about empty name
-        //     } else {
-        //       // clear marker;
-        //       marker.setMap(null);
-        //       // that.locationInfoWindowSelected(results[0], locationName); city param is blank:
-        //       that.sendAction('mapClickedAction', 'gmapLocation', results[0], '', locationName);
-        //     }
-        //   });
-        // });
-
-
       });
 
 
 
     }
+  },
+
+  showNewInfowindow: function(infowindowInstance, marker) {
+    debugger;
+    if (this.newLocationMarker) {
+      this.newLocationMarker.setMap(null);
+    }
+    for (var i = 0; i < this.infoWindows.length; i++) {
+      this.infoWindows[i].close();
+    }
+    this.infoWindows = [];
+    this.infoWindows.push(infowindowInstance);
+    infowindowInstance.open(this.map, marker);
+    marker.showingInfoWindow = true;
   },
 
   renderMapWithMarkers: function() {
@@ -347,8 +335,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     this.markers = [];
     var that = this;
     $.each(currentMarkerValues, function(index, detailsForMarker) {
-        // debugger;
-        //         context: 'topic_view',
+      // debugger;
+      //         context: 'topic_view',
       if (detailsForMarker.context === 'topic_view') {
         // debugger;
         // using topic icon everywhere till I figure out a decent scheme...
@@ -387,7 +375,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       that.markers.pushObject(marker);
 
       var userNameString = "";
-      if(userName){
+      if (userName) {
         userNameString = '<small>By: ' + userName + '</small>';
       };
       var contentString = '<div id="tmap-infowindow-content" >' +
@@ -407,14 +395,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       });
       google.maps.event.addListener(marker, 'mouseover', function() {
         // debugger;
-        for (var i = 0; i < that.infoWindows.length; i++) {
-          that.infoWindows[i].close();
-        }
-        that.infoWindows = [];
-        that.infoWindows.push(infowindowInstance);
-        infowindowInstance.open(that.map, marker);
-        marker.showingInfoWindow = true;
-
+        that.showNewInfowindow(infowindowInstance, marker);
       });
 
 
@@ -423,13 +404,15 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         if (marker.showingInfoWindow) {
           that.placeSelected(event, detailsForMarker);
         } else {
-          for (var i = 0; i < that.infoWindows.length; i++) {
-            that.infoWindows[i].close();
-          }
-          that.infoWindows = [];
-          that.infoWindows.push(infowindowInstance);
-          infowindowInstance.open(that.map, marker);
-          marker.showingInfoWindow = true;
+          that.showNewInfowindow(infowindowInstance, marker);
+
+          // for (var i = 0; i < that.infoWindows.length; i++) {
+          //   that.infoWindows[i].close();
+          // }
+          // that.infoWindows = [];
+          // that.infoWindows.push(infowindowInstance);
+          // infowindowInstance.open(that.map, marker);
+          // marker.showingInfoWindow = true;
         }
       });
 
@@ -482,22 +465,22 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     }, function(results, status) {
       if (status == google.maps.GeocoderStatus.OK) {
         if (results[0]) {
-          // if (marker) {
-          //   marker.setMap(null);
-          // }
-          var marker = new google.maps.Marker({
+          if (that.newLocationMarker) {
+            that.newLocationMarker.setMap(null);
+          }
+          that.newLocationMarker = new google.maps.Marker({
             position: latlng,
             map: that.map
           });
 
 
-          if (that.userSelectionMarkers) {
-            $.each(that.userSelectionMarkers, function(index, value) {
-              value.setMap(null);
-            });
-          };
-          that.userSelectionMarkers = [];
-          that.userSelectionMarkers.pushObject(marker);
+          // if (that.userSelectionMarkers) {
+          //   $.each(that.userSelectionMarkers, function(index, value) {
+          //     value.setMap(null);
+          //   });
+          // };
+          // that.userSelectionMarkers = [];
+          // that.userSelectionMarkers.pushObject(that.newLocationMarker);
 
           var contentString = '<div id="map-clickedlocation-content" >' +
             '<h4>' +
@@ -514,7 +497,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             content: contentString
           });
           // infowindowForClickedLocation.setContent(results[0].formatted_address);
-          infowindowForClickedLocation.open(that.map, marker);
+          infowindowForClickedLocation.open(that.map, that.newLocationMarker);
 
           // if (that.infoWindows) {
           for (var i = 0; i < that.infoWindows.length; i++) {
@@ -534,8 +517,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
                 // TODO - warn about empty name
                 debugger;
               } else {
-                // clear marker;
-                marker.setMap(null);
+                // clear that.newLocationMarker;
+                that.newLocationMarker.setMap(null);
                 // that.locationInfoWindowSelected(results[0], locationName); city param is blank:
                 that.sendAction('mapClickedAction', 'gmapLocation', results[0], '', locationName);
               }
