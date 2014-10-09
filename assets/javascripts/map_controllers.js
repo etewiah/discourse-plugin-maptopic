@@ -58,19 +58,20 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       };
       this.send('closeModal');
     },
-    topicSelected: function(topic) {
+    topicSelected: function(detailsForMarker) {
+      debugger;
       // this.transitionToRoute('topic.fromParams', topic);
       // above doesn't work
       // https://meta.discourse.org/t/why-does-discourse-use-a-bunch-of-tags-with-unbound-in-the-basic-topic-list-template/10541/4
       this.transitionToRoute('topic.fromParams', Discourse.Topic.create({
-        id: topic.id
+        id: detailsForMarker.topic.id
       }));
     }
   },
   markers: function() {
     var topics = this.get('content.topics');
     var currentMarkerValues = [];
-    debugger;
+    // debugger;
     // chapuzo to ensure I maximise no of markers on index page
     topics.forEach(function(t) {
       var markerInfo = {
