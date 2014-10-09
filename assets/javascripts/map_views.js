@@ -5,7 +5,7 @@ Discourse.MapView = Discourse.View.extend({
 Discourse.MapFromOneParamView = Discourse.View.extend({
   templateName: function() {
     if (Discourse.SiteSettings.maptopic.showLocationsPreview) {
-      return 'map_with_sidebox_mobile';
+      return 'map_with_sidebox_desktop';
       // if (Discourse.Mobile.mobileView) {
       //   return 'map_with_sidebox_mobile';
       // } else {

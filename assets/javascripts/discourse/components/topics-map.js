@@ -160,44 +160,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   topic_icon: "http://maps.google.com/mapfiles/ms/icons/green-dot.png",
   post_icon: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
 
-  renderMapWithoutMarkers: function() {
-    var cityDetails = this.get('cityDetails');
-    var mapCenter = new google.maps.LatLng(cityDetails.latitude, cityDetails.longitude);
-    // no longer need this as I will not display map where there are no markerValues...
-    // if (currentMarkerValues && currentMarkerValues.length > 0) {
-    //  mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude, currentMarkerValues[0].longitude);
-    // } else {
-    //  mapCenter = new google.maps.LatLng(Discourse.Constants.DEFAULT_CITY_DETAILS.lat, Discourse.Constants.DEFAULT_CITY_DETAILS.lon);
-    // }
-
-    var zoom = 15;
-
-    var styles = [{
-      "featureType": "poi",
-      "elementType": "labels",
-      "stylers": [{
-        "visibility": "off"
-      }]
-    }];
-
-    var mapOptions = {
-      zoom: zoom,
-      center: mapCenter,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      styles: styles
-    };
-
-    this.map = new google.maps.Map(document.getElementById(
-        'topics-map-canvas'),
-      mapOptions);
-    var that = this;
-    google.maps.event.addListener(this.map, 'click', function(event) {
-      that.mapClicked(event.latLng.lat(), event.latLng.lng());
-    });
-
-    this.displaySearchBox();
-  },
-
   displaySearchBox: function() {
     if (this.get('showSearchBox')) {
       if (!$('#tmap-pac-input')[0]) {
@@ -295,37 +257,64 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     marker.showingInfoWindow = true;
   },
 
-  renderMapWithMarkers: function() {
-    var currentMarkerValues = this.get('markerValues');
-    var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
-      currentMarkerValues[0].longitude);
-    // no longer need this as I will not display map where there are no markers...
-    // if (currentMarkerValues && currentMarkerValues.length > 0) {
-    //  mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude, currentMarkerValues[0].longitude);
-    // } else {
-    //  mapCenter = new google.maps.LatLng(Discourse.Constants.DEFAULT_CITY_DETAILS.lat, Discourse.Constants.DEFAULT_CITY_DETAILS.lon);
-    // }
-
-    var zoom = 15;
-
-    var styles = [{
+  mapOptions: {
+    maxZoom: 20,
+    minZoom: 9,
+    zoom: 15,
+    // center: mapCenter,
+    // mapTypeId: google.maps.MapTypeId.ROADMAP
+    styles: [{
       "featureType": "poi",
       "elementType": "labels",
       "stylers": [{
         "visibility": "off"
       }]
-    }];
+    }]
+  },
 
-    var mapOptions = {
-      zoom: zoom,
-      center: mapCenter,
-      mapTypeId: google.maps.MapTypeId.ROADMAP,
-      styles: styles
-    };
+  renderMapWithoutMarkers: function() {
+    var cityDetails = this.get('cityDetails');
+    var mapCenter = new google.maps.LatLng(cityDetails.latitude, cityDetails.longitude);
+
+    // var zoom = 15;
+
+    // var styles = [{
+    //   "featureType": "poi",
+    //   "elementType": "labels",
+    //   "stylers": [{
+    //     "visibility": "off"
+    //   }]
+    // }];
+
+    this.mapOptions.center = mapCenter;
+    this.mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
 
     this.map = new google.maps.Map(document.getElementById(
         'topics-map-canvas'),
-      mapOptions);
+      this.mapOptions);
+
+    var that = this;
+    google.maps.event.addListener(this.map, 'click', function(event) {
+      that.mapClicked(event.latLng.lat(), event.latLng.lng());
+    });
+
+    this.displaySearchBox();
+  },
+
+  renderMapWithMarkers: function() {
+    var currentMarkerValues = this.get('markerValues');
+    var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
+      currentMarkerValues[0].longitude);
+
+    // var zoom = 15;
+
+
+    this.mapOptions.center = mapCenter;
+    this.mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
+
+    this.map = new google.maps.Map(document.getElementById(
+        'topics-map-canvas'),
+      this.mapOptions);
 
     var bounds = new google.maps.LatLngBounds();
     // TODO - ensure I have unique markers where location is same
