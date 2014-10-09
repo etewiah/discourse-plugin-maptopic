@@ -42,7 +42,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       map: this.map,
       title: title,
       icon: icon
-      // address: value.title
+        // address: value.title
     });
 
     this.map.setCenter(myLatlng);
@@ -226,8 +226,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           position: place.geometry.location,
           map: that.map,
           title: place.name
-          // icon: icon
-          // address: place.title
+            // icon: icon
+            // address: place.title
         });
         if (that.searchResultMarkers) {
           $.each(that.searchResultMarkers, function(index, value) {
@@ -347,7 +347,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     this.markers = [];
     var that = this;
     $.each(currentMarkerValues, function(index, detailsForMarker) {
-      if (detailsForMarker.posts) {
+        // debugger;
+        //         context: 'topic_view',
+      if (detailsForMarker.context === 'topic_view') {
         // debugger;
         // using topic icon everywhere till I figure out a decent scheme...
         var icon = that.topic_icon;
@@ -356,7 +358,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var title = detailsForMarker.location.title;
         var dataObject = detailsForMarker.posts;
         var dataObjectType = 'post';
-      } else if (detailsForMarker.topic) {
+      } else if (detailsForMarker.context === 'index_view') {
         var icon = that.topic_icon;
         var userName = detailsForMarker.topic.get('posters.firstObject.user.username') || detailsForMarker.topic.get('details.created_by.username');
         var title = detailsForMarker.topic.get('title') + "( " + detailsForMarker.location.title + " )";
@@ -378,8 +380,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         position: myLatlng,
         map: that.map,
         title: title,
-        icon: icon
-        // address: detailsForMarker.title
+        icon: icon,
+        showingInfoWindow: false
+          // address: detailsForMarker.title
       });
       that.markers.pushObject(marker);
 
@@ -399,21 +402,31 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
       });
       google.maps.event.addListener(marker, 'mouseover', function() {
-        // setTimeout(function() {
-        //   infowindowInstance.close();
-        // }, 6000);
+        // debugger;
         for (var i = 0; i < that.infoWindows.length; i++) {
           that.infoWindows[i].close();
         }
         that.infoWindows = [];
         that.infoWindows.push(infowindowInstance);
         infowindowInstance.open(that.map, marker);
+        marker.showingInfoWindow = true;
+
       });
 
 
       google.maps.event.addListener(marker, 'click', function(event) {
-        console.log('val is', detailsForMarker);
-        that.placeSelected(event, detailsForMarker);
+        // need to show infoWindow for 1st click as tablets do not trigger mouseover
+        if (marker.showingInfoWindow) {
+          that.placeSelected(event, detailsForMarker);
+        } else {
+          for (var i = 0; i < that.infoWindows.length; i++) {
+            that.infoWindows[i].close();
+          }
+          that.infoWindows = [];
+          that.infoWindows.push(infowindowInstance);
+          infowindowInstance.open(that.map, marker);
+          marker.showingInfoWindow = true;
+        }
       });
 
       google.maps.event.addListener(infowindowInstance, 'domready', function() {
@@ -538,12 +551,15 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     // this.get("controller").addEvent(lat, lng);
   },
-  // locationInfoWindowSelected: function(selectedLocation) {
-  //   this.sendAction('mapClickedAction', selectedLocation);
-  // },
   placeSelected: function(event, detailsForMarker) {
+    // if (detailsForMarker.context === 'index_view'){
+        
+    // }
     this.sendAction('markerSelectedAction', detailsForMarker);
   },
+  // placeSelectedInTopic: function(event, detailsForMarker) {
+  //   this.sendAction('markerSelectedAction', detailsForMarker);
+  // },
   // locationPostSelected: function(event, post) {
   //   // TODO implement scrollTO
   //   // Discourse.URL.jumpToPost(post.post_number);

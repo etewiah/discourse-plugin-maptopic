@@ -36,6 +36,7 @@ Discourse.Topic.reopen({
     var locations = this.get('locations');
     locations.forEach(function(loc) {
       var markerInfo = {
+        context: 'topic_view',
         location: loc,
         location_id: loc.id
       };

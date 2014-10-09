@@ -4,36 +4,34 @@
     <h5>{{ model.location.address}}</h5>
   </div>
   <div>
-  {{#each post in postsForPlace }}
-  a post
-    <h4>{{ post.title }}</h4>
-  {{/each}}
-
-  {{#each post in model.posts }}
-  a model post
-    <h4>{{ post.title }}</h4>
-  {{/each}}
 
 
+
+  {{#if model.posts}}
   {{#each model.posts itemController="group/post"}}
     <div class='item'>
       <div class='clearfix info'>
         {{#link-to 'user' user class="avatar-link"}}<div class='avatar-wrapper'>{{avatar user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}}
+
+{{bound-avatar-template avatar_template "small"}} 
+
+        <span>{{ name }}</span>
         <span class='time'>{{format-date path="created_at" leaveAgo="true"}}</span>
-        <span class="title">
-          <a href="{{unbound url}}">{{unbound title}}</a>
+        <span class="">
+          <a {{action goToPost }} >go to post</a>
         </span>
-        {{#if byName}}
-          <span class="name">
-            {{unbound byName}}
-          </span>
-        {{/if}}
+        <span>
+          
+        </span>
       </div>
       <p class='excerpt'>
       {{{unbound cooked}}}
       </p>
     </div>
   {{/each}}
+  {{else}}
+    <h4>There are no posts about this place.</h4>
+  {{/if}}
 
   </div>
 </div>

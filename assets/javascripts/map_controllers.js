@@ -13,7 +13,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   // }.property('selectedTopic'),
 
   actions: {
-// had meant to show topic details next to index map - might come back to this
+    // had meant to show topic details next to index map - might come back to this
     // showPost: function(){
 
     //   var detailedTopic = Discourse.Topic.find(this.get('model.topics.firstObject.id'),{});
@@ -32,7 +32,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         var locationObject = Discourse.Location.locationFromGmap(locationDetails);
         locationObject.title = title;
       }
-        // this.set('locationObject', locationObject);
+      // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
         var self = this;
@@ -70,13 +70,16 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   markers: function() {
     var topics = this.get('content.topics');
     var currentMarkerValues = [];
+    debugger;
+    // chapuzo to ensure I maximise no of markers on index page
     topics.forEach(function(t) {
       var markerInfo = {
+        context: 'index_view',
         topic: t,
         location: t.get('location')
-        // latitude: t.get('latitude'),
-        // // venueAddress: t.get('excerpt'),
-        // venueName: t.get('location_title')
+          // latitude: t.get('latitude'),
+          // // venueAddress: t.get('excerpt'),
+          // venueName: t.get('location_title')
 
       };
       currentMarkerValues.push(markerInfo);
