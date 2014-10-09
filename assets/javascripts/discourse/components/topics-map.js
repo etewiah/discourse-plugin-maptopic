@@ -20,7 +20,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     }
     if (this.get('activePost.post_number') === 1) {
       var icon = this.topic_icon;
-      var userName = activePost.topic.get('posters.firstObject.user.username') || activePost.topic.get('details.created_by.username');
+      // var userName = activePost.topic.get('posters.firstObject.user.username') || activePost.topic.get('details.created_by.username');
       var title = activePost.topic.get('title') + "( " + activePost.location.title + " )";
       var dataObject = activePost.topic;
       var dataObjectType = 'topic';
@@ -30,7 +30,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       var address = activePost.location.address || activePost.location.formattedAddress;
     } else {
       var icon = this.post_icon;
-      var userName = activePost.name;
+      // var userName = activePost.name;
       var title = activePost.location.title;
       var dataObject = activePost;
       var dataObjectType = 'post';
@@ -55,7 +55,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       '<p class="infowindow-address">' + address +
       '</p>' +
       '<div id="bodyContent">' +
-      '<small>By: ' + userName + '</small>' +
+      // '<small>By: ' + userName + '</small>' +
       '</div>' +
       '</div>';
 
@@ -353,7 +353,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         // debugger;
         // using topic icon everywhere till I figure out a decent scheme...
         var icon = that.topic_icon;
-        var userName = detailsForMarker.posts.get('firstObject.name');
+        // var userName = detailsForMarker.posts.get('firstObject.name');
         // detailsForMarker.posts.firstObject.name;
         var title = detailsForMarker.location.title;
         var dataObject = detailsForMarker.posts;
@@ -386,12 +386,16 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       });
       that.markers.pushObject(marker);
 
+      var userNameString = "";
+      if(userName){
+        userNameString = '<small>By: ' + userName + '</small>';
+      };
       var contentString = '<div id="tmap-infowindow-content" >' +
         '<a>' +
         '<h4 id="firstHeading" class="firstHeading">' + title +
         '</h4>' +
         '<div id="bodyContent">' +
-        '<small>By: ' + userName + '</small>' +
+        userNameString +
         '</div></a>' +
         '</div>';
 
@@ -487,13 +491,13 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           });
 
 
-          if (that.markers) {
-            $.each(that.markers, function(index, value) {
+          if (that.userSelectionMarkers) {
+            $.each(that.userSelectionMarkers, function(index, value) {
               value.setMap(null);
             });
           };
-          that.markers = [];
-          that.markers.pushObject(marker);
+          that.userSelectionMarkers = [];
+          that.userSelectionMarkers.pushObject(marker);
 
           var contentString = '<div id="map-clickedlocation-content" >' +
             '<h4>' +
@@ -553,7 +557,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
   placeSelected: function(event, detailsForMarker) {
     // if (detailsForMarker.context === 'index_view'){
-        
+
     // }
     this.sendAction('markerSelectedAction', detailsForMarker);
   },
