@@ -283,7 +283,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   showNewInfowindow: function(infowindowInstance, marker) {
-    debugger;
     if (this.newLocationMarker) {
       this.newLocationMarker.setMap(null);
     }
