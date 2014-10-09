@@ -74,8 +74,8 @@ require("discourse/controllers/topic")["default"].reopen({
   actions: {
     // called when marker on topics map is clicked:
     showPlaceDetails: function(detailsForMarker){
-      debugger;
-      this.send('showLocationSelectorModal',detailsForMarker);
+      // this.send('showLocationSelectorModal',detailsForMarker);
+      this.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
     },
     showLocationSelector: function() {
       if (Discourse.User.current()) {

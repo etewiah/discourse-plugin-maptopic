@@ -20,6 +20,13 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     });
     this.$('#pac-input').focus();
   }.on('didInsertElement'),
+
+
+  didInsertElement: function() {
+    this._super();
+    this.displayMapIfNeeded();
+  },
+
   cityToFind: "",
   cityForMap: "",
   countryForMap: "",
@@ -40,11 +47,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
   //     // for re-rendering as I browse
   //     this.displayMapIfNeeded();
   // }.observes('markers'),
-
-  didInsertElement: function() {
-    this._super();
-    this.displayMapIfNeeded();
-  },
 
   displayMapIfNeeded: function() {
     // if (markersFound) {

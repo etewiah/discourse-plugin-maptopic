@@ -30,11 +30,11 @@ Discourse.Topic.reopen({
     }
   }.property("location"),
 
-// below gets fed to topics map component
+  // below gets fed to topics map component
   markers: function() {
     var currentMarkerValues = [];
     var locations = this.get('locations');
-    locations.forEach(function(loc){
+    locations.forEach(function(loc) {
       var markerInfo = {
         location: loc,
         location_id: loc.id
@@ -47,15 +47,23 @@ Discourse.Topic.reopen({
       posts.forEach(function(p) {
         if (p.get('location')) {
           // var markerInfo = currentMarkerValues.findBy('location.id', p.get('location.id'));
-// above works but I suspect this is more efficient:
+          // above works but I suspect this is more efficient:
           var markerInfo = currentMarkerValues.findBy('location_id', p.get('location.id'));
+          if (!markerInfo.posts) {
+            markerInfo.posts = [];
+          }
+          markerInfo.posts.pushObject(p);
+          // debugger;
 
-          if(p.post_number === 1){
-            markerInfo.topic = p.topic;
-          }
-          else{
-            markerInfo.post = p;
-          }
+          // markerInfo.post = p;
+
+          // if(p.post_number === 1){
+          //   below would result in this.get('model.topic.markers.firstObject.topic.markers.firstObject.topic.markers.firstObject');
+          //   markerInfo.topic = p.topic;
+          // }
+          // else{
+          //   markerInfo.post = p;
+          // }
           // currentMarkerValues.push(markerInfo);
         };
 
@@ -80,6 +88,6 @@ Discourse.Topic.reopen({
     return currentMarkerValues;
     // locationCount below is not accurate, just a value that increments each time
     // a new reply with a location is added (done in extension to composer model)
-  }.property('locations', 'location','locationCount')
+  }.property('locations', 'location', 'locationCount')
 
 })

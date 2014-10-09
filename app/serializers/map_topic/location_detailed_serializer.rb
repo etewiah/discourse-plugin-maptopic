@@ -2,8 +2,10 @@ module MapTopic
     class LocationDetailedSerializer < ActiveModel::Serializer
 
 
-        attributes :id, :title, :description, :address, :city, :region, :postal_code, :country, :longitude, 
-        :latitude, :topics_count
+        attributes :id, :title, :description, :address, :city, 
+        :region, :postal_code, :country, :longitude, 
+        :latitude, :topics_count,
+        :gplace_id, :website_url
         # t.text :description
         # t.text :address
         # t.string :city

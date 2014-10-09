@@ -1,17 +1,43 @@
-{{#unless complete}}
 <div class="modal-body">
   <div>
-    <div>
-      {{ selectable-map     
-      locationAddedAction="addLocationToTopic" defaultLocation=defaultLocation }}
+    <h3>{{ model.location.title}}</h3>
+    <h5>{{ model.location.address}}</h5>
+  </div>
+  <div>
+  {{#each post in postsForPlace }}
+  a post
+    <h4>{{ post.title }}</h4>
+  {{/each}}
+
+  {{#each post in model.posts }}
+  a model post
+    <h4>{{ post.title }}</h4>
+  {{/each}}
+
+
+  {{#each model.posts itemController="group/post"}}
+    <div class='item'>
+      <div class='clearfix info'>
+        {{#link-to 'user' user class="avatar-link"}}<div class='avatar-wrapper'>{{avatar user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}}
+        <span class='time'>{{format-date path="created_at" leaveAgo="true"}}</span>
+        <span class="title">
+          <a href="{{unbound url}}">{{unbound title}}</a>
+        </span>
+        {{#if byName}}
+          <span class="name">
+            {{unbound byName}}
+          </span>
+        {{/if}}
+      </div>
+      <p class='excerpt'>
+      {{{unbound cooked}}}
+      </p>
     </div>
+  {{/each}}
+
   </div>
 </div>
 
 <div class="modal-footer">
-
-  {{#if formSubmitted}} &nbsp; <i class='fa fa-spinner fa-spin'></i>
-  {{else}} &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
-  {{/if}}
+  <a {{action closeModal}}>{{i18n cancel}}</a>
 </div>
-{{/unless}}

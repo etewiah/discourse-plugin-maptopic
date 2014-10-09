@@ -347,12 +347,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     this.markers = [];
     var that = this;
     $.each(currentMarkerValues, function(index, detailsForMarker) {
-      if (detailsForMarker.post) {
+      if (detailsForMarker.posts) {
+        // debugger;
         // using topic icon everywhere till I figure out a decent scheme...
         var icon = that.topic_icon;
-        var userName = detailsForMarker.post.name;
+        var userName = detailsForMarker.posts.get('firstObject.name');
+        // detailsForMarker.posts.firstObject.name;
         var title = detailsForMarker.location.title;
-        var dataObject = detailsForMarker.post;
+        var dataObject = detailsForMarker.posts;
         var dataObjectType = 'post';
       } else if (detailsForMarker.topic) {
         var icon = that.topic_icon;
@@ -540,7 +542,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   //   this.sendAction('mapClickedAction', selectedLocation);
   // },
   placeSelected: function(event, detailsForMarker) {
-    debugger;
     this.sendAction('markerSelectedAction', detailsForMarker);
   },
   // locationPostSelected: function(event, post) {

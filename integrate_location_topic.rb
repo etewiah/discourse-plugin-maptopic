@@ -47,17 +47,19 @@ module ExtendPostSerializerForLocationTopic
   def location
     ::MapTopic::LocationDetailedSerializer.new( object.location, root: false )
   end
-  def locations
-    return @locations if @locations.present?
-    @locations = []
-    if object.locations
-      object.locations.each_with_index do |l, idx|
-        location = ::MapTopic::LocationDetailedSerializer.new(l, root: false)
-        @locations << location.as_json
-      end
-    end
-    @locations
-  end
+
+# for now keeping posts to 1 location but that might change
+  # def locations
+  #   return @locations if @locations.present?
+  #   @locations = []
+  #   if object.locations
+  #     object.locations.each_with_index do |l, idx|
+  #       location = ::MapTopic::LocationDetailedSerializer.new(l, root: false)
+  #       @locations << location.as_json
+  #     end
+  #   end
+  #   @locations
+  # end
 
 end
 
