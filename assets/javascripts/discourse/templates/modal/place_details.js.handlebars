@@ -1,6 +1,5 @@
 <div class="modal-body">
   <div>
-    <h3>{{ model.location.title}}</h3>
     <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
   </div>
   <div>
@@ -36,12 +35,13 @@
   </div>
 
   <div>
-              <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addNewCity}}>
-            Say something about this place
-          </button>
   </div>
 </div>
 
 <div class="modal-footer">
+          <button class='btn btn-primary'  {{action replyWithLocation model.location }}>
+            Say something about this place
+          </button>
+
   <a {{action closeModal}}>{{i18n cancel}}</a>
 </div>

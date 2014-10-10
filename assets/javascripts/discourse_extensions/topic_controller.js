@@ -13,14 +13,14 @@ require("discourse/controllers/topic")["default"].reopen({
   }.observes('location'),
 
 
-//   // If our current post is changed, notify the router
-//   _currentPostChanged2: function() {
-// debugger;
-//     // var currentPost = this.get('currentPost');
-//     // if (currentPost) {
-//     //   this.send('postChangedRoute', currentPost);
-//     // }
-//   }.observes('currentPost'),
+  //   // If our current post is changed, notify the router
+  //   _currentPostChanged2: function() {
+  // debugger;
+  //     // var currentPost = this.get('currentPost');
+  //     // if (currentPost) {
+  //     //   this.send('postChangedRoute', currentPost);
+  //     // }
+  //   }.observes('currentPost'),
 
 
   // below will trigger if a new location is set through select_location_modal
@@ -50,7 +50,7 @@ require("discourse/controllers/topic")["default"].reopen({
         var locs = this.get('model.locations');
         locs.pushObject(topic.locationObject);
         var that = this;
-        map_topic.then(function(result){
+        map_topic.then(function(result) {
           // debugger;
         });
         // TODO - handle errors
@@ -85,7 +85,7 @@ require("discourse/controllers/topic")["default"].reopen({
 
   actions: {
     // called when marker on topics map is clicked:
-    showPlaceDetails: function(detailsForMarker){
+    showPlaceDetails: function(detailsForMarker) {
       // this.send('showLocationSelectorModal',detailsForMarker);
       this.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
     },
@@ -101,7 +101,6 @@ require("discourse/controllers/topic")["default"].reopen({
     // replyWithLocation: function(geocodedLocation, title) {
     // when a location is double clicked and 'go' is clicked on the resulting infowindow
     replyWithLocation: function(locationType, locationDetails, city, title) {
-      debugger;
       if (locationType === "placeSearch") {
         // currently placeSearch is disabled within topic map so should not end up here
         debugger;
@@ -113,6 +112,29 @@ require("discourse/controllers/topic")["default"].reopen({
         debugger;
       }
 
+      this.send('replyWithLocationObject', locationObject);
+      // if (Discourse.User.current()) {
+      //   var composerController = this.get('controllers.composer');
+      //   var topic = this.get('model');
+      //   // var self = this;
+
+      //   var opts = {
+      //     action: Discourse.Composer.REPLY,
+      //     draftKey: topic.get('draft_key'),
+      //     draftSequence: topic.get('draft_sequence'),
+      //     topic: topic
+      //   };
+
+      //   composerController.open(opts).then(function() {
+      //     composerController.content.set('locationObject', locationObject);
+      //   });
+      // } else {
+      //   this.send('showLogin');
+      // }
+      //return true to bubble up to route...
+      return false;
+    },
+    replyWithLocationObject: function(locationObject) {
       // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
@@ -125,12 +147,6 @@ require("discourse/controllers/topic")["default"].reopen({
           draftSequence: topic.get('draft_sequence'),
           topic: topic
         };
-
-        // if(post && post.get("post_number") !== 1){
-        //   opts.post = post;
-        // } else {
-        //   opts.topic = topic;
-        // }
 
         composerController.open(opts).then(function() {
           composerController.content.set('locationObject', locationObject);

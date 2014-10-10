@@ -10,20 +10,18 @@ Discourse.PlaceDetailsModalController = Discourse.Controller.extend(Discourse.Mo
       // this.set('model.activePost', post);
       this.send('closeModal');
     },
+    replyWithLocation: function(locationObject){
+      var topicController = this.get('controllers.topic');
+      topicController.send('replyWithLocationObject', locationObject);
+      this.send('closeModal');
+    }
 
   },
 
-  didInsertElement: function() {
-    debugger;
-    // never triggered
-    this._super();
-    debugger;
-  },
-
-  // postsForPlace: function(){
+  // didInsertElement: function() {
   //   debugger;
-  //   return [];
-  // }.property('model')
-
+  //   // never triggered
+  //   this._super();
+  // },
 
 });

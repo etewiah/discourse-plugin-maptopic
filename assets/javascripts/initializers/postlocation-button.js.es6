@@ -71,7 +71,6 @@ default {
         var controller = this.get('controller');
         var detailsForMarker = controller.get('content.markers').findBy('location_id', postLocationId);
            // this.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
-debugger;
         controller.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
 
         // controller.set('activePost', post);
