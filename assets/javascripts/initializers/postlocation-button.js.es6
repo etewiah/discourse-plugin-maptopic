@@ -58,7 +58,7 @@ default {
         }
         // buffer.push('<button title="Mark this post as solving your initial question" data-action="correct">Mark as correct</button>');
 
-        var innerHTML = "<a> Show '" + locationTitle + "' on map</a>";
+        var innerHTML = "<a> Show '" + locationTitle + "'</a>";
         var opts = {
           innerHTML: innerHTML
         }
@@ -67,10 +67,15 @@ default {
       },
 
       clickPostlocation: function() {
-        var post = this.get('post');
+        var postLocationId = this.get('post.location.id');
         var controller = this.get('controller');
-        controller.set('activePost', post);
-        Discourse.URL.jumpToPost(1);
+        var detailsForMarker = controller.get('content.markers').findBy('location_id', postLocationId);
+           // this.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
+debugger;
+        controller.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
+
+        // controller.set('activePost', post);
+        // Discourse.URL.jumpToPost(1);
 
         // $("#post_" + this.get("post.post_number") + " .cooked").toggle();
         // this.toggleProperty("post.temporarily_hidden");

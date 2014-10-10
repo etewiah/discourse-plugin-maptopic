@@ -1,13 +1,14 @@
 <div class="modal-body">
   <div>
     <h3>{{ model.location.title}}</h3>
-    <h5>{{ model.location.address}}</h5>
+    <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
   </div>
   <div>
 
 
 
   {{#if model.posts}}
+  <h4>Posts about this place:</h4>
   {{#each model.posts itemController="group/post"}}
     <div class='item'>
       <div class='clearfix info'>
@@ -18,14 +19,13 @@
         <span>{{ name }}</span>
         <span class='time'>{{format-date path="created_at" leaveAgo="true"}}</span>
         <span class="">
-          <a {{action goToPost }} >go to post</a>
+          <a {{action goToPost this }} >go to post</a>
         </span>
         <span>
           
         </span>
       </div>
       <p class='excerpt'>
-      {{{unbound cooked}}}
       </p>
     </div>
   {{/each}}
@@ -33,6 +33,12 @@
     <h4>There are no posts about this place.</h4>
   {{/if}}
 
+  </div>
+
+  <div>
+              <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addNewCity}}>
+            Say something about this place
+          </button>
   </div>
 </div>
 

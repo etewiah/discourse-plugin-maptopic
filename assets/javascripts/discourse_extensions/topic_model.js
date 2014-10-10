@@ -13,7 +13,7 @@ Discourse.Topic.reopen({
     //   data: { title: this.get('title'), category_id: this.get('category.id') }
     // });
   },
-
+  // activePost: {},
   hasLocation: function() {
     if (this.get('location')) {
       return true;
@@ -50,6 +50,18 @@ Discourse.Topic.reopen({
           // var markerInfo = currentMarkerValues.findBy('location.id', p.get('location.id'));
           // above works but I suspect this is more efficient:
           var markerInfo = currentMarkerValues.findBy('location_id', p.get('location.id'));
+          // currently some posts have locations that are not in the topic locations collection
+          // so this is a workaround that should not be needed in the future:
+          if (!markerInfo) {
+            var loc = p.get('location');
+            var markerInfo = {
+              context: 'topic_view',
+              location: loc,
+              location_id: loc.id
+            };
+            currentMarkerValues.push(markerInfo);
+          }
+
           if (!markerInfo.posts) {
             markerInfo.posts = [];
           }

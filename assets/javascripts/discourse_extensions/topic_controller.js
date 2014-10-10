@@ -11,6 +11,18 @@ require("discourse/controllers/topic")["default"].reopen({
     }
     // this._super();
   }.observes('location'),
+
+
+//   // If our current post is changed, notify the router
+//   _currentPostChanged2: function() {
+// debugger;
+//     // var currentPost = this.get('currentPost');
+//     // if (currentPost) {
+//     //   this.send('postChangedRoute', currentPost);
+//     // }
+//   }.observes('currentPost'),
+
+
   // below will trigger if a new location is set through select_location_modal
   startLocationPost: function() {
     if (this.get('model.locationObject')) {
@@ -100,39 +112,6 @@ require("discourse/controllers/topic")["default"].reopen({
       } else {
         debugger;
       }
-
-      // http://stackoverflow.com/questions/6359995/get-city-from-geocoder-results
-      // why does this have to be so hard!!!
-      // var arrAddress = geocodedLocation.address_components;
-      // // var itemRoute = '';
-      // var city = '';
-      // var country = '';
-
-      // // iterate through address_component array
-      // $.each(arrAddress, function(i, address_component) {
-      //   // console.log('address_component:' + i);
-
-      //   if (address_component.types[0] == "locality") {
-      //     // console.log("town:" + address_component.long_name);
-      //     city = address_component.long_name;
-      //   }
-
-      //   if (address_component.types[0] == "country") {
-      //     // console.log("country:" + address_component.long_name);
-      //     country = address_component.long_name;
-      //   }
-
-      //   //return false; // break the loop   
-      // });
-
-      // var locationObject = {
-      //   formattedAddress: geocodedLocation.formatted_address,
-      //   latitude: geocodedLocation.geometry.location.lat(),
-      //   longitude: geocodedLocation.geometry.location.lng(),
-      //   title: title,
-      //   city: city,
-      //   country: country
-      // };
 
       // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
