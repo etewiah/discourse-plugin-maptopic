@@ -11,12 +11,15 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
 
   defaultLocation: function() {
     if (this.get('model.locationObject')) {
+      debugger;
       return this.get('model.locationObject');
     }
-    // if this is a reply to a topic we will use that topics location
-    else if (this.get('model.topic.location')) {
-      return this.get('model.topic.location');
+    // if this is a post or topic, use that location location
+    else if (this.get('model.topic.location') || this.get('model.location')) {
+      return this.get('model.topic.location') || this.get('model.location');
     } else {
+      // should not get to this:
+      debugger;
       // if user has browsed map, we will have a currentCity
       if (this.get('controllers.map.currentCity')) {
         var currentCity = this.get('controllers.map.currentCity');
