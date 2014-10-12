@@ -45,7 +45,9 @@ register_asset "javascripts/discourse/templates/map_full_page.js.handlebars"
 
 
 register_asset "stylesheets/desktop/maptopic.scss", :desktop
-register_asset "stylesheets/desktop/simple-dropdown.scss", :desktop
+register_asset "stylesheets/mobile/maptopic.scss", :mobile
+register_asset "stylesheets/simple-dropdown.scss"
+register_asset "stylesheets/common.scss"
 
 # And mount the engine
 Discourse::Application.routes.append do

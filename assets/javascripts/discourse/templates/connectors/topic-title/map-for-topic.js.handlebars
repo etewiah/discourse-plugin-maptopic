@@ -1,7 +1,8 @@
 {{#if model.hasLocation}}
 
+<div class="row">
 <div>
-  <h2 style="line-height: 32px;margin-bottom:5px;">
+    <h2 style="line-height: 32px;margin-bottom:5px;">
     <small>Conversation started with : {{ model.locationDetails.title }} </small>
           <button class='btn btn-primary' {{action showLocationSelector}}>
             Add more places
@@ -11,10 +12,10 @@
       {{/if}}
 
   </h2>
-
+</div>
 </div>
 
-<div>
+<div class="row">
   
 {{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
 </div>
