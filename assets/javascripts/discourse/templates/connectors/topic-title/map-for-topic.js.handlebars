@@ -1,10 +1,10 @@
 {{#if model.hasLocation}}
-
+<br>
 <div class="row">
 <div>
     <h2 style="line-height: 32px;margin-bottom:5px;">
     <small>Conversation started with : {{ model.locationDetails.title }} </small>
-          <button class='btn btn-primary' {{action showLocationSelector}}>
+          <button class='btn btn-primary' style="float:none" {{action showLocationSelector}}>
             Add more places
           </button>
       {{#if details.can_edit}}
