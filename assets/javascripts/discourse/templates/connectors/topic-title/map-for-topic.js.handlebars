@@ -1,23 +1,53 @@
-{{#if model.hasLocation}}
-<br>
-<div class="row" style="float: left;width: 100%;">
-<div>
-    <h2 style="line-height: 32px;margin-bottom:5px;">
-    <small>Conversation started with : {{ model.locationDetails.title }} </small>
-          <button class='btn btn-primary' style="float:none" {{action showLocationSelector}}>
-            Add more places
-          </button>
-      {{#if details.can_edit}}
-{{!--  --}}
-      {{/if}}
+{{#if model.isLocationTopic}}
 
-  </h2>
-</div>
-</div>
+    {{#if model.hasLocation}}
+      <div class="row" style="float: left;width: 100%;">
+      <div>
+          <h2 style="line-height: 32px;margin-bottom:5px;">
+          <small>Conversation started with : {{ model.locationDetails.title }} </small>
+                <button class='btn btn-primary' style="float:none" {{action showLocationSelector}}>
+                  Add more places
+                </button>
+            {{#if details.can_edit}}
+      {{!--  --}}
+            {{/if}}
 
-<div class="row" style="float: left;width: 100%;">
-  
-{{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
-</div>
+        </h2>
+      </div>
+      </div>
+
+      <div class="row" style="float: left;width: 100%;">
+        
+      {{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
+      </div>
+
+    {{else}}
+      <div class="row" style="float: left;width: 100%;">
+      <div>
+          <h2 style="line-height: 32px;margin-bottom:5px;">
+          <small> </small>
+                <button class='btn btn-primary' style="float:none" {{action showLocationSelector}}>
+                  Add places to this conversation
+                </button>
+            {{#if details.can_edit}}
+      {{!--  --}}
+            {{/if}}
+
+        </h2>
+      </div>
+      </div>
+
+      <div class="row" style="float: left;width: 100%;">
+        
+          {{ topics-map showSearchBox=false 
+           markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" 
+           markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
+            locationMeta=model.locationMeta
+          }}
+
+      </div>
+
+    {{/if}}
+
 
 {{/if}}

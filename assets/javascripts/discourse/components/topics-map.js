@@ -134,6 +134,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   cityDetails: function() {
+    debugger;
+    if (this.get('locationMeta')) {
+      return this.get('locationMeta');
+    };
     var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
     var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
     return cityObject;

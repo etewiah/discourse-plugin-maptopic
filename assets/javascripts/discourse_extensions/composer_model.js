@@ -74,6 +74,7 @@ Discourse.Composer.reopen({
   createPost: function(opts) {
     var locationObject = this.get('locationObject');
     // when replying to a topic, this will be available:
+    debugger;
     var topic = this.get('topic');
     var dfr = this._super(opts);
     if (locationObject) {
@@ -109,6 +110,8 @@ Discourse.Composer.reopen({
 
         });
         map_topic.then(function(set_location_result) {
+          debugger;
+          // TODO - set location object so newly created topics have a map...
           return post_result;
         });
         return map_topic;
