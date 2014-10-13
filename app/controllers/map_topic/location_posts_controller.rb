@@ -2,7 +2,33 @@ module MapTopic
   class LocationPostsController < ApplicationController
     include CurrentUser
 
-    before_action :check_user, only: [:set_location]
+    before_action :check_user, only: [:set_location, :set_geo]
+
+
+    def set_geo
+      unless(params[:post_id] && params[:geo] )
+        render_error "incorrect params"
+        return
+      end
+      longitude = params[:geo][:longitude]
+      latitude = params[:geo][:latitude]
+
+
+      @post = Post.find(params[:post_id])
+      if current_user.guardian.ensure_can_edit!(@post)
+        render status: :forbidden, json: false
+        return
+      end
+
+
+      if params[:initial_location]
+        create_location params[:initial_location]
+      end
+
+      return render json: params[:geo]
+      # location.to_json
+
+    end
 
 
     def set_location
@@ -69,6 +95,23 @@ module MapTopic
     end
 
     private
+
+    def create_location location
+            # TODO - find location which is close enough to be considered the same..
+      location = MapTopic::Location.where(:longitude => location[:longitude], :latitude => location[:latitude]).first_or_initialize
+      location.title = location[:title] || ""
+      location.city = location[:city] || ""
+      location.country = location[:country] || ""
+      location.address = location[:address] || ""
+      location.gplace_id = location[:gplace_id] || ""
+
+      # below will not update if already exists:
+      # do |loc|
+      #   loc.title = params[:location_title] || "ll"
+      # end
+      location.save!
+      
+    end
 
     def ensure_category country, city, topic
       admin_user = User.where(:admin => true).last

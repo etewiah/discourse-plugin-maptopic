@@ -75,35 +75,16 @@ Discourse.Composer.reopen({
     var locationObject = this.get('locationObject');
     var geo = this.get('geo');
     // when replying to a topic, this will be available:
-    debugger;
     var topic = this.get('topic');
     var dfr = this._super(opts);
-    if (geo) {
-      dfr.then(function(post_result) {
-debugger;
+//     if (geo) {
+//       dfr.then(function(post_result) {
+// debugger;
 
-        // set_location below can figure out if topic should be updated too:
-        var set_location_endpoint = '/location_posts/set_geo';
-
-        var map_topic = Discourse.ajax(set_location_endpoint, {
-          data: {
-            location: locationObject,
-            // longitude: locationObject.longitude,
-            post_id: post_result.post.id,
-            topic_id: post_result.post.topic_id
-          },
-          method: 'POST'
-
-        });
-        map_topic.then(function(set_location_result) {
-          debugger;
-          // TODO - set location object so newly created topics have a map...
-          return post_result;
-        });
-        return map_topic;
-      });
-    }
-    else if (locationObject) {
+//       });
+//     }
+//     else 
+    if (locationObject) {
       dfr.then(function(post_result) {
 
         if (topic) {
@@ -138,6 +119,8 @@ debugger;
         map_topic.then(function(set_location_result) {
           debugger;
           // TODO - set location object so newly created topics have a map...
+          // though not entirely convinced that will work as the post_result isn't
+          // passed 
           return post_result;
         });
         return map_topic;

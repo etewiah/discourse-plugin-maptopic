@@ -15,7 +15,6 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
 
   actions: {
     createNewTopic: function() {
-      debugger;
       var opts = {
         action: "createTopic",
         draftKey: "new_topic",
@@ -25,8 +24,8 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       // opts.action = "CREATE_TOPIC";
       var composerModel = Discourse.Composer.create();
       composerModel.open(opts);
-// setting below ensures composerModel sets geo object on server after creation..
-      composerModel.set('geo', this.get('model.currentCitySelection'));
+      // setting below ensures composerModel sets geo object on server after creation..
+      // composerModel.set('geo', this.get('model.currentCitySelection'));
 
       // var st = composerModel.createPost()
       // composerModel.save will call createPost on itself..
@@ -34,9 +33,30 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       return composerModel.save({
         imageSizes: {},
         editReason: null
-      }).then(function(opts) {
+      }).then(function(post_result) {
+        var geo = self.get('model.currentCitySelection');
         debugger;
-        Discourse.URL.routeTo(opts.post.get('url'));
+
+        var set_geo_endpoint = '/location_posts/set_geo';
+        var map_topic = Discourse.ajax(set_geo_endpoint, {
+          data: {
+            geo: geo,
+            // longitude: locationObject.longitude,
+            post_id: post_result.post.id,
+            topic_id: post_result.post.topic_id
+          },
+          method: 'POST'
+
+        });
+        map_topic.then(function(set_geo_result) {
+          debugger;
+          Discourse.URL.routeTo(post_result.post.get('url'));
+
+          // return post_result;
+        });
+        // return map_topic;
+
+
         self.send('closeModal');
         // If we replied as a new topic successfully, remove the draft.
         // if (self.get('replyAsNewTopicDraft')) {
