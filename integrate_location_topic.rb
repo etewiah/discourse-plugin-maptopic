@@ -72,10 +72,20 @@ module ExtendTopicViewSerializerForLocationTopic
   def self.included(klass)
     klass.attributes :location
     klass.attributes :locations
+    klass.attributes :geo
   end
   #
   def location
     ::MapTopic::LocationDetailedSerializer.new( object.topic.location, root: false )
+  end
+  def geo
+    geo =  {
+        displayString: 'Lisbon',
+        value: 'lisbon',
+        longitude:  "-9.1393366",
+        latitude: "38.7222524"
+      }
+    geo.as_json
   end
   # def locations
   #   ::MapTopic::LocationDetailedSerializer.new( object.topic.locations, root: false )

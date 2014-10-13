@@ -14,26 +14,31 @@ Discourse.Topic.reopen({
     // });
   },
   // activePost: {},
-  locationMeta: function(){
+  locationMeta: function() {
     // TODO - set a locationMeta property for each topic
     // eventually all locationTopics will have to have this
     // as this object will come from db, probably should use snake case names - hot_from etc
-    return {
+    debugger; 
+    if (this.get('geo')) {
+      return this.get('geo');
+    } else {
+      return {
         displayString: 'Berlin',
         value: 'berlin',
-        longitude: "13.4060912", 
+        longitude: "13.4060912",
         latitude: "52.519171",
         hot_from: "",
         scope_type: "city"
       };
-  }.property(),
+    }
+  }.property('geo'),
   isLocationTopic: function() {
     if (this.get('location') || this.get('locationMeta')) {
       return true;
     } else {
       return false;
     }
-  }.property('location','locationMeta'),
+  }.property('location', 'locationMeta'),
 
   hasLocation: function() {
     if (this.get('location')) {

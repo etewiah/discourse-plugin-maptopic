@@ -103,9 +103,10 @@ Discourse.MapController = Discourse.Controller.extend({
       }
       newTopicData = {
           topicType: topicType,
-          cityName: currentCitySelection.displayString
+          cityName: currentCitySelection.displayString,
+          currentCitySelection: currentCitySelection
         }
-        // 
+      debugger;
       this.send('showDiscourseModal', 'newTopicModal', newTopicData);
 
     },

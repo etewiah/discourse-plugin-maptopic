@@ -134,7 +134,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   cityDetails: function() {
-    debugger;
+// TODO - this will have to change to support more scenarios
+// like countries, regions etc
     if (this.get('locationMeta')) {
       return this.get('locationMeta');
     };

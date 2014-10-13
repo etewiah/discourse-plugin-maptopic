@@ -25,6 +25,8 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       // opts.action = "CREATE_TOPIC";
       var composerModel = Discourse.Composer.create();
       composerModel.open(opts);
+// setting below ensures composerModel sets geo object on server after creation..
+      composerModel.set('geo', this.get('model.currentCitySelection'));
 
       // var st = composerModel.createPost()
       // composerModel.save will call createPost on itself..
