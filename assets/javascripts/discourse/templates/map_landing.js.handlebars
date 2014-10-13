@@ -1,6 +1,7 @@
 <div class="container">
 
 
+<div class="row">  
   <h1 style="margin-top:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
 
     Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' action='cityChanged' newLocationAction='showAddCityModal' currentSelectionItem=currentCitySelection }}
@@ -8,8 +9,20 @@
 {{!--       <a style="padding: 8px 10px 3px 40px;text-decoration: underline;" {{ action addLocation }} >
        search on map
       </a>
- --}}    </small>
+ --}}    
+
+     </small>
   </h1>
+          <button class='btn btn-primary' style="float:none" {{action showNewTopicModal 'info'}}>
+            Add some tips
+          </button>
+          <button class='btn btn-primary' style="float:none" {{action showNewTopicModal 'question'}}>
+            Ask for information
+          </button>
+
+
+</div>
+
 
 
 

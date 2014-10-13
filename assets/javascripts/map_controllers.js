@@ -96,6 +96,11 @@ Discourse.MapController = Discourse.Controller.extend({
   needs: ['composer', 'map-from-one-param'],
 
   actions: {
+    showNewTopicModal: function(topicType) {
+      debugger;
+      this.send('showDiscourseModal', 'newTopicModal', "detailsForMarker");
+
+    },
     startConversation: function() {
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
