@@ -96,9 +96,17 @@ Discourse.MapController = Discourse.Controller.extend({
   needs: ['composer', 'map-from-one-param'],
 
   actions: {
-    showNewTopicModal: function(topicType) {
-      debugger;
-      this.send('showDiscourseModal', 'newTopicModal', "detailsForMarker");
+    showNewTopicModal: function(currentCitySelection, topicType) {
+      if (!Discourse.User.current()) {
+        this.send('showLogin');
+        return;
+      }
+      newTopicData = {
+          topicType: topicType,
+          cityName: currentCitySelection.displayString
+        }
+        // 
+      this.send('showDiscourseModal', 'newTopicModal', newTopicData);
 
     },
     startConversation: function() {

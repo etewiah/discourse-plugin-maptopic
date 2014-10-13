@@ -1,4 +1,11 @@
 Discourse.Composer.reopen({
+  getCookedHtml: function() {
+    debugger;
+    return "some longish gibberrish for testing from getCookedHtml";
+
+    // return $('#wmd-preview').html().replace(/<span class="marker"><\/span>/g, '');
+  },
+
 
   editPost: function(opts) {
     var locationObject = this.get('locationObject');
