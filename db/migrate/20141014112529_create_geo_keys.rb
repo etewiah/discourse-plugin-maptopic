@@ -1,4 +1,5 @@
 class CreateGeoKeys < ActiveRecord::Migration
+  # perhaps I should add country_code too
   def change
     create_table :geo_keys do |t|
       t.string :display_name
