@@ -13,6 +13,8 @@ module LocationTopicExtender
     klass.has_many :topic_locations, class_name: "::MapTopic::LocationTopic"
     klass.has_many :locations, through: :topic_locations, class_name: "::MapTopic::Location"
 
+    klass.has_one :geo, class_name: "::MapTopic::TopicGeo"
+
     # , autosave: true, class_name: "::Tagger::Tag"
   end
 end
@@ -79,13 +81,13 @@ module ExtendTopicViewSerializerForLocationTopic
     ::MapTopic::LocationDetailedSerializer.new( object.topic.location, root: false )
   end
   def geo
-    geo =  {
-        displayString: 'Lisbon',
-        value: 'lisbon',
-        longitude:  "-9.1393366",
-        latitude: "38.7222524"
-      }
-    geo.as_json
+    # geo =  {
+    #     displayString: 'Lisbon',
+    #     value: 'lisbon',
+    #     longitude:  "-9.1393366",
+    #     latitude: "38.7222524"
+    #   }
+    object.topic.geo.as_json
   end
   # def locations
   #   ::MapTopic::LocationDetailedSerializer.new( object.topic.locations, root: false )
