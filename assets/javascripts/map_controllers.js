@@ -95,8 +95,8 @@ Discourse.MapController = Discourse.Controller.extend({
   // needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
   needs: ['composer', 'map-from-one-param'],
 
-  isAdmin: function(){
-  // temporarily needed so I can try new feature in prod
+  isAdmin: function() {
+    // temporarily needed so I can try new feature in prod
     return Discourse.User.currentProp("admin");
   }.property(),
 
@@ -107,12 +107,26 @@ Discourse.MapController = Discourse.Controller.extend({
         this.send('showLogin');
         return;
       }
-      newTopicData = {
-          topicType: topicType,
-          cityName: currentCitySelection.displayString,
-          currentCitySelection: currentCitySelection
-        }
-      this.send('showDiscourseModal', 'newTopicModal', newTopicData);
+      var geo = {};
+      // in future might allow country bounds etc..
+
+      geo.bounds_value = currentCitySelection.value.toLowerCase();
+      geo.bounds_type = "city";
+      geo.bounds_range = 20;
+      geo.latitude = currentCitySelection.latitude
+      geo.longitude = currentCitySelection.longitude
+      geo.city_lower = currentCitySelection.value.toLowerCase();
+      // geo.country_lower = geo_key.country_lower
+      geo.display_name = currentCitySelection.displayString;
+      // if(topicType === "question"){
+      //   geo.capability = "question";
+      // }
+      geo.capability = topicType;
+      // newTopicData = {
+      //   topicType: topicType,
+      //   currentCitySelection: geo
+      // }
+      this.send('showDiscourseModal', 'newTopicModal', geo);
 
     },
     startConversation: function() {

@@ -1,11 +1,11 @@
 Discourse.NewTopicModalView = Discourse.ModalBodyView.extend({
   templateName: 'modal/new_topic',
   title: function() {
-      var topicType = this.controller.get('model.topicType');
-      var cityName = this.controller.get('model.cityName');
+      var topicType = this.controller.get('model.capability');
+      var cityName = this.controller.get('model.display_name');
 
       if (topicType && topicType === "question") {
-        return "Ask question about " + cityName;
+        return "Ask a Question regarding " + cityName;
       } else if (topicType && topicType === "info") {
         return "Share tips about " + cityName;
       } else {

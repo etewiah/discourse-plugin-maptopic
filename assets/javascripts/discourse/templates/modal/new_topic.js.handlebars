@@ -6,7 +6,7 @@
   </div>
 
   <form {{action "createNewTopic" on="submit"}}>
-    <table>
+    <table style="width: 100%;">
       <tr>
         <td style="" class="label">
           <label for='topic-title'>
@@ -15,9 +15,7 @@
       </tr>
       <tr class="input">
         <td style="">
-          {{text-field placeholder="Type in any city or town here" value=topicTitle id="topic-title" autofocus="autofocus"}}
-        </td>
-        <td>
+          {{text-field placeholder="Short summary" value=topicTitle id="topic-title" autofocus="autofocus"}}
         </td>
       </tr>
 
@@ -29,9 +27,7 @@
 
       <tr class="input">
         <td style="">
-          {{textarea placeholder="Type in any city or town here" value=topicDescription id="topic-description" autofocus="autofocus"}}
-        </td>
-        <td>
+          {{textarea placeholder=detailsPrompt value=topicDetails id="topic-details" autofocus="autofocus"}}
         </td>
       </tr>
 

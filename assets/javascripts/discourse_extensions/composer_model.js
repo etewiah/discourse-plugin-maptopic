@@ -1,9 +1,11 @@
 Discourse.Composer.reopen({
   getCookedHtml: function() {
-    debugger;
-    return "some longish gibberrish for testing from getCookedHtml";
-
-    // return $('#wmd-preview').html().replace(/<span class="marker"><\/span>/g, '');
+    // original assumed wmd-preview would exist so had to over-write it
+    if ($('#wmd-preview').html()) {
+      return $('#wmd-preview').html().replace(/<span class="marker"><\/span>/g, '');
+    } else {
+      return this.get('reply');
+    }
   },
 
 
@@ -77,13 +79,13 @@ Discourse.Composer.reopen({
     // when replying to a topic, this will be available:
     var topic = this.get('topic');
     var dfr = this._super(opts);
-//     if (geo) {
-//       dfr.then(function(post_result) {
-// debugger;
+    //     if (geo) {
+    //       dfr.then(function(post_result) {
+    // debugger;
 
-//       });
-//     }
-//     else 
+    //       });
+    //     }
+    //     else 
     if (locationObject) {
       dfr.then(function(post_result) {
 

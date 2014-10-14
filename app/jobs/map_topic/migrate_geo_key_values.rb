@@ -72,7 +72,7 @@ module MapTopic
           topic_geo.country_lower = geo_key.country_lower
           topic_geo.display_name = geo_key.display_name
           topic_geo.capability = "info"
-
+# TODO - may add extra category to denote question capability
         else
           binding.pry
         end

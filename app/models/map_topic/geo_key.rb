@@ -1,6 +1,8 @@
 module MapTopic
     class GeoKey < ActiveRecord::Base
         self.table_name = "geo_keys"
+        # city may be duplicated but bounds_value has to always stay unique - eg:
+        # could have bounds_values of madrid_center and madrid_region ...
         validates_uniqueness_of :bounds_value
         after_validation :reverse_geocode
         # reverse_geocoded_by :latitude, :longitude

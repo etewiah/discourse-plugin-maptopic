@@ -1,8 +1,18 @@
 Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
   // topicTitle: "",
   onShow: function() {
-    this.set('topicTitle', '');
+    // this.set('topicTitle', '');
   },
+  detailsPrompt: function() {
+    var topicType = this.get('model.capability');
+    if (topicType && topicType === "question") {
+      return "Some details to help people answer your question better.";
+    } else if (topicType && topicType === "info") {
+      return "More details. ";
+    } else {
+      debugger;
+    };
+  }.property('model.capability'),
   readyToAdd: function() {
     if (Ember.isBlank(this.get('topicTitle'))) {
       return false;
@@ -26,7 +36,6 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       composerModel.open(opts);
       // setting below ensures composerModel sets geo object on server after creation..
       // composerModel.set('geo', this.get('model.currentCitySelection'));
-
       // var st = composerModel.createPost()
       // composerModel.save will call createPost on itself..
       var self = this;
@@ -34,8 +43,8 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
         imageSizes: {},
         editReason: null
       }).then(function(post_result) {
-        var geo = self.get('model.currentCitySelection');
-        debugger;
+        var geo = self.get('model');
+        // debugger;
 
         var set_geo_endpoint = '/location_posts/set_geo';
         var map_topic = Discourse.ajax(set_geo_endpoint, {
