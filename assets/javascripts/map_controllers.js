@@ -95,6 +95,12 @@ Discourse.MapController = Discourse.Controller.extend({
   // needs: ['header', 'modal', 'composer', 'quote-button', 'search', 'topic-progress'],
   needs: ['composer', 'map-from-one-param'],
 
+  isAdmin: function(){
+  // temporarily needed so I can try new feature in prod
+    return Discourse.User.currentProp("admin");
+  }.property(),
+
+
   actions: {
     showNewTopicModal: function(currentCitySelection, topicType) {
       if (!Discourse.User.current()) {

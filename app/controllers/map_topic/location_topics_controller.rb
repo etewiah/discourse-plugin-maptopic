@@ -133,6 +133,8 @@ module MapTopic
       request_location = Geocoder.search(request.remote_ip).first
 
       unless request_location && request_location.data['longitude'] != "0"
+        # where I can't find a location for that ip or it returns a location with no longitude
+        # default to Berlin...
         return MapTopic::LocationTopic.where(:location_title =>'berlin',:location_id => 0).first
 
       else

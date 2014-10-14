@@ -13,13 +13,18 @@
 
      </small>
   </h1>
-          <button class='btn btn-primary' style="float:none" {{action showNewTopicModal currentCitySelection 'info'}}>
+
+{{#if isAdmin}}
+<div>
+            <button class='btn btn-primary' style="float:none" {{action showNewTopicModal currentCitySelection 'info'}}>
             Add some tips
           </button>
           <button class='btn btn-primary' style="float:none" {{action showNewTopicModal currentCitySelection 'question'}}>
             Ask for information
           </button>
+</div>
 
+{{/if}}
 
 </div>
 

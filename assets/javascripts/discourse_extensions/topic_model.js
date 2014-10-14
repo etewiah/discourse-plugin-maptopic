@@ -18,7 +18,7 @@ Discourse.Topic.reopen({
     // TODO - set a locationMeta property for each topic
     // eventually all locationTopics will have to have this
     // as this object will come from db, probably should use snake case names - hot_from etc
-    debugger; 
+    debugger;
     if (this.get('geo')) {
       return this.get('geo');
     } else {
@@ -60,15 +60,16 @@ Discourse.Topic.reopen({
   markers: function() {
     var currentMarkerValues = [];
     var locations = this.get('locations');
-    locations.forEach(function(loc) {
-      var markerInfo = {
-        context: 'topic_view',
-        location: loc,
-        location_id: loc.id
-      };
-      currentMarkerValues.push(markerInfo);
-    });
-
+    if (locations) {
+      locations.forEach(function(loc) {
+        var markerInfo = {
+          context: 'topic_view',
+          location: loc,
+          location_id: loc.id
+        };
+        currentMarkerValues.push(markerInfo);
+      });
+    }
     if (this.get('postStream.posts')) {
       var posts = this.get('postStream.posts');
       posts.forEach(function(p) {
