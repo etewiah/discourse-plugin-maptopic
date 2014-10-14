@@ -40,6 +40,7 @@ module MapTopic
       if params[:city]
         location = get_location_from_city_name(params[:city].downcase)
       else
+        # TODO - log how often this is being called - pretty expensive as should be called as little as possible
         location = get_nearest_location_to_request
       end
       center_point = [location.latitude,location.longitude]
