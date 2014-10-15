@@ -20,7 +20,7 @@ module MapTopic
         return
       end
 
-# might use below in the future if I decide to support initial locations ..
+      # might use below in the future if I decide to support initial locations ..
       # if params[:initial_location]
       #   create_location params[:initial_location]
       # end
@@ -49,6 +49,8 @@ module MapTopic
       end
       # todo - add category when setting geo
       topic_geo.save!
+
+      ensure_category topic_geo.country_lower, topic_geo.city_lower, @post.topic, topic_geo.capability
 
       return render json: topic_geo.as_json
       # location.to_json
@@ -138,9 +140,10 @@ module MapTopic
 
     end
 
-    def ensure_category country, city, topic
+    def ensure_category country, city, topic, capability
       admin_user = User.where(:admin => true).last
-      # cities_color = '92278F' # purple
+      question_color = 'F7941D' # orange
+      # question_color = '92278F' # purple
       countries_color = '8C6238' #brown
       # gigs_color = 'EA1D25' #red
 
@@ -158,16 +161,33 @@ module MapTopic
       # create(:name => 'China', :color => '8C6238', :user_id => admin_user.id)
 
 
+      # topic.category = city_cat
 
-      city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
-      unless city_cat.user
-        city_cat.user_id = admin_user.id
-        city_cat.save!
-        city_cat_topic = city_cat.topic
-        city_cat_topic.visible = false
-        city_cat_topic.save!
+      if capability && capability == "question"
+        capability_cat_name = city.titleize + " - Question"
+        capability_cat = Category.where(:name => capability_cat_name, :parent_category_id => country_cat.id).first_or_initialize
+        unless capability_cat.user
+          capability_cat.user_id = admin_user.id
+          capability_cat.color = question_color
+          capability_cat.save!
+          capability_cat_topic = capability_cat.topic
+          capability_cat_topic.visible = false
+          capability_cat_topic.save!
+        end
+        topic.category = capability_cat
+      else
+
+        # TODO - handle scenarios where there might not be a city
+        city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
+        unless city_cat.user
+          city_cat.user_id = admin_user.id
+          city_cat.save!
+          city_cat_topic = city_cat.topic
+          city_cat_topic.visible = false
+          city_cat_topic.save!
+        end
+        topic.category = city_cat
       end
-      topic.category = city_cat
       topic.save!
 
 

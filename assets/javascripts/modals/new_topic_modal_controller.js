@@ -22,14 +22,66 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
   }.property('topicTitle'),
 
 
+  detailsValidation: function() {
+    if (!this.get('validate')) {
+      return;
+    };
+    if (this.blank('topicDetails')) return Discourse.InputValidation.create({
+      failed: true
+    });
+    // If too short
+    if (this.get('topicDetails').length < 10) {
+      return Discourse.InputValidation.create({
+        failed: true,
+        reason: "Details have to be at least 10 characters long."
+      });
+    }
+
+    // Looks good!
+    return Discourse.InputValidation.create({
+      ok: true,
+      reason: ""
+    });
+  }.property('validate', 'topicDetails'),
+  titleValidation: function() {
+    if (!this.get('validate')) {
+      return;
+    };
+    // If blank, fail without a reason
+    if (this.blank('topicTitle')) return Discourse.InputValidation.create({
+      failed: true
+    });
+    // If too short
+    if (this.get('topicTitle').length < 5) {
+      return Discourse.InputValidation.create({
+        failed: true,
+        reason: "Title has to be at least 5 characters long."
+      });
+    }
+
+    // Looks good!
+    return Discourse.InputValidation.create({
+      ok: true,
+      reason: ""
+    });
+  }.property('validate', 'topicTitle'),
 
   actions: {
     createNewTopic: function() {
+
+      debugger;
+      if (this.get('topicTitle').length < 10 || this.get('topicDetails').length < 5) {
+        this.set('validate', true);
+        return;
+      }
+
+      var reply = this.get('topicDetails'),
+        title = this.get('topicTitle');
       var opts = {
         action: "createTopic",
         draftKey: "new_topic",
-        title: "a long enough title to please...",
-        reply: "this can probably contain some html..."
+        title: title,
+        reply: reply
       };
       // opts.action = "CREATE_TOPIC";
       var composerModel = Discourse.Composer.create();
@@ -58,7 +110,6 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
 
         });
         map_topic.then(function(set_geo_result) {
-          debugger;
           Discourse.URL.routeTo(post_result.post.get('url'));
 
           // return post_result;

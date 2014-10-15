@@ -6,32 +6,37 @@
   </div>
 
   <form {{action "createNewTopic" on="submit"}}>
-    <table style="width: 100%;">
-      <tr>
-        <td style="" class="label">
-          <label for='topic-title'>
+    <div style="width: 100%;">
+      <div>
+        <div style="" class="label">
+          <label for='geo-topic-title'>
           </label>
-        </td>
-      </tr>
-      <tr class="input">
-        <td style="">
-          {{text-field placeholder="Short summary" value=topicTitle id="topic-title" autofocus="autofocus"}}
-        </td>
-      </tr>
+        </div>
+      </div>
+      <div class="input">
+        <div style="">
+          {{text-field placeholder="Short summary" value=topicTitle id="geo-topic-title" autofocus="autofocus"}}
 
-      <tr class="instructions">
-        <td>
+           {{input-tip validation=titleValidation}}
+
+        </div>
+      </div>
+
+      <div class="instructions">
+        <div>
           <label></label>
-        </td>
-      </tr>
+        </div>
+      </div>
 
-      <tr class="input">
-        <td style="">
-          {{textarea placeholder=detailsPrompt value=topicDetails id="topic-details" autofocus="autofocus"}}
-        </td>
-      </tr>
+      <div class="input">
+        <div style="">
+          {{textarea placeholder=detailsPrompt value=topicDetails id="geo-topic-details" autofocus="autofocus"}}
+           {{input-tip validation=detailsValidation}}
 
-    </table>
+        </div>
+      </div>
+
+    </div>
   </form>
 
 
