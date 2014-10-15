@@ -134,10 +134,11 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   cityDetails: function() {
+// used to decide center of map if there are no markers
 // TODO - this will have to change to support more scenarios
 // like countries, regions etc
-    if (this.get('locationMeta')) {
-      return this.get('locationMeta');
+    if (this.get('geo')) {
+      return this.get('geo');
     };
     var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
     var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
