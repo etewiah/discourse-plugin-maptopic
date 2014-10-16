@@ -59,12 +59,18 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       this.send('closeModal');
     },
     topicSelected: function(detailsForMarker) {
+      var topic = Discourse.Topic.create(
+       detailsForMarker.topic
+      );
+      Discourse.URL.routeTo(topic.get('url'));
+// above fixed issue with suggested topics for a topic not being routed to properly..
+
       // this.transitionToRoute('topic.fromParams', topic);
       // above doesn't work
       // https://meta.discourse.org/t/why-does-discourse-use-a-bunch-of-tags-with-unbound-in-the-basic-topic-list-template/10541/4
-      this.transitionToRoute('topic.fromParams', Discourse.Topic.create({
-        id: detailsForMarker.topic.id
-      }));
+      // this.transitionToRoute('topic.fromParams', Discourse.Topic.create({
+      //   id: detailsForMarker.topic.id
+      // }));
     }
   },
   markers: function() {
@@ -74,12 +80,15 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     // chapuzo to ensure I maximise no of markers on index page
     // will include posts in topic...
     topics.forEach(function(t) {
-      var markerInfo = {
-        context: 'index_view',
-        topic: t.topic,
-        location: t.primary_location
-      };
-      currentMarkerValues.push(markerInfo);
+      if (t.primary_location) {
+        var markerInfo = {
+          context: 'index_view',
+          topic: t.topic,
+          location: t.primary_location
+        };
+        currentMarkerValues.push(markerInfo);
+      } else {
+      }
       // p.user = users[p.user_id];
     });
     return currentMarkerValues;

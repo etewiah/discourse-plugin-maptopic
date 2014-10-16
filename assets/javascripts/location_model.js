@@ -8,7 +8,6 @@ Discourse.GeoTopic.reopenClass({
     if (!city) {
       console.log('no city, will be expensive on server...');
     };
-    debugger;
     var url = Discourse.getURL("/geo_topics/get_for_city");
     return Discourse.ajax(url, {
       data: {
