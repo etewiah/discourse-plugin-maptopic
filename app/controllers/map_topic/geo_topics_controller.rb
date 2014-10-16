@@ -6,7 +6,10 @@ module MapTopic
 
       @geo_topics = MapTopic::TopicGeo.where(:city_lower => params[:city].downcase)
        # MapTopic::TopicGeo.all.count
-      return render json: @geo_topics.as_json
+
+      return render json: @geo_topics, each_serializer: MapTopic::GeoTopicSummarySerializer
+
+      # return render json: @geo_topics.as_json
       # json: { status: 'ok'}
     end
 
