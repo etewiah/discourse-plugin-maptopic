@@ -167,7 +167,6 @@ Discourse.MapController = Discourse.Controller.extend({
 
       // var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
       var topiclist = Discourse.GeoTopic.geoTopicsForCity(newCity);
-      debugger;
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
     // initiateAddLocation: function(newLocation) {

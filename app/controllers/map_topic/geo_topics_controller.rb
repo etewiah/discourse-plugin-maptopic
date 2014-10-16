@@ -21,9 +21,9 @@ module MapTopic
       # return render json: @geo_topics, each_serializer: MapTopic::GeoTopicSummarySerializer
       serialized_geo_topics = serialize_data(@geo_topics, MapTopic::GeoTopicSummarySerializer)
       return render_json_dump({
-        "geo_topics" => serialized_geo_topics,
-        "city" => city
-        })
+                                "geo_topics" => serialized_geo_topics,
+                                "city" => city
+      })
 
       # 2 calls below are the same:
       # render_json_dump(serialize_data(@geo_topics, MapTopic::GeoTopicSummarySerializer))
@@ -57,21 +57,42 @@ module MapTopic
     def ensure_geo_key_exists(city_name)
       geo_key= MapTopic::GeoKey.where(:city_lower => city_name.downcase).first
       unless geo_key
-        location_coordinates = Geocoder.coordinates(city_name)
-        if location_coordinates
-binding.pry
+        # TODO - add bounds json text field that will store the full bounds of the result
+        results = Geocoder.search(city_name)
+        if geo = results.first
+          if geo.city
+            bounds_value = geo.city.downcase
+            bounds_type = "city"
+          else
+            if geo.types.include? 'country'
+              bounds_value = geo.country.downcase
+              bounds_type = "country"
+            else
+              bounds_value = geo.country
+              bounds_type = "unknown"
+            end
+
+          end
+          # because geocoder will find a misspelt city like accrra, prefer its city to my input
+          city_name = geo.city ?  geo.city.downcase : city_name.downcase
           geo_key = MapTopic::GeoKey.create({
-                bounds_range: 20,
-                bounds_type: "city",
-                bounds_value: city_name.downcase,
-                city_lower: city_name.downcase,
-                country_lower: "",
-                show_criteria: "searched",
-                longitude: location_coordinates[1],
-                latitude: location_coordinates[0],
-                location_id: 0,
-                topic_id: 0
+                                              bounds_range: 20,
+                                              bounds_type: bounds_type,
+                                              bounds_value: bounds_value,
+                                              city_lower: city_name,
+                                              country_lower: geo.country.downcase,
+                                              show_criteria: "searched",
+                                              longitude: geo.longitude,
+                                              latitude: geo.latitude,
+                                              location_id: 0,
+                                              topic_id: 0
           })
+
+        end
+
+        if location_coordinates
+          binding.pry
+
           # return geo_key
         end
       end
