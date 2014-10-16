@@ -186,7 +186,6 @@ Discourse.MapController = Discourse.Controller.extend({
 
   // below updates the citySelectionItems
   citySelectionItemsWithUrls: function() {
-    debugger;
     var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
     selectionItems.forEach(function(item) {
       item.url = this.get('target').generate('map.fromOneParam', {

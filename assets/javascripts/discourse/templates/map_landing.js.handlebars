@@ -5,17 +5,9 @@
   <h1 style="margin-top:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
 
     Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' action='cityChanged' newLocationAction='showAddCityModal' currentSelectionItem=currentCitySelection }}
-    <small style="font-size: 70%;float:right">
-{{!--       <a style="padding: 8px 10px 3px 40px;text-decoration: underline;" {{ action addLocation }} >
-       search on map
-      </a>
- --}}    
-
-     </small>
-  </h1>
 
 {{#if isAdmin}}
-<span style="padding-bottom: 10px;text-align:center">
+<span style="padding-bottom: 10px;float:right">
             <button class='btn btn-large btn-primary' style="" {{action showNewTopicModal currentCitySelection 'info'}}>
             Add city tips
           </button>
@@ -25,6 +17,10 @@
 </span>
 
 {{/if}}
+
+  </h1>
+
+
 
 </div>
 

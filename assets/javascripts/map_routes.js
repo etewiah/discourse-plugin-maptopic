@@ -56,7 +56,6 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
       };
       selectionItems.pushObject(currentCitySelection);
     }
-debugger;
     mapController.set('currentCitySelection', currentCitySelection);
 
     // mapController.get('currentCity') || this.paramsFor(this.routeName).currentCity;
