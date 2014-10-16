@@ -1,3 +1,24 @@
+// TODO - move into its own file
+Discourse.GeoTopic = Discourse.Model.extend({
+
+});
+Discourse.GeoTopic.reopenClass({
+  // TODO **  make use of result.place_id  (google place id...)
+  geoTopicsForCity: function(city) {
+    if (!city) {
+      console.log('no city, will be expensive on server...');
+    };
+    debugger;
+    var url = Discourse.getURL("/geo_topics/get_for_city");
+    return Discourse.ajax(url, {
+      data: {
+        city: city
+      }
+    });
+  },
+});
+
+
 Discourse.Location = Discourse.Model.extend({
 
 });
@@ -22,15 +43,15 @@ Discourse.Location.reopenClass({
     // TODO - check if I already have city and country as result from Gmap
     // can be dodgy (eg Balsall Heath for birmingham)
     var locationObject = {
-        address: result.formatted_address,
-        latitude: result.geometry.location.lat(),
-        longitude: result.geometry.location.lng()
-      };
-      // title will be provided through user input
-      // if (!Ember.isBlank(city)) {
-      //   locationObject.city = city;
-      // }
-      // latlng = result.geometry.location
+      address: result.formatted_address,
+      latitude: result.geometry.location.lat(),
+      longitude: result.geometry.location.lng()
+    };
+    // title will be provided through user input
+    // if (!Ember.isBlank(city)) {
+    //   locationObject.city = city;
+    // }
+    // latlng = result.geometry.location
     $.each(result.address_components, function(i, address_component) {
       if (address_component.types[0] == "locality") {
         locationObject.city = address_component.long_name.toLowerCase();

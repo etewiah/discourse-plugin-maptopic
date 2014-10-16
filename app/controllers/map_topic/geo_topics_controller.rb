@@ -4,16 +4,34 @@ module MapTopic
 
     def get_for_city
 
-      @geo_topics = MapTopic::TopicGeo.where(:city_lower => params[:city].downcase)
-       # MapTopic::TopicGeo.all.count
+      if params[:city]
+        city = params[:city].downcase
+      else
+        # TODO - log how often this is being called - pretty expensive as should be called as little as possible
+        geo_key = get_nearest_location_to_request
+        city = geo_key.city_lower
+      end
 
-      return render json: @geo_topics, each_serializer: MapTopic::GeoTopicSummarySerializer
+      @geo_topics = MapTopic::TopicGeo.where(:city_lower => city)
+      if @geo_topics.length < 1
+        # when a random city has been passed in, lets create a key for it
+        ensure_geo_key_exists city
+      end
 
-      # return render json: @geo_topics.as_json
-      # json: { status: 'ok'}
+      # return render json: @geo_topics, each_serializer: MapTopic::GeoTopicSummarySerializer
+      serialized_geo_topics = serialize_data(@geo_topics, MapTopic::GeoTopicSummarySerializer)
+      return render_json_dump({
+        "geo_topics" => serialized_geo_topics,
+        "city" => city
+        })
+
+      # 2 calls below are the same:
+      # render_json_dump(serialize_data(@geo_topics, MapTopic::GeoTopicSummarySerializer))
+      # render_serialized(@geo_topics, MapTopic::GeoTopicSummarySerializer)
+
     end
 
-  
+
     private
 
     def get_nearest_location_to_request
@@ -25,48 +43,46 @@ module MapTopic
       # end
       request_location = Geocoder.search(request.remote_ip).first
 
-      unless request_location && request_location.data['longitude'] != "0"
-        # where I can't find a location for that ip or it returns a location with no longitude
-        # default to Berlin...
-        return MapTopic::LocationTopic.where(:location_title =>'berlin',:location_id => 0).first
-
-      else
+      if request_location && request_location.data['longitude'] != "0"
         center_point = [request_location.data['latitude'],request_location.data['longitude']]
-        return MapTopic::LocationTopic.where(:location_id => 0).near(center_point,5000).first
-    
+        return MapTopic::GeoKey.near(center_point,5000).first
+      else
+        return MapTopic::GeoKey.where(:city_lower => 'berlin').first
       end
 
 
     end
 
 
-    def get_location_from_city_name(city_name)
-      location_topic = MapTopic::LocationTopic.where(:location_title => city_name.downcase,:location_id => 0).first
-      if location_topic
-        return location_topic
-      else
+    def ensure_geo_key_exists(city_name)
+      geo_key= MapTopic::GeoKey.where(:city_lower => city_name.downcase).first
+      unless geo_key
         location_coordinates = Geocoder.coordinates(city_name)
         if location_coordinates
-          location_topic = MapTopic::LocationTopic.create({
-                                                            location_title: city_name.downcase,
-                                                            longitude: location_coordinates[1],
-                                                            latitude: location_coordinates[0],
-                                                            location_id: 0,
-                                                            topic_id: 0
+binding.pry
+          geo_key = MapTopic::GeoKey.create({
+                bounds_range: 20,
+                bounds_type: "city",
+                bounds_value: city_name.downcase,
+                city_lower: city_name.downcase,
+                country_lower: "",
+                show_criteria: "searched",
+                longitude: location_coordinates[1],
+                latitude: location_coordinates[0],
+                location_id: 0,
+                topic_id: 0
           })
-          return location_topic
-        else
-          return MapTopic::LocationTopic.where(:location_title =>'london',:location_id => 0).first
+          # return geo_key
         end
       end
     end
 
-    def location_topics_query(options={})
-      Topic.where("deleted_at" => nil)
-      .where("visible")
-      .where("archetype <> ?", Archetype.private_message)
-      .where(id: @location_topic_ids)
-    end
+    # def location_topics_query(options={})
+    #   Topic.where("deleted_at" => nil)
+    #   .where("visible")
+    #   .where("archetype <> ?", Archetype.private_message)
+    #   .where(id: @location_topic_ids)
+    # end
 
     def check_user
       if current_user.nil?

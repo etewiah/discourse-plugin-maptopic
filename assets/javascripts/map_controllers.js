@@ -152,11 +152,13 @@ Discourse.MapController = Discourse.Controller.extend({
     // below is primary action passed into simple-dropdown component
     // but is also called by add_city_modal directly
     cityChanged: function(newCity) {
-      var params = {
-        currentCity: newCity
-      }
+      // var params = {
+      //   currentCity: newCity
+      // }
 
-      var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
+      // var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
+      var topiclist = Discourse.GeoTopic.geoTopicsForCity(newCity);
+      debugger;
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
     // initiateAddLocation: function(newLocation) {
