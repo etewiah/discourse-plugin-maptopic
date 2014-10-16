@@ -3,7 +3,9 @@
   <div style="" class="index-map">
       
 
-    {{ topics-map showSearchBox=true markerSelectedAction="topicSelected" mapClickedAction="startLocationTopic" displayContext="topicsIndex" currentCity=currentCity markerValues=markers mapsClass="medium-maps" }}
+    {{ topics-map showSearchBox=true markerSelectedAction="topicSelected" 
+    geo=model.geo_key
+    mapClickedAction="startLocationTopic" displayContext="topicsIndex" currentCity=currentCity markerValues=markers mapsClass="medium-maps" }}
   </div>
   <div style="" class="index-map-info">
 

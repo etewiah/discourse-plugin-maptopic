@@ -15,14 +15,14 @@
   </h1>
 
 {{#if isAdmin}}
-<div style="padding-bottom: 10px;">
-            <button class='btn btn-primary' style="float:none" {{action showNewTopicModal currentCitySelection 'info'}}>
-            Add some tips
+<span style="padding-bottom: 10px;text-align:center">
+            <button class='btn btn-large btn-primary' style="" {{action showNewTopicModal currentCitySelection 'info'}}>
+            Add city tips
           </button>
-          <button class='btn btn-primary' style="float:none" {{action showNewTopicModal currentCitySelection 'question'}}>
+          <button class='btn btn-large btn-primary' style="margin-left: 5%;" {{action showNewTopicModal currentCitySelection 'question'}}>
             Ask for information
           </button>
-</div>
+</span>
 
 {{/if}}
 

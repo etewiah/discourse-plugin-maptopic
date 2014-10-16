@@ -177,14 +177,16 @@ Discourse.MapController = Discourse.Controller.extend({
 
 
 
-  currentCitySelection: function() {
-    var currentCity = this.get('currentCity') || Discourse.SiteSettings.maptopic.defaultCityName;
-    return this.get('citySelectionItemsWithUrls').findBy('value', currentCity);
-  }.property('currentCity', 'citySelectionItemsWithUrls'),
+  // currentCitySelection: function() {
+  //   debugger;
+  //   var currentCity = this.get('currentCity') || Discourse.SiteSettings.maptopic.defaultCityName;
+  //   return this.get('citySelectionItemsWithUrls').findBy('value', currentCity);
+  // }.property('currentCity', 'citySelectionItemsWithUrls'),
 
 
   // below updates the citySelectionItems
   citySelectionItemsWithUrls: function() {
+    debugger;
     var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
     selectionItems.forEach(function(item) {
       item.url = this.get('target').generate('map.fromOneParam', {
@@ -202,7 +204,7 @@ Discourse.MapController = Discourse.Controller.extend({
     //   });
     // }
     return selectionItems;
-  }.property(),
+  }.property('currentCitySelection'),
 
 
 });

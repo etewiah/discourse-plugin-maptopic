@@ -6,6 +6,8 @@ module MapTopic
 
       if params[:city]
         city = params[:city].downcase
+        # when a random city has been passed in, below ensures a key is created for it
+        geo_key =  ensure_geo_key_exists city
       else
         # TODO - log how often this is being called - pretty expensive as should be called as little as possible
         geo_key = get_nearest_location_to_request
@@ -13,14 +15,15 @@ module MapTopic
       end
 
       @geo_topics = MapTopic::TopicGeo.where(:city_lower => city)
-      if @geo_topics.length < 1
-        # when a random city has been passed in, lets create a key for it
-        ensure_geo_key_exists city
-      end
+      # if @geo_topics.length < 1
+      #   # when a random city has been passed in, lets create a key for it
+      #   ensure_geo_key_exists city
+      # end
 
       # return render json: @geo_topics, each_serializer: MapTopic::GeoTopicSummarySerializer
       serialized_geo_topics = serialize_data(@geo_topics, MapTopic::GeoTopicSummarySerializer)
       return render_json_dump({
+                                "geo_key" => geo_key,
                                 "geo_topics" => serialized_geo_topics,
                                 "city" => city
       })
@@ -58,6 +61,7 @@ module MapTopic
       geo_key= MapTopic::GeoKey.where(:city_lower => city_name.downcase).first
       unless geo_key
         # TODO - add bounds json text field that will store the full bounds of the result
+        # bounds_range: 20 makes no sense so not bothering with that anymore
         results = Geocoder.search(city_name)
         if geo = results.first
           if geo.city
@@ -76,26 +80,20 @@ module MapTopic
           # because geocoder will find a misspelt city like accrra, prefer its city to my input
           city_name = geo.city ?  geo.city.downcase : city_name.downcase
           geo_key = MapTopic::GeoKey.create({
-                                              bounds_range: 20,
+                                              display_name: bounds_value.titleize,
                                               bounds_type: bounds_type,
                                               bounds_value: bounds_value,
                                               city_lower: city_name,
                                               country_lower: geo.country.downcase,
                                               show_criteria: "searched",
                                               longitude: geo.longitude,
-                                              latitude: geo.latitude,
-                                              location_id: 0,
-                                              topic_id: 0
+                                              latitude: geo.latitude
           })
 
         end
 
-        if location_coordinates
-          binding.pry
-
-          # return geo_key
-        end
       end
+      return geo_key
     end
 
     # def location_topics_query(options={})

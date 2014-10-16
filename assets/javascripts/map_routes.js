@@ -42,6 +42,23 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
     // city may have been calculated server side so lets save that to avoid making calculation again
     // TODO - save in localStorage?
     var currentCity = model.city;
+
+
+    var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+    var currentCitySelection = selectionItems.findBy('value', currentCity.toLowerCase());
+    // where a random city (passed by url for eg) is being used, below will add that city 
+    if (!currentCitySelection) {
+      currentCitySelection = {
+        displayString: model.geo_key.display_name.capitalize(),
+        value: model.geo_key.bounds_value.toLowerCase(),
+        longitude: model.geo_key.longitude,
+        latitude: model.geo_key.latitude
+      };
+      selectionItems.pushObject(currentCitySelection);
+    }
+debugger;
+    mapController.set('currentCitySelection', currentCitySelection);
+
     // mapController.get('currentCity') || this.paramsFor(this.routeName).currentCity;
     mapController.set('currentCity', currentCity);
     Discourse.set('title', currentCity.capitalize() + ' - recent conversations');

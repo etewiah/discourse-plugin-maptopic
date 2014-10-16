@@ -134,15 +134,19 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   cityDetails: function() {
-// used to decide center of map if there are no markers
-// TODO - this will have to change to support more scenarios
-// like countries, regions etc
+    // used to decide center of map if there are no markers
+    // TODO - this will have to change to support more scenarios
+    // like countries, regions etc
+    // ---- once I confirm that geo exists in all cases, will replace cityDetails with geo...
     if (this.get('geo')) {
       return this.get('geo');
-    };
-    var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
-    var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
-    return cityObject;
+    } else {
+      // should not get here
+      debugger;
+      var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
+      var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
+      return cityObject;
+    }
   }.property('currentCity'),
 
   renderMap: function() {
@@ -342,7 +346,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var title = detailsForMarker.topic.title;
         // .get('title') + "( " + detailsForMarker.location.title + " )";
         addressString = detailsForMarker.location.title +
-        '<br><small>click for more...</small>';
+          '<br><small>click for more...</small>';
         var dataObject = detailsForMarker.topic;
         var dataObjectType = 'topic';
       } else {
@@ -373,7 +377,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       // };
       var contentString = '<div id="tmap-infowindow-content" >' +
         '<h4 id="firstHeading" class="firstHeading">' + title +
-        '</h4>' +        '<a>' +
+        '</h4>' + '<a>' +
         '<div id="bodyContent">' +
         addressString +
         '</div></a>' +
@@ -536,120 +540,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // }
     this.sendAction('markerSelectedAction', detailsForMarker);
   },
-  // placeSelectedInTopic: function(event, detailsForMarker) {
-  //   this.sendAction('markerSelectedAction', detailsForMarker);
-  // },
-  // locationPostSelected: function(event, post) {
-  //   // TODO implement scrollTO
-  //   // Discourse.URL.jumpToPost(post.post_number);
-  //   this.sendAction('markerSelectedAction', topic);
-  // },
 
-
-  // places search functionality:
-  // searchByName: function() {
-  //   if (Ember.isBlank(this.nameStringToSearch)) {
-  //     return;
-  //   };
-  //   var searchRequest = {
-  //     location: this.map.center,
-  //     radius: '10000',
-  //     name: this.nameStringToSearch
-  //     // types: ['store']
-  //   };
-  //   this.execPlaceSearch(searchRequest);
-  // },
-  // searchByKeyword: function() {
-  //   if (Ember.isBlank(this.stringToSearch)) {
-  //     return;
-  //   };
-  //   var searchRequest = {
-  //     location: this.map.center,
-  //     radius: '10000',
-  //     keyword: this.stringToSearch
-  //     // types: ['store']
-  //   };
-  //   this.execPlaceSearch(searchRequest);
-  // },
-  // execPlaceSearch: function(searchRequest) {
-  //   var that = this;
-  //   service = new google.maps.places.PlacesService(this.map);
-  //   service.nearbySearch(searchRequest, function(results, status) {
-  //     if (status == google.maps.places.PlacesServiceStatus.OK) {
-  //       var bounds = new google.maps.LatLngBounds();
-
-  //       if (that.marker) {
-  //         // if a marker has previously been set, clear it
-  //         that.marker.setMap(null);
-  //       };
-  //       if (that.markers) {
-  //         $.each(that.markers, function(index, value) {
-  //           value.setMap(null);
-  //         });
-  //       };
-  //       that.markers = [];
-  //       results.forEach(function(value, index) {
-  //         var marker = new google.maps.Marker({
-  //           position: value.geometry.location,
-  //           map: that.map,
-  //           title: value.name
-  //           // icon: icon
-  //           // address: value.title
-  //         });
-  //         that.markers.pushObject(marker);
-  //         var contentString = '<div id="tmap-infowindow-content" >' +
-  //           '<a>' +
-  //           '<h4 id="firstHeading" class="firstHeading">' + value.name +
-  //           '</h4>' +
-  //           '<div id="bodyContent">' +
-  //           '<small>' + value.vicinity + '</small>' +
-  //           '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-  //           'Use</button></form>' +
-
-  //           '</div></a>' +
-  //           '</div>';
-
-  //         var infowindowInstance = new google.maps.InfoWindow({
-  //           content: contentString,
-  //           searchResult: value
-  //         });
-  //         google.maps.event.addListener(marker, 'mouseover', function() {
-  //           // setTimeout(function() {
-  //           //   infowindowInstance.close();
-  //           // }, 6000);
-  //           for (var i = 0; i < that.infoWindows.length; i++) {
-  //             that.infoWindows[i].close();
-  //           }
-  //           that.infoWindows = [];
-  //           that.infoWindows.push(infowindowInstance);
-  //           infowindowInstance.open(that.map, marker);
-  //         });
-
-  //         google.maps.event.addListener(infowindowInstance, 'domready', function() {
-  //           document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
-  //             e.stopPropagation();
-  //             // debugger;
-  //             that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('cityDetails.value'));
-
-  //           });
-  //         });
-  //         bounds.extend(value.geometry.location);
-  //       })
-  //       if (that.get('markers.length') > 1) {
-  //         that.map.fitBounds(bounds);
-  //       } else {
-  //         // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
-  //         that.map.fitBounds(bounds);
-  //         // seems silly but I really have to do all that to get the zoom looking half decent
-  //         google.maps.event.addListenerOnce(that.map, 'bounds_changed', function(event) {
-  //           if (this.getZoom() > 15) {
-  //             this.setZoom(15);
-  //           }
-  //         });
-  //       }
-
-  //     }
-  //   });
-  // }
 
 });
