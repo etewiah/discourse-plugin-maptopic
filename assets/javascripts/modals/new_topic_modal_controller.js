@@ -70,7 +70,7 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
     createNewTopic: function() {
 
       debugger;
-      if (this.get('topicTitle').length < 10 || this.get('topicDetails').length < 5) {
+      if (this.get('topicTitle').length < 5 || this.get('topicDetails').length < 10) {
         this.set('validate', true);
         return;
       }
