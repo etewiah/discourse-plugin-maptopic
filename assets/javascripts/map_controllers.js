@@ -68,7 +68,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     }
   },
   markers: function() {
-    var topics = this.get('content.topics');
+    var topics = this.get('content.geo_topics');
     var currentMarkerValues = [];
     // debugger;
     // chapuzo to ensure I maximise no of markers on index page
@@ -76,8 +76,8 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     topics.forEach(function(t) {
       var markerInfo = {
         context: 'index_view',
-        topic: t,
-        location: t.get('location')
+        topic: t.topic,
+        location: t.primary_location
       };
       currentMarkerValues.push(markerInfo);
       // p.user = users[p.user_id];

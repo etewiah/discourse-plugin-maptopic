@@ -312,9 +312,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
       currentMarkerValues[0].longitude);
 
-    // var zoom = 15;
-
-
     this.mapOptions.center = mapCenter;
     this.mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
 
@@ -330,20 +327,22 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     var that = this;
     $.each(currentMarkerValues, function(index, detailsForMarker) {
       // debugger;
-      //         context: 'topic_view',
+      var addressString = "";
       if (detailsForMarker.context === 'topic_view') {
         // debugger;
         // using topic icon everywhere till I figure out a decent scheme...
         var icon = that.topic_icon;
-        // var userName = detailsForMarker.posts.get('firstObject.name');
-        // detailsForMarker.posts.firstObject.name;
+        addressString = detailsForMarker.location.address;
         var title = detailsForMarker.location.title;
         var dataObject = detailsForMarker.posts;
         var dataObjectType = 'post';
       } else if (detailsForMarker.context === 'index_view') {
         var icon = that.topic_icon;
-        var userName = detailsForMarker.topic.get('posters.firstObject.user.username') || detailsForMarker.topic.get('details.created_by.username');
-        var title = detailsForMarker.topic.get('title') + "( " + detailsForMarker.location.title + " )";
+        // var userName = detailsForMarker.topic.get('posters.firstObject.user.username') || detailsForMarker.topic.get('details.created_by.username');
+        var title = detailsForMarker.topic.title;
+        // .get('title') + "( " + detailsForMarker.location.title + " )";
+        addressString = detailsForMarker.location.title +
+        '<br><small>click for more...</small>';
         var dataObject = detailsForMarker.topic;
         var dataObjectType = 'topic';
       } else {
@@ -368,16 +367,15 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       });
       that.markers.pushObject(marker);
 
-      var userNameString = "";
-      if (userName) {
-        userNameString = '<small>By: ' + userName + '</small>';
-      };
+      // var addressString = "";
+      // if (userName) {
+      //   addressString = '<small>By: ' + userName + '</small>';
+      // };
       var contentString = '<div id="tmap-infowindow-content" >' +
-        '<a>' +
         '<h4 id="firstHeading" class="firstHeading">' + title +
-        '</h4>' +
+        '</h4>' +        '<a>' +
         '<div id="bodyContent">' +
-        userNameString +
+        addressString +
         '</div></a>' +
         '</div>';
 

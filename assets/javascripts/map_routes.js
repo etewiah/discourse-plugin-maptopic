@@ -25,22 +25,32 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 Discourse.MapFromOneParamRoute = Discourse.Route.extend( {
 
   model: function(params) {
-    // TODO make use of params to return either venue conversations or gig conversations
-    return Discourse.TopicList.findWhereLocationPresent("", params);
-    // return Discourse.TopicList.findWhereLocationPresent("h/visitor_topics/" + params.tag, {});
+    var url = Discourse.getURL("/geo_topics/get_for_city");
+    return Discourse.ajax(url, {
+      data: {
+        city: params.currentCity
+      }
+    });
+    // .then(function(result) {
+    //   console.log(params);
+    //   debugger;
+    //   return result;
+    //   // return Discourse.TopicList.fromWhereLocationPresent(result, filter_url, params);
+    // });
+
   },
   // serialize: function(model) {
   //   return { val: 'recent' };
   // },
   setupController: function(controller, model) {
+    debugger;
     var mapController = this.controllerFor('map');
-   // debugger;
-
     // mapController.set('content', model);
     // set above just to satisfy objectcontroller need for content....
-    mapController.set('currentCity', model.params.currentCity);
+    var  currentCity = this.paramsFor(this.routeName).currentCity;
+    mapController.set('currentCity', currentCity);
     controller.set('content',model);
-    Discourse.set('title', model.params.currentCity.capitalize() + ' - recent conversations');
+    Discourse.set('title', currentCity.capitalize() + ' - recent conversations');
   }
 
 });
