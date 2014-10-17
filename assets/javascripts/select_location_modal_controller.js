@@ -10,9 +10,9 @@ Discourse.SelectLocationModalController = Discourse.Controller.extend(Discourse.
   // }.property('locationObject.title'),
 
   defaultLocation: function() {
-    if (this.get('model.locationObject')) {
-      debugger;
-      return this.get('model.locationObject');
+    if (this.get('model.geo')) {
+      // when called from composer, will have set this to topic.geo
+      return this.get('model.geo');
     }
     // if this is a post or topic, use that location location
     else if (this.get('model.topic.location') || this.get('model.location')) {

@@ -142,7 +142,8 @@ module MapTopic
 
     def ensure_category country, city, topic, capability
       admin_user = User.where(:admin => true).last
-      question_color = 'F7941D' # orange
+      question_color = '0E76BD' # darker blue
+      # 'F7941D' # orange
       # question_color = '92278F' # purple
       countries_color = '8C6238' #brown
       # gigs_color = 'EA1D25' #red

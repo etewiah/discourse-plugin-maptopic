@@ -6,7 +6,9 @@
 
     Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' action='cityChanged' newLocationAction='showAddCityModal' currentSelectionItem=currentCitySelection }}
 
-{{#if isAdmin}}
+{{!-- {{#if isAdmin}}
+{{/if}}
+ --}}
 <span style="padding-bottom: 10px;float:right">
             <button class='btn btn-large btn-primary' style="" {{action showNewTopicModal currentCitySelection 'info'}}>
             Add city tips
@@ -15,8 +17,6 @@
             Ask for information
           </button>
 </span>
-
-{{/if}}
 
   </h1>
 

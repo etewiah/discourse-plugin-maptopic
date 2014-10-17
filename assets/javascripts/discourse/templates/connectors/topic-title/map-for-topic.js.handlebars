@@ -4,8 +4,8 @@
       <div class="row" style="float: left;width: 100%;">
       <div>
           <h2 style="line-height: 32px;margin-bottom:5px;">
-          <small>Conversation started with : {{ model.locationDetails.title }} </small>
-                <button class='btn btn-primary' style="float:none" {{action showLocationSelector}}>
+{{!--           <small>Conversation started with : </small>
+ --}}                <button class='btn btn-primary' style="float:none" {{action showLocationSelector}}>
                   Add more places
                 </button>
             {{#if details.can_edit}}
@@ -49,5 +49,17 @@
 
     {{/if}}
 
+{{else}}
+    <div class="row" style="float: left;width: 100%;">
+    <div>
+        <h2 style="line-height: 32px;margin-bottom:5px;">
+        <small> </small>
+              <button class='btn btn-primary' style="float:none" {{action showLocationSelector}}>
+                Put this conversation on the map
+              </button>
+
+      </h2>
+    </div>
+    </div>
 
 {{/if}}
