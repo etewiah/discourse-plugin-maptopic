@@ -2,6 +2,12 @@ module MapTopic
   class GeoTopicsController < ApplicationController
     include CurrentUser
 
+    def get_geo_keys
+      @geo_keys = MapTopic::GeoKey.all
+      render_json_dump( @geo_keys.as_json )
+      
+    end
+
     def get_for_city
 
       if params[:city]
