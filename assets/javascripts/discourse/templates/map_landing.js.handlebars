@@ -2,18 +2,18 @@
 
 
 <div class="row">  
-  <h1 style="margin-top:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
+  <h1 style="margin-bottom:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
 
     Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' action='cityChanged' newLocationAction='showAddCityModal' currentSelectionItem=currentCitySelection }}
 
 {{!-- {{#if isAdmin}}
 {{/if}}
  --}}
-<span style="padding-bottom: 10px;float:right">
-            <button class='btn btn-large btn-primary' style="" {{action showNewTopicModal currentCitySelection 'info'}}>
+<span style="margin-left:7%">
+            <button class='btn btn-large btn-primary' style="background: #090;" {{action showNewTopicModal currentCitySelection 'info'}}>
             Add city tips
           </button>
-          <button class='btn btn-large btn-primary' style="" {{action showNewTopicModal currentCitySelection 'question'}}>
+          <button class='btn btn-large btn-primary' style="background: #090;" {{action showNewTopicModal currentCitySelection 'question'}}>
             Ask for information
           </button>
 </span>

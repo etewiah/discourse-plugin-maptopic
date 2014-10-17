@@ -3,12 +3,22 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
   onShow: function() {
     // this.set('topicTitle', '');
   },
+  titlePrompt: function() {
+    var topicType = this.get('model.capability');
+    if (topicType && topicType === "question") {
+      return "Your question.";
+    } else if (topicType && topicType === "info") {
+      return "A short summary of your tip.";
+    } else {
+      debugger;
+    };
+  }.property('model.capability'),
   detailsPrompt: function() {
     var topicType = this.get('model.capability');
     if (topicType && topicType === "question") {
       return "Some details to help people answer your question better.";
     } else if (topicType && topicType === "info") {
-      return "More details. ";
+      return "More details. ( You can select relevant places in the next page.)";
     } else {
       debugger;
     };
@@ -27,7 +37,9 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       return;
     };
     if (this.blank('topicDetails')) return Discourse.InputValidation.create({
-      failed: true
+      failed: true,
+      reason: "Details have to be at least 10 characters long."
+
     });
     // If too short
     if (this.get('topicDetails').length < 10) {
@@ -69,7 +81,6 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
   actions: {
     createNewTopic: function() {
 
-      debugger;
       if (this.get('topicTitle').length < 5 || this.get('topicDetails').length < 10) {
         this.set('validate', true);
         return;

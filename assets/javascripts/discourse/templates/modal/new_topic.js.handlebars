@@ -15,7 +15,7 @@
       </div>
       <div class="input">
         <div style="">
-          {{text-field placeholder="Short summary" value=topicTitle id="geo-topic-title" autofocus="autofocus"}}
+          {{text-field placeholder=titlePrompt value=topicTitle id="geo-topic-title" autofocus="autofocus"}}
 
            {{input-tip validation=titleValidation}}
 
@@ -45,7 +45,7 @@
 <div class="modal-footer">
     {{#if readyToAdd}}
           <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action createNewTopic}}>
-            Add
+            Go
           </button>
     {{/if}}
           {{#if formSubmitted}} &nbsp; <i class='fa fa-spinner fa-spin'></i>
