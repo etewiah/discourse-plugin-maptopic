@@ -3,20 +3,20 @@
 {{#if model.isLocationTopic}}
 
     {{#if model.hasLocation}}
-      <div class="row" style="float: left;width: 100%;">
       <div>
           <h2 style="line-height: 32px;margin-bottom:5px;">
 {{!--           <small>Conversation started with : </small>
  --}}                <button class='btn btn-primary btn-klavado' style="float:none" {{action showLocationSelector}}>
                   Add more places
                 </button>
-            {{#if details.can_edit}}
-      {{!--  --}}
-            {{/if}}
+
+      <button class='btn btn-primary btn-klavado' style="float:none" {{action showInvite}}>
+          Invite your friends
+      </button>
 
         </h2>
       </div>
-      </div>
+
 
       <div class="row" style="float: left;width: 100%;">
         
@@ -24,19 +24,18 @@
       </div>
 
     {{else}}
-      <div class="row" style="float: left;width: 100%;">
       <div>
           <h2 style="line-height: 32px;margin-bottom:5px;">
           <small> </small>
                 <button class='btn btn-primary btn-klavado' style="float:none" {{action showLocationSelector}}>
                   Add places to this conversation
                 </button>
-            {{#if details.can_edit}}
-      {{!--  --}}
-            {{/if}}
+
+      <button class='btn btn-primary btn-klavado' style="float:none" {{action showInvite}}>
+          Invite your friends
+      </button>
 
         </h2>
-      </div>
       </div>
 
       <div class="row" style="float: left;width: 100%;">
@@ -52,7 +51,6 @@
     {{/if}}
 
 {{else}}
-    <div class="row" style="float: left;width: 100%;">
     <div>
         <h2 style="line-height: 32px;margin-bottom:5px;">
         <small> </small>
@@ -62,11 +60,8 @@
 
       </h2>
     </div>
-    </div>
 
 {{/if}}
 
-              <button class='btn btn-primary btn-klavado' style="float:none" {{action showInvite}}>
-                Invite your friends
-              </button>
+
 </div>

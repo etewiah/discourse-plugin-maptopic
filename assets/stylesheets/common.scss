@@ -1,6 +1,10 @@
 .btn-klavado{
     background-color: #090;
 }
+.btn-klavado:hover {
+  color: #fff;
+  background: #006600;
+}
 
 /* Don't know why this is 90% in the base topic.scss file but I'm making it 100% 
 #topic-title {

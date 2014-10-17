@@ -268,7 +268,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     infowindowInstance.open(this.map, marker);
     window.setTimeout(function() {
       marker.showingInfoWindow = true;
-    }, 3500);
+    }, 1000);
   },
 
   mapOptions: {
