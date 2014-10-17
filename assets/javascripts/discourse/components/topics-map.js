@@ -254,6 +254,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     }
   },
 
+  // below ensures that after infoWindow is shown, showingInfoWindow is set
+  // so a second click know to do something else - like redirect to topic...
   showNewInfowindow: function(infowindowInstance, marker) {
     if (this.newLocationMarker) {
       this.newLocationMarker.setMap(null);
@@ -264,7 +266,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     this.infoWindows = [];
     this.infoWindows.push(infowindowInstance);
     infowindowInstance.open(this.map, marker);
-    marker.showingInfoWindow = true;
+    window.setTimeout(function() {
+      marker.showingInfoWindow = true;
+    }, 3500);
   },
 
   mapOptions: {

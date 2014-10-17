@@ -90,6 +90,7 @@ require("discourse/controllers/topic")["default"].reopen({
       this.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
     },
     showLocationSelector: function() {
+      debugger;
       if (Discourse.User.current()) {
         // below calls method defined in application_route
         this.send('showLocationSelectorModal', this.get('model'));
