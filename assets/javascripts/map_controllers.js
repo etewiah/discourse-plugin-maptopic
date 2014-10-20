@@ -2,16 +2,6 @@
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   needs: ['composer'],
 
-  // selectedTopicPost: function(){
-  //   if (this.get('selectedTopic')) {
-  //     var selectedTopicPost = this.get('selectedTopic.post_stream.posts').findBy('post_number', 1);
-  //     debugger;
-  //     return selectedTopicPost;
-  //   } else{
-  //     return false;
-  //   };
-  // }.property('selectedTopic'),
-
   actions: {
     // had meant to show topic details next to index map - might come back to this
     // showPost: function(){
@@ -60,10 +50,10 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     },
     topicSelected: function(detailsForMarker) {
       var topic = Discourse.Topic.create(
-       detailsForMarker.topic
+        detailsForMarker.topic
       );
       Discourse.URL.routeTo(topic.get('url'));
-// above fixed issue with suggested topics for a topic not being routed to properly..
+      // above fixed issue with suggested topics for a topic not being routed to properly..
 
       // this.transitionToRoute('topic.fromParams', topic);
       // above doesn't work
@@ -71,8 +61,30 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       // this.transitionToRoute('topic.fromParams', Discourse.Topic.create({
       //   id: detailsForMarker.topic.id
       // }));
+    },
+    sharePopup: function(target, url) {
+      window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=600,height=' + Discourse.ShareLink.popupHeight(target));
+      return false;
     }
   },
+  cityShareLinks: function() {
+    var link = window.location.href;
+    var title = "What's being said about " + this.get('content.city').capitalize();
+    // if (link.indexOf("/") === 0) {
+    //   link = window.location.protocol + "//" + window.location.host + link;
+    // }
+    return Discourse.SiteSettings.share_links.split('|').map(function(i) {
+      if (Discourse.ShareLink.supportedTargets.indexOf(i) >= 0) {
+        return Discourse.ShareLink.create({
+          target: i,
+          link: link,
+          topicTitle: title
+        });
+      } else {
+        return null;
+      }
+    }, this).compact();
+  }.property('content'),
   markers: function() {
     var topics = this.get('content.geo_topics');
     var currentMarkerValues = [];
@@ -87,8 +99,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
           location: t.primary_location
         };
         currentMarkerValues.push(markerInfo);
-      } else {
-      }
+      } else {}
       // p.user = users[p.user_id];
     });
     return currentMarkerValues;

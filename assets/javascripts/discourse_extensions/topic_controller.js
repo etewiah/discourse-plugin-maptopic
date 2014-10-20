@@ -1,5 +1,25 @@
 require("discourse/controllers/topic")["default"].reopen({
   needs: ['map'],
+
+  topicShareLinks: function() {
+    var link = this.get('url');
+    if (link.indexOf("/") === 0) {
+      link = window.location.protocol + "//" + window.location.host + link;
+    }
+    debugger;
+    return Discourse.SiteSettings.share_links.split('|').map(function(i) {
+      if (Discourse.ShareLink.supportedTargets.indexOf(i) >= 0) {
+        return Discourse.ShareLink.create({
+          target: i,
+          link: link,
+          topicTitle: this.get('title')
+        });
+      } else {
+        return null;
+      }
+    }, this).compact();
+  }.property('url'),
+
   setUserPreferredCity: function() {
     // TODO set currentCity for map here (and also as custom user field)
     // need to get geocoder working first though..
@@ -74,6 +94,10 @@ require("discourse/controllers/topic")["default"].reopen({
   // }.observes('topic'),
 
   actions: {
+    sharePopup: function(target, url) {
+      window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=600,height=' + Discourse.ShareLink.popupHeight(target));
+      return false;
+    },
     // called when marker on topics map is clicked:
     showPlaceDetails: function(detailsForMarker) {
       // this.send('showLocationSelectorModal',detailsForMarker);

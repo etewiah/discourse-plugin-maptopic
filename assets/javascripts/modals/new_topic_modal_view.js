@@ -7,7 +7,7 @@ Discourse.NewTopicModalView = Discourse.ModalBodyView.extend({
     if (topicType && topicType === "question") {
       return "Ask for information regarding " + cityName;
     } else if (topicType && topicType === "info") {
-      return "Add tips about " + cityName;
+      return "Start a conversation about " + cityName;
     } else {
       debugger;
     };

@@ -6,9 +6,9 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
   titlePrompt: function() {
     var topicType = this.get('model.capability');
     if (topicType && topicType === "question") {
-      return "Your question.";
+      return "Your question";
     } else if (topicType && topicType === "info") {
-      return "A short summary of your tip.";
+      return "Conversation title";
     } else {
       debugger;
     };
@@ -16,9 +16,9 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
   detailsPrompt: function() {
     var topicType = this.get('model.capability');
     if (topicType && topicType === "question") {
-      return "Some details to help people answer your question better.";
+      return "Some details to help people answer your question better";
     } else if (topicType && topicType === "info") {
-      return "More details. ( You can select relevant places in the next page.)";
+      return "The first post ( You can select places on the map later )";
     } else {
       debugger;
     };

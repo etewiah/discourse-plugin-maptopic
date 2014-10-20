@@ -1,3 +1,19 @@
+.standalone-share-links{
+  font-size: xx-large;
+  float:right;
+  display: inline-flex;
+  flex-direction: row-reverse;
+  width: 100%;
+  margin-bottom: 10px;
+  a{
+    color:#090
+  }
+  .social-link{
+    margin-left:20px;
+  }
+
+}
+
 .btn-klavado{
     background-color: #090;
 }

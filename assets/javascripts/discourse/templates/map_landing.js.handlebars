@@ -9,12 +9,14 @@
 {{!-- {{#if isAdmin}}
 {{/if}}
  --}}
-<span style="margin-left:7%">
+<span style="float:right">
             <button class='btn btn-large btn-primary' style="background: #090;" {{action showNewTopicModal currentCitySelection 'info'}}>
-            Add city tips
+            <i class="fa fa-comments"></i>
+            Start city conversation
           </button>
           <button class='btn btn-large btn-primary' style="background: #090;" {{action showNewTopicModal currentCitySelection 'question'}}>
-            Ask for information
+          <i class="fa fa-info"></i>
+            Ask for city info
           </button>
 </span>
 

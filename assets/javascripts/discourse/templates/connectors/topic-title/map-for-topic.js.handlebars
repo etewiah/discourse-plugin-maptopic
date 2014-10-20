@@ -17,8 +17,14 @@
 
       <div class="map-for-topic-buttons" style="float: left;width: 20%;">
         <h2 style="line-height: 32px;margin-bottom:5px;">
-           <button class='btn btn-primary btn-klavado btn-map-for-topic' style="text-align: left;float: right;width: 90%;" {{action showLocationSelector}}><i class="fa fa-map-marker"></i>
-            Add more places
+
+          <div class="standalone-share-links">
+            {{each topicShareLinks itemView='share-link'}}
+
+          </div>
+
+          <button class='btn btn-primary btn-klavado btn-map-for-topic' style="text-align: left;float: right;width: 90%;" {{action showLocationSelector}}><i class="fa fa-map-marker"></i>
+            Add places
           </button>
 
           <button class='btn btn-primary btn-klavado btn-map-for-topic' style="text-align: left;float: right;width: 90%;margin-top:5px" {{action showInvite}}><i class="fa fa-users"></i>
@@ -28,7 +34,6 @@
           <button class='btn btn-primary btn-klavado btn-map-for-topic' style="text-align: left;float: right;width: 90%;margin-top:5px" {{action showInvite}}><i class="fa fa-link"></i>
               Share
           </button>
-
 
         </h2>
       </div>

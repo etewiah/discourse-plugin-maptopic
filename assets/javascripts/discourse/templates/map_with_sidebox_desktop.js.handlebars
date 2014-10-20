@@ -9,13 +9,19 @@
   </div>
   <div style="" class="index-map-info">
 
-    <div class="alert alert-info" style="font-weight: normal;height:580px">
+    <div class="" style=" padding: 8px 0px 8px 14px;height:580px">
+
+
+          <div class="standalone-share-links">
+            {{each cityShareLinks itemView='share-link'}}
+
+          </div>
+
+
     {{!-- <p>Klavado is like a reddit for places - it lets you find and talk about places in a simple manner.</p> --}}
     <p>Klavado is a new way of simplifying the things you would normally do with a map - like finding and sharing places. </p>
     <p> If you are visiting a new city, just ask your friends to create a 'klavado' of their favourite places.  You can then have conversations about these places without having to switch between different websites.</p>
     <p>The markers on the map represent recent conversations about the place marked.  You can find more conversations by searching ( {{fa-icon search label="search.title"}} in the top right menu on this page ) or by browsing this {{#link-to "discovery.top"}}list.{{/link-to}}</p>
-
-    <p>To start a conversation, just click anywhere on the map or use the searchbox on the map to find the place you want to talk about.</p>
 
     <p>Change to any city or town you wish by clicking <a {{ action showAddCityModal }}>here.</a> </p>
 
