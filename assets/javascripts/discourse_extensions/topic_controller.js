@@ -13,16 +13,6 @@ require("discourse/controllers/topic")["default"].reopen({
   }.observes('location'),
 
 
-  //   // If our current post is changed, notify the router
-  //   _currentPostChanged2: function() {
-  // debugger;
-  //     // var currentPost = this.get('currentPost');
-  //     // if (currentPost) {
-  //     //   this.send('postChangedRoute', currentPost);
-  //     // }
-  //   }.observes('currentPost'),
-
-
   // below will trigger if a new location is set through select_location_modal
   startLocationPost: function() {
     if (this.get('model.locationObject')) {

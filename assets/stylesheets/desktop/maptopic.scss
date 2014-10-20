@@ -1,4 +1,16 @@
+.topic-body {
+  width: 75%;
+}
+
 @media all and (min-width: 800px) {
+    .map-for-topic-buttons {
+        width: 20%;
+        float: left;
+    }
+    .map-for-topic {
+        width: 80%;
+        float: left;
+    }
     .index-map-info {
         width: 30%;
         float: left;

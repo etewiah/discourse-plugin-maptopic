@@ -1,29 +1,40 @@
-<div class="row" style="float: left;width: 100%;">
+<div class="row" style="float: left;width: 100%;margin-top:5px">
 
 {{#if model.isLocationTopic}}
 
     {{#if model.hasLocation}}
-      <div>
-          <h2 style="line-height: 32px;margin-bottom:5px;">
-{{!--           <small>Conversation started with : </small>
- --}}                <button class='btn btn-primary btn-klavado' style="float:none" {{action showLocationSelector}}>
-                  Add more places
-                </button>
 
-      <button class='btn btn-primary btn-klavado' style="float:none" {{action showInvite}}>
-          Invite your friends
-      </button>
+      <div class="map-for-topic" style="float: left;width: 80%;">
+      {{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
+      </div>
+
+    {{else}}
+      <div class="map-for-topic" style="float: left;width: 80%;">
+      {{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
+      showSearchBox=false geo=model.geo }} 
+      </div>
+    {{/if}}
+
+      <div class="map-for-topic-buttons" style="float: left;width: 20%;">
+        <h2 style="line-height: 32px;margin-bottom:5px;">
+           <button class='btn btn-primary btn-klavado btn-map-for-topic' style="text-align: left;float: right;width: 90%;" {{action showLocationSelector}}><i class="fa fa-map-marker"></i>
+            Add more places
+          </button>
+
+          <button class='btn btn-primary btn-klavado btn-map-for-topic' style="text-align: left;float: right;width: 90%;margin-top:5px" {{action showInvite}}><i class="fa fa-users"></i>
+              Invite your friends
+          </button>
+
+          <button class='btn btn-primary btn-klavado btn-map-for-topic' style="text-align: left;float: right;width: 90%;margin-top:5px" {{action showInvite}}><i class="fa fa-link"></i>
+              Share
+          </button>
+
 
         </h2>
       </div>
 
 
-      <div class="row" style="float: left;width: 100%;">
-        
-      {{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
-      </div>
-
-    {{else}}
+{{!--     {{else}}
       <div>
           <h2 style="line-height: 32px;margin-bottom:5px;">
           <small> </small>
@@ -48,7 +59,7 @@
 
       </div>
 
-    {{/if}}
+    {{/if}} --}}
 
 {{else}}
     <div>
