@@ -30,5 +30,28 @@
     </div>
 
   </div>
+</div>
 
+<div>
+            {{#if cityQuestions}}
+              <div id='suggested-topics'>
+                <h3>Questions regarding ..</h3>
+                <div class='topics'>
+                  {{basic-topic-list topics=cityQuestions postsAction="showTopicEntrance"}}
+                </div>
+                <h3>{{{view.browseMoreMessage}}}</h3>
+              </div>
+            {{/if}}
+
+
+
+            {{#if content}}
+              <div id='suggested-topics'>
+                <h3>Other conversations</h3>
+                <div class='topics'>
+                  {{basic-topic-list topics=otherTopics postsAction="showTopicEntrance"}}
+                </div>
+                <h3>{{{view.browseMoreMessage}}}</h3>
+              </div>
+            {{/if}}
 </div>

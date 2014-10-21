@@ -86,12 +86,12 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     }, this).compact();
   }.property('content'),
   markers: function() {
-    var topics = this.get('content.geo_topics');
+    var city_conversations = this.get('content.geo_topics');
     var currentMarkerValues = [];
     // debugger;
     // chapuzo to ensure I maximise no of markers on index page
     // will include posts in topic...
-    topics.forEach(function(t) {
+    city_conversations.forEach(function(t) {
       if (t.primary_location) {
         var markerInfo = {
           context: 'index_view',
@@ -103,7 +103,37 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       // p.user = users[p.user_id];
     });
     return currentMarkerValues;
-  }.property('content')
+  }.property('content'),
+  otherTopics: function() {
+    var other_conversations = this.get('content.other_conversations');
+    var otherTopics = [];
+    other_conversations.forEach(function(t) {
+      var topicObject = Discourse.Topic.create(t.topic);
+      // basic-topic-list needs fancy_title
+      topicObject.set('fancy_title', topicObject.get('title'));
+      otherTopics.push(topicObject);
+    });
+    return otherTopics;
+  }.property('content'),
+  cityQuestions: function() {
+    var topics = this.get('content.geo_topics');
+    var cityQuestions = [];
+    topics.forEach(function(t) {
+      if (t.capability === "question") {
+        var topicObject = Discourse.Topic.create(t.topic);
+        // basic-topic-list needs fancy_title
+        topicObject.set('fancy_title', topicObject.get('title'));
+        cityQuestions.push(topicObject);
+      } 
+    });
+    debugger;
+    if (cityQuestions.length > 0) {
+          return cityQuestions;
+    } else{
+      return null;
+    };
+
+  }.property('content'),
 });
 
 // not using object controller as I won't be setting its content..

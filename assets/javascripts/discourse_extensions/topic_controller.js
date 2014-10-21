@@ -6,7 +6,6 @@ require("discourse/controllers/topic")["default"].reopen({
     if (link.indexOf("/") === 0) {
       link = window.location.protocol + "//" + window.location.host + link;
     }
-    debugger;
     return Discourse.SiteSettings.share_links.split('|').map(function(i) {
       if (Discourse.ShareLink.supportedTargets.indexOf(i) >= 0) {
         return Discourse.ShareLink.create({

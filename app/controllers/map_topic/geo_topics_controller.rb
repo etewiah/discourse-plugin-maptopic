@@ -20,23 +20,28 @@ module MapTopic
         city = geo_key.city_lower
       end
 
-      @geo_topics = MapTopic::TopicGeo.where(:city_lower => city)
-      # if @geo_topics.length < 1
+      @city_conversations = MapTopic::TopicGeo.where(:city_lower => city)
+
+      @other_conversations = MapTopic::TopicGeo.where("city_lower <> ?", city).limit(6)
+      # if @city_conversations.length < 1
       #   # when a random city has been passed in, lets create a key for it
       #   ensure_geo_key_exists city
       # end
 
-      # return render json: @geo_topics, each_serializer: MapTopic::GeoTopicSummarySerializer
-      serialized_geo_topics = serialize_data(@geo_topics, MapTopic::GeoTopicSummarySerializer)
+      # return render json: @city_conversations, each_serializer: MapTopic::GeoTopicSummarySerializer
+      city_conversations_serialized = serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer)
+      other_conversations_serialized = serialize_data(@other_conversations, MapTopic::GeoTopicSummarySerializer)
+
       return render_json_dump({
                                 "geo_key" => geo_key,
-                                "geo_topics" => serialized_geo_topics,
+                                "other_conversations" => other_conversations_serialized,
+                                "geo_topics" => city_conversations_serialized,
                                 "city" => city
       })
 
       # 2 calls below are the same:
-      # render_json_dump(serialize_data(@geo_topics, MapTopic::GeoTopicSummarySerializer))
-      # render_serialized(@geo_topics, MapTopic::GeoTopicSummarySerializer)
+      # render_json_dump(serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer))
+      # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
 
     end
 
