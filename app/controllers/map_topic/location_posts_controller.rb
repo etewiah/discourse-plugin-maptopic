@@ -112,7 +112,7 @@ module MapTopic
         location_topic.save!
 
         topic = @post.topic
-        ensure_category location.country, location.city, topic
+        ensure_category location.country, location.city, topic, ""
 
       end
 
