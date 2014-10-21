@@ -99,7 +99,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     city_conversations.forEach(function(t) {
       if (t.primary_location) {
         var markerInfo = {
-          context: 'index_view',
+          // context: 'index_view',
           topic: t.topic,
           location: t.primary_location
         };
@@ -232,34 +232,34 @@ Discourse.MapController = Discourse.Controller.extend({
   // below updates the citySelectionItems
   citySelectionItemsWithUrls: function() {
     var selectionItems = Discourse.GeoTopic.getGeoIndexList();
-//     var lsGeoIndexListUpToDate = true;
-//     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
-//     if (lsGeoIndexList) {
-//       var selectionItems = JSON.parse(lsGeoIndexList);
-//     } else {
-//       lsGeoIndexListUpToDate = false;
-// // todo - get from server
-//       var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
-//       selectionItems.forEach(function(item) {
-//         item.url = this.get('target').generate('map.fromOneParam', {
-//           city: item.value
-//         });
-//       }, this);
+    //     var lsGeoIndexListUpToDate = true;
+    //     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
+    //     if (lsGeoIndexList) {
+    //       var selectionItems = JSON.parse(lsGeoIndexList);
+    //     } else {
+    //       lsGeoIndexListUpToDate = false;
+    // // todo - get from server
+    //       var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+    //       selectionItems.forEach(function(item) {
+    //         item.url = this.get('target').generate('map.fromOneParam', {
+    //           city: item.value
+    //         });
+    //       }, this);
 
-//     }
+    //     }
     var currentCitySelection = this.get('currentCitySelection');
     var currentCityInSelectionItems = selectionItems.findBy('value', currentCitySelection.value);
     if (!currentCityInSelectionItems) {
       debugger;
       selectionItems.pushObject(currentCitySelection);
-      lsGeoIndexListUpToDate = false;
+      // lsGeoIndexListUpToDate = false;
     };
-    if (!lsGeoIndexListUpToDate) {
-      Discourse.KeyValueStore.set({
-        key: 'lsGeoIndexList',
-        value: JSON.stringify(selectionItems)
-      });
-    };
+    // if (!lsGeoIndexListUpToDate) {
+    Discourse.KeyValueStore.set({
+      key: 'lsGeoIndexList',
+      value: JSON.stringify(selectionItems)
+    });
+    // };
     return selectionItems;
   }.property('currentCitySelection'),
 

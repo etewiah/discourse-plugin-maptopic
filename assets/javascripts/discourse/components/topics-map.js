@@ -147,7 +147,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
       return cityObject;
     }
-  }.property('currentCity'),
+  }.property('currentCity','geo'),
 
   renderMap: function() {
     var currentMarkerValues = this.get('markerValues');
@@ -271,9 +271,11 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     }, 1000);
   },
 
+  // having min and maxZoom can lead to a shitty experience if someone really wants to add something outside a city
+  // in 2 minds about it..
   mapOptions: {
-    maxZoom: 20,
-    minZoom: 9,
+    // maxZoom: 20,
+    // minZoom: 9,
     zoom: 15,
     // center: mapCenter,
     // mapTypeId: google.maps.MapTypeId.ROADMAP
@@ -290,15 +292,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     var cityDetails = this.get('cityDetails');
     var mapCenter = new google.maps.LatLng(cityDetails.latitude, cityDetails.longitude);
 
-    // var zoom = 15;
-
-    // var styles = [{
-    //   "featureType": "poi",
-    //   "elementType": "labels",
-    //   "stylers": [{
-    //     "visibility": "off"
-    //   }]
-    // }];
 
     this.mapOptions.center = mapCenter;
     this.mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
@@ -316,9 +309,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   renderMapWithMarkers: function() {
+    var displayContext = this.get('displayContext');
     var currentMarkerValues = this.get('markerValues');
-    var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
-      currentMarkerValues[0].longitude);
+    // var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
+    //   currentMarkerValues[0].longitude);
+    var cityDetails = this.get('cityDetails');
+    var mapCenter = new google.maps.LatLng(cityDetails.latitude, cityDetails.longitude);
 
     this.mapOptions.center = mapCenter;
     this.mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
@@ -336,7 +332,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     $.each(currentMarkerValues, function(index, detailsForMarker) {
       // debugger;
       var addressString = "";
-      if (detailsForMarker.context === 'topic_view') {
+      if (displayContext === 'topicView') {
         // debugger;
         // using topic icon everywhere till I figure out a decent scheme...
         var icon = that.topic_icon;
@@ -344,7 +340,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var title = detailsForMarker.location.title;
         var dataObject = detailsForMarker.posts;
         var dataObjectType = 'post';
-      } else if (detailsForMarker.context === 'index_view') {
+      } else if (displayContext === 'indexView') {
         var icon = that.topic_icon;
         // var userName = detailsForMarker.topic.get('posters.firstObject.user.username') || detailsForMarker.topic.get('details.created_by.username');
         var title = detailsForMarker.topic.title;
@@ -432,22 +428,24 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     });
 
-    if (this.get('markers.length') > 1) {
-      this.map.fitBounds(bounds);
-    } else {
-      // if there is only one marker, set center to be that one
-      // this.map.setZoom(zoom);
-      // this.map.setCenter(mapCenter);
-      // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
-      this.map.fitBounds(bounds);
-      // seems silly but I really have to do all this to get the zoom looking half decent
-      google.maps.event.addListenerOnce(this.map, 'bounds_changed', function(event) {
-        if (this.getZoom() > 15) {
-          this.setZoom(15);
-        }
-      });
-    }
-
+// for indexView, I will not fitBounds in case
+    // if (displayContext === 'topicView') {
+      if (this.get('markers.length') > 1) {
+        this.map.fitBounds(bounds);
+      } else {
+        // if there is only one marker, set center to be that one
+        // this.map.setZoom(zoom);
+        // this.map.setCenter(mapCenter);
+        // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+        this.map.fitBounds(bounds);
+        // seems silly but I really have to do all this to get the zoom looking half decent
+        google.maps.event.addListenerOnce(this.map, 'bounds_changed', function(event) {
+          if (this.getZoom() > 15) {
+            this.setZoom(15);
+          }
+        });
+      };
+    // };
     google.maps.event.addListener(this.map, 'click', function(event) {
       that.mapClicked(event.latLng.lat(), event.latLng.lng());
     });
@@ -539,7 +537,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // this.get("controller").addEvent(lat, lng);
   },
   placeSelected: function(event, detailsForMarker) {
-    // if (detailsForMarker.context === 'index_view'){
+    // if (displayContext === 'index_view'){
 
     // }
     this.sendAction('markerSelectedAction', detailsForMarker);

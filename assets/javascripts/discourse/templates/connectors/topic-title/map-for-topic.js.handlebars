@@ -5,12 +5,12 @@
     {{#if model.hasLocation}}
 
       <div class="map-for-topic" style="float: left;width: 80%;">
-      {{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
+      {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
       </div>
 
     {{else}}
       <div class="map-for-topic" style="float: left;width: 80%;">
-      {{ topics-map  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
+      {{ topics-map displayContext="topicView"  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
       showSearchBox=false geo=model.geo }} 
       </div>
     {{/if}}
