@@ -20,16 +20,18 @@ require("discourse/controllers/topic")["default"].reopen({
   }.property('url'),
 
   setUserPreferredCity: function() {
-    // TODO set currentCity for map here (and also as custom user field)
-    // need to get geocoder working first though..
-    if (this.get('location.city')) {
+    var geo =  this.get('model.geo');
+    if (geo) {
+      // below should really be geo.bounds_value but in the case of belfast
+      // its wrong - should investigate
+      var boundsValue = geo.city_lower;
+
       var mapController = this.get('controllers.map');
-      // debugger;
       // setting below should ensure that map.route uses this as default city..
-      mapController.set('currentCity', this.get('location.city').toLowerCase());
+      mapController.set('currentCity', boundsValue);
     }
     // this._super();
-  }.observes('location'),
+  }.observes('model.geo'),
 
 
   // below will trigger if a new location is set through select_location_modal

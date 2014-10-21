@@ -35,7 +35,7 @@ module MapTopic
       return render_json_dump({
                                 "geo_key" => geo_key,
                                 "other_conversations" => other_conversations_serialized,
-                                "geo_topics" => city_conversations_serialized,
+                                "city_conversations" => city_conversations_serialized,
                                 "city" => city
       })
 

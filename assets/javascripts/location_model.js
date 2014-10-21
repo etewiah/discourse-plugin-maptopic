@@ -3,6 +3,24 @@ Discourse.GeoTopic = Discourse.Model.extend({
 
 });
 Discourse.GeoTopic.reopenClass({
+  getGeoIndexList: function(){
+    // var lsGeoIndexListUpToDate = true;
+    var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
+    if (lsGeoIndexList) {
+      var selectionItems = JSON.parse(lsGeoIndexList);
+    } else {
+      // lsGeoIndexListUpToDate = false;
+// todo - get from server
+      var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+      selectionItems.forEach(function(item) {
+        item.url = this.get('target').generate('map.fromOneParam', {
+          city: item.value
+        });
+      }, this);
+
+    }
+    return selectionItems;
+  },
   // TODO **  make use of result.place_id  (google place id...)
   geoTopicsForCity: function(city) {
     if (!city) {

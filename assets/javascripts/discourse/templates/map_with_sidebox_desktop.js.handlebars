@@ -19,8 +19,10 @@
 
 
     {{!-- <p>Klavado is like a reddit for places - it lets you find and talk about places in a simple manner.</p> --}}
-    <p>Klavado is a new way of simplifying the things you would normally do with a map - like finding and sharing places. </p>
-    <p> If you are visiting a new city, just ask your friends to create a 'klavado' of their favourite places.  You can then have conversations about these places without having to switch between different websites.</p>
+{{!--     <p>Klavado is a new way of simplifying the things you would normally do with a map - like finding and sharing places. </p> --}}
+    <p>Klavado is the simplest way to have a discussion about places on a map.  On one page, multiple people can add and remove places as well add notes and see what else is happening close by. </p>
+
+    <p> If you are visiting a new city, for example, just ask your friends to create a 'klavado' of their favourite places.  You can then have conversations about these places without having to switch between different websites.</p>
     <p>The markers on the map represent recent conversations about the place marked.  You can find more conversations by searching ( {{fa-icon search label="search.title"}} in the top right menu on this page ) or by browsing this {{#link-to "discovery.top"}}list.{{/link-to}}</p>
 
     <p>Change to any city or town you wish by clicking <a {{ action showAddCityModal }}>here.</a> </p>
@@ -34,8 +36,8 @@
 
 <div>
             {{#if cityQuestions}}
-              <div id='suggested-topics'>
-                <h3>Questions regarding ..</h3>
+              <div class="suggested-topics">
+                <h3>{{ cityQuestionsTitle }}</h3>
                 <div class='topics'>
                   {{basic-topic-list topics=cityQuestions postsAction="showTopicEntrance"}}
                 </div>
@@ -46,7 +48,7 @@
 
 
             {{#if content}}
-              <div id='suggested-topics'>
+              <div class="suggested-topics">
                 <h3>Other conversations</h3>
                 <div class='topics'>
                   {{basic-topic-list topics=otherTopics postsAction="showTopicEntrance"}}

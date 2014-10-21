@@ -85,8 +85,13 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       }
     }, this).compact();
   }.property('content'),
+  cityQuestionsTitle: function() {
+    if (this.get('content.city')) {
+      return "Questions regarding " + this.get('content.city').capitalize();
+    };
+  }.property('content.city'),
   markers: function() {
-    var city_conversations = this.get('content.geo_topics');
+    var city_conversations = this.get('content.city_conversations');
     var currentMarkerValues = [];
     // debugger;
     // chapuzo to ensure I maximise no of markers on index page
@@ -116,7 +121,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     return otherTopics;
   }.property('content'),
   cityQuestions: function() {
-    var topics = this.get('content.geo_topics');
+    var topics = this.get('content.city_conversations');
     var cityQuestions = [];
     topics.forEach(function(t) {
       if (t.capability === "question") {
@@ -124,12 +129,11 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         // basic-topic-list needs fancy_title
         topicObject.set('fancy_title', topicObject.get('title'));
         cityQuestions.push(topicObject);
-      } 
+      }
     });
-    debugger;
     if (cityQuestions.length > 0) {
-          return cityQuestions;
-    } else{
+      return cityQuestions;
+    } else {
       return null;
     };
 
@@ -227,22 +231,35 @@ Discourse.MapController = Discourse.Controller.extend({
 
   // below updates the citySelectionItems
   citySelectionItemsWithUrls: function() {
-    var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
-    selectionItems.forEach(function(item) {
-      item.url = this.get('target').generate('map.fromOneParam', {
-        currentCity: item.value
-      });
-      // "http://google.com";
-    }, this);
-    // below will add a city from the url that is not in the list:
-    // now doing that closer to the bone (in topic_list_model where I get city long etc from server..)
-    // if(!selectionItems.findBy('value', this.get('currentCity').toLowerCase())){
-    //   selectionItems.pushObject({
-    //     displayString: this.get('currentCity').capitalize(),
-    //     value: this.get('currentCity').toLowerCase()
+    var selectionItems = Discourse.GeoTopic.getGeoIndexList();
+//     var lsGeoIndexListUpToDate = true;
+//     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
+//     if (lsGeoIndexList) {
+//       var selectionItems = JSON.parse(lsGeoIndexList);
+//     } else {
+//       lsGeoIndexListUpToDate = false;
+// // todo - get from server
+//       var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+//       selectionItems.forEach(function(item) {
+//         item.url = this.get('target').generate('map.fromOneParam', {
+//           city: item.value
+//         });
+//       }, this);
 
-    //   });
-    // }
+//     }
+    var currentCitySelection = this.get('currentCitySelection');
+    var currentCityInSelectionItems = selectionItems.findBy('value', currentCitySelection.value);
+    if (!currentCityInSelectionItems) {
+      debugger;
+      selectionItems.pushObject(currentCitySelection);
+      lsGeoIndexListUpToDate = false;
+    };
+    if (!lsGeoIndexListUpToDate) {
+      Discourse.KeyValueStore.set({
+        key: 'lsGeoIndexList',
+        value: JSON.stringify(selectionItems)
+      });
+    };
     return selectionItems;
   }.property('currentCitySelection'),
 
