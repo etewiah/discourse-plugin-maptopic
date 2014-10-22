@@ -20,6 +20,7 @@ module MapTopic
         city = geo_key.city_lower
       end
 
+# TODO - make sure this query does not return unlisted or private conversations..
       @city_conversations = MapTopic::TopicGeo.where(:city_lower => city)
 
       @other_conversations = MapTopic::TopicGeo.where("city_lower <> ?", city).limit(6)

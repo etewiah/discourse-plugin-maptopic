@@ -3,7 +3,7 @@ Discourse.GeoTopic = Discourse.Model.extend({
 
 });
 Discourse.GeoTopic.reopenClass({
-  getGeoIndexList: function(){
+  getGeoIndexList: function(router){
     // var lsGeoIndexListUpToDate = true;
     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
     if (lsGeoIndexList) {
@@ -13,7 +13,7 @@ Discourse.GeoTopic.reopenClass({
 // todo - get from server
       var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
       selectionItems.forEach(function(item) {
-        item.url = this.get('target').generate('map.fromOneParam', {
+        item.url =  router.generate('map.fromOneParam', {
           city: item.value
         });
       }, this);

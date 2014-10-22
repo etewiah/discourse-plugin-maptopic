@@ -231,7 +231,9 @@ Discourse.MapController = Discourse.Controller.extend({
 
   // below updates the citySelectionItems
   citySelectionItemsWithUrls: function() {
-    var selectionItems = Discourse.GeoTopic.getGeoIndexList();
+    debugger;
+    var router = this.get('target');
+    var selectionItems = Discourse.GeoTopic.getGeoIndexList(router);
     //     var lsGeoIndexListUpToDate = true;
     //     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
     //     if (lsGeoIndexList) {
