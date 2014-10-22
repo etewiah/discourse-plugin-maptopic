@@ -1,8 +1,28 @@
 // Discourse.MapControllerMixin = Em.Mixin.create({
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
-  needs: ['composer'],
+  needs: ['composer','map'],
 
   actions: {
+    showNewTopicModal: function(topicType) {
+      if (!Discourse.User.current()) {
+        this.send('showLogin');
+        return;
+      }
+      var geo = {};
+      // in future might allow country bounds etc..
+      var currentCitySelection = this.get('controllers.map.currentCitySelection');
+
+      geo.bounds_value = currentCitySelection.value.toLowerCase();
+      geo.bounds_type = "city";
+      geo.bounds_range = 20;
+      geo.latitude = currentCitySelection.latitude
+      geo.longitude = currentCitySelection.longitude
+      geo.city_lower = currentCitySelection.value.toLowerCase();
+      // geo.country_lower = geo_key.country_lower
+      geo.display_name = currentCitySelection.displayString;
+      geo.capability = topicType;
+      this.send('showDiscourseModal', 'newTopicModal', geo);
+    },
     // had meant to show topic details next to index map - might come back to this
     // showPost: function(){
 
@@ -16,25 +36,49 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     // can be triggered by clicking on infowindow after either doubleclicking map
     // use hovering over marker from places search
     startLocationTopic: function(locationType, locationDetails, city, title) {
+      if (!Discourse.User.current()) {
+        this.send('showLogin');
+        return;
+      }
+
       if (locationType === "placeSearch") {
         var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
       } else if (locationType === "gmapLocation") {
         var locationObject = Discourse.Location.locationFromGmap(locationDetails);
         locationObject.title = title;
       }
-      // this.set('locationObject', locationObject);
-      if (Discourse.User.current()) {
-        var composerController = this.get('controllers.composer');
-        var self = this;
-        composerController.open({
-          action: Discourse.Composer.CREATE_TOPIC,
-          draftKey: "new_topic"
-        }).then(function() {
-          composerController.content.set('locationObject', locationObject);
-        });
-      } else {
-        this.send('showLogin');
-      }
+
+      debugger;
+
+      var geo = {};
+      geo.initial_location = locationObject;
+      // in future might allow country bounds etc..
+      var currentCitySelection = this.get('controllers.map.currentCitySelection');
+
+      geo.bounds_value = currentCitySelection.value.toLowerCase();
+      geo.bounds_type = "city";
+      geo.bounds_range = 20;
+      geo.latitude = currentCitySelection.latitude
+      geo.longitude = currentCitySelection.longitude
+      geo.city_lower = currentCitySelection.value.toLowerCase();
+      // geo.country_lower = geo_key.country_lower
+      geo.display_name = currentCitySelection.displayString;
+      geo.capability = "info";
+      this.send('showDiscourseModal', 'newTopicModal', geo);
+
+
+      // if (Discourse.User.current()) {
+      //   var composerController = this.get('controllers.composer');
+      //   var self = this;
+      //   composerController.open({
+      //     action: Discourse.Composer.CREATE_TOPIC,
+      //     draftKey: "new_topic"
+      //   }).then(function() {
+      //     composerController.content.set('locationObject', locationObject);
+      //   });
+      // } else {
+      //   this.send('showLogin');
+      // }
       //return true to bubble up to route...
       return false;
     },
@@ -156,33 +200,25 @@ Discourse.MapController = Discourse.Controller.extend({
 
 
   actions: {
-    showNewTopicModal: function(currentCitySelection, topicType) {
-      if (!Discourse.User.current()) {
-        this.send('showLogin');
-        return;
-      }
-      var geo = {};
-      // in future might allow country bounds etc..
+    // showNewTopicModal: function(currentCitySelection, topicType) {
+    //   if (!Discourse.User.current()) {
+    //     this.send('showLogin');
+    //     return;
+    //   }
+    //   var geo = {};
+    //   // in future might allow country bounds etc..
 
-      geo.bounds_value = currentCitySelection.value.toLowerCase();
-      geo.bounds_type = "city";
-      geo.bounds_range = 20;
-      geo.latitude = currentCitySelection.latitude
-      geo.longitude = currentCitySelection.longitude
-      geo.city_lower = currentCitySelection.value.toLowerCase();
-      // geo.country_lower = geo_key.country_lower
-      geo.display_name = currentCitySelection.displayString;
-      // if(topicType === "question"){
-      //   geo.capability = "question";
-      // }
-      geo.capability = topicType;
-      // newTopicData = {
-      //   topicType: topicType,
-      //   currentCitySelection: geo
-      // }
-      this.send('showDiscourseModal', 'newTopicModal', geo);
-
-    },
+    //   geo.bounds_value = currentCitySelection.value.toLowerCase();
+    //   geo.bounds_type = "city";
+    //   geo.bounds_range = 20;
+    //   geo.latitude = currentCitySelection.latitude
+    //   geo.longitude = currentCitySelection.longitude
+    //   geo.city_lower = currentCitySelection.value.toLowerCase();
+    //   // geo.country_lower = geo_key.country_lower
+    //   geo.display_name = currentCitySelection.displayString;
+    //   geo.capability = topicType;
+    //   this.send('showDiscourseModal', 'newTopicModal', geo);
+    // },
     startConversation: function() {
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
@@ -231,7 +267,6 @@ Discourse.MapController = Discourse.Controller.extend({
 
   // below updates the citySelectionItems
   citySelectionItemsWithUrls: function() {
-    debugger;
     var router = this.get('target');
     var selectionItems = Discourse.GeoTopic.getGeoIndexList(router);
     //     var lsGeoIndexListUpToDate = true;

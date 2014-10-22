@@ -222,7 +222,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           '<small>' + place.vicinity + '</small>' +
           '</div>' +
           '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-          'Start talking</button>' +
+          'Start conversation</button>' +
           '</form>' +
           '</div>';
 
@@ -485,10 +485,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             results[0].formatted_address +
             '</h4>' +
             '<form id="clickedlocation-form">' +
-            '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start talking:</div>' +
+            '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start conversation:</div>' +
             '<input id="clickedlocation-name" type="text" /><br>' +
             '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-            'Start talking</button></form>' +
+            'Start conversation</button></form>' +
             '</div>';
 
           infowindowForClickedLocation = new google.maps.InfoWindow({

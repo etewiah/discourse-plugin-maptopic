@@ -9,16 +9,27 @@
   </div>
   <div style="" class="index-map-info">
 
-    <div class="" style=" padding: 8px 0px 8px 14px;height:580px">
+    <div class="" style=" padding: 0px 0px 8px 14px;">
 
 
+    <div>
           <div class="standalone-share-links">
             {{each cityShareLinks itemView='share-link'}}
-
           </div>
 
+          <button class='btn btn-primary btn-map-for-index btn-klavado' style="" {{action showNewTopicModal  'info'}}>
+            <i class="fa fa-comments"></i>
+            Start conversation
+          </button>
+          <button class='btn btn-primary btn-map-for-index btn-klavado' style="" {{action showNewTopicModal  'question'}}>
+          <i class="fa fa-info"></i>
+            Ask for info
+          </button>
+    </div>
 
-    {{!-- <p>Klavado is like a reddit for places - it lets you find and talk about places in a simple manner.</p> --}}
+
+    <div style="float:left;margin-top:14px;">
+          {{!-- <p>Klavado is like a reddit for places - it lets you find and talk about places in a simple manner.</p> --}}
 {{!--     <p>Klavado is a new way of simplifying the things you would normally do with a map - like finding and sharing places. </p> --}}
     <p>Klavado is the simplest way to have a discussion about places on a map.  On one page, multiple people can add and remove places as well add notes and see what else is happening close by. </p>
 
@@ -28,6 +39,7 @@
     <p>Change to any city or town you wish by clicking <a {{ action showAddCityModal }}>here.</a> </p>
 
     <p></p>
+    </div>
 
     </div>
 

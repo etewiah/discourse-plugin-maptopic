@@ -9,16 +9,19 @@
 
 .standalone-share-links{
   font-size: xx-large;
+  /*
   float:right;
   display: inline-flex;
   flex-direction: row-reverse;
-  width: 100%;
-  margin-bottom: 10px;
+  */
+  margin-bottom: 5px;
   a{
 /*    color:#090; */
   }
   .social-link{
-    margin-left:20px;
+    margin-top: 5px;
+    margin-right:20px;
+    float:left;
   }
 
 }

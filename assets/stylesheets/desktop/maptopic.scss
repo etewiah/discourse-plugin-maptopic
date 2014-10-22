@@ -1,8 +1,17 @@
 .topic-body {
-  width: 75%;
+    width: 75%;
 }
-
 @media all and (min-width: 800px) {
+    .btn-map-for-topic {
+        text-align: left;
+        float: right;
+        width: 100%;
+        margin-top:5px
+    }
+    .btn-map-for-index {
+        text-align: left;
+        margin-top:5px
+    }
     .map-for-topic-buttons {
         width: 20%;
         float: left;
