@@ -57,7 +57,7 @@ module MapTopic
 
     end
 
-
+# should no longer need to use set_location in location_topics...
     def set_location
       unless(params[:post_id] && params[:location] )
         render_error "incorrect params"
@@ -72,7 +72,6 @@ module MapTopic
         render status: :forbidden, json: false
         return
       end
-
       # TODO - use create_location private method...
       # TODO - find location which is close enough to be considered the same..
       location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
@@ -87,7 +86,7 @@ module MapTopic
       #   loc.title = params[:location_title] || "ll"
       # end
       location.save!
-
+binding.pry
 
       location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
       location_post.location_title = location.title

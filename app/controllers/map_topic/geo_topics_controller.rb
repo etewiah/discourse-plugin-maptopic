@@ -17,6 +17,9 @@ module MapTopic
       else
         # TODO - log how often this is being called - pretty expensive as should be called as little as possible
         geo_key = get_nearest_location_to_request
+        unless geo_key
+          return render_error "error finding city"
+        end
         city = geo_key.city_lower
       end
 

@@ -74,6 +74,8 @@ module MapTopic
       # json: { status: 'ok'}
     end
 
+
+# below deprecated?????
     def set_location
       unless(params[:topic_id] && params[:location] )
         render_error "incorrect params"

@@ -1,0 +1,663 @@
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=UTF-8
+Date: Wed, 22 Oct 2014 21:30:18 GMT
+Expires: Thu, 23 Oct 2014 21:30:18 GMT
+Cache-Control: public, max-age=86400
+Access-Control-Allow-Origin: *
+Server: mafe
+X-XSS-Protection: 1; mode=block
+X-Frame-Options: SAMEORIGIN
+Alternate-Protocol: 80:quic,p=0.01
+Transfer-Encoding: chunked
+
+{
+   "results" : [
+      {
+         "address_components" : [
+            {
+               "long_name" : "83",
+               "short_name" : "83",
+               "types" : [ "street_number" ]
+            },
+            {
+               "long_name" : "Aston University",
+               "short_name" : "Aston University",
+               "types" : [ "establishment" ]
+            },
+            {
+               "long_name" : "Aston Street",
+               "short_name" : "Aston St",
+               "types" : [ "route" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "postal_town" ]
+            },
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            },
+            {
+               "long_name" : "B4 7DA",
+               "short_name" : "B4 7DA",
+               "types" : [ "postal_code" ]
+            }
+         ],
+         "formatted_address" : "Aston University, 83 Aston Street, Birmingham, West Midlands B4 7DA, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.4858837,
+                  "lng" : -1.8901379
+               },
+               "southwest" : {
+                  "lat" : 52.485433,
+                  "lng" : -1.8910051
+               }
+            },
+            "location" : {
+               "lat" : 52.4858915,
+               "lng" : -1.8901512
+            },
+            "location_type" : "RANGE_INTERPOLATED",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.4870073302915,
+                  "lng" : -1.889222519708498
+               },
+               "southwest" : {
+                  "lat" : 52.4843093697085,
+                  "lng" : -1.891920480291502
+               }
+            }
+         },
+         "types" : [ "street_address" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "B4133",
+               "short_name" : "B4133",
+               "types" : [ "route" ]
+            },
+            {
+               "long_name" : "Aston University",
+               "short_name" : "Aston University",
+               "types" : [ "establishment" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "postal_town" ]
+            },
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            },
+            {
+               "long_name" : "B4 7DA",
+               "short_name" : "B4 7DA",
+               "types" : [ "postal_code" ]
+            }
+         ],
+         "formatted_address" : "Aston University, B4133, Birmingham, West Midlands B4 7DA, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.4858837,
+                  "lng" : -1.8901379
+               },
+               "southwest" : {
+                  "lat" : 52.485433,
+                  "lng" : -1.8910051
+               }
+            },
+            "location" : {
+               "lat" : 52.4856523,
+               "lng" : -1.8905623
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.4870073302915,
+                  "lng" : -1.889222519708498
+               },
+               "southwest" : {
+                  "lat" : 52.4843093697085,
+                  "lng" : -1.891920480291502
+               }
+            }
+         },
+         "types" : [ "route" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "B4 7DU",
+               "short_name" : "B4 7DU",
+               "types" : [ "postal_code" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "postal_town" ]
+            },
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Birmingham, Birmingham, West Midlands B4 7DU, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.4873391,
+                  "lng" : -1.8892371
+               },
+               "southwest" : {
+                  "lat" : 52.4861831,
+                  "lng" : -1.8919926
+               }
+            },
+            "location" : {
+               "lat" : 52.4866368,
+               "lng" : -1.890952
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.4881100802915,
+                  "lng" : -1.8892371
+               },
+               "southwest" : {
+                  "lat" : 52.4854121197085,
+                  "lng" : -1.8919926
+               }
+            }
+         },
+         "types" : [ "postal_code" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "B4 7ET",
+               "short_name" : "B4 7ET",
+               "types" : [ "postal_code" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "postal_town" ]
+            },
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Birmingham, Birmingham, West Midlands B4 7ET, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.4873391,
+                  "lng" : -1.8892371
+               },
+               "southwest" : {
+                  "lat" : 52.4861831,
+                  "lng" : -1.8919926
+               }
+            },
+            "location" : {
+               "lat" : 52.4866368,
+               "lng" : -1.890952
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.4881100802915,
+                  "lng" : -1.8892371
+               },
+               "southwest" : {
+                  "lat" : 52.4854121197085,
+                  "lng" : -1.8919926
+               }
+            }
+         },
+         "types" : [ "postal_code" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "B4 7ES",
+               "short_name" : "B4 7ES",
+               "types" : [ "postal_code" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "postal_town" ]
+            },
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Birmingham, Birmingham, West Midlands B4 7ES, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.4873391,
+                  "lng" : -1.8892371
+               },
+               "southwest" : {
+                  "lat" : 52.4861831,
+                  "lng" : -1.8919926
+               }
+            },
+            "location" : {
+               "lat" : 52.4866368,
+               "lng" : -1.890952
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.4881100802915,
+                  "lng" : -1.8892371
+               },
+               "southwest" : {
+                  "lat" : 52.4854121197085,
+                  "lng" : -1.8919926
+               }
+            }
+         },
+         "types" : [ "postal_code" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "B4",
+               "short_name" : "B4",
+               "types" : [ "postal_code_prefix", "postal_code" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "postal_town" ]
+            },
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Birmingham, Birmingham, West Midlands B4, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.4904018,
+                  "lng" : -1.8778173
+               },
+               "southwest" : {
+                  "lat" : 52.47628330000001,
+                  "lng" : -1.9046696
+               }
+            },
+            "location" : {
+               "lat" : 52.4860987,
+               "lng" : -1.8919867
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.4904018,
+                  "lng" : -1.8778173
+               },
+               "southwest" : {
+                  "lat" : 52.47628330000001,
+                  "lng" : -1.9046696
+               }
+            }
+         },
+         "types" : [ "postal_code_prefix", "postal_code" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "locality", "political" ]
+            },
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "England",
+               "short_name" : "England",
+               "types" : [ "administrative_area_level_1", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Birmingham, West Midlands, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.5688762,
+                  "lng" : -1.7098294
+               },
+               "southwest" : {
+                  "lat" : 52.385999,
+                  "lng" : -2.0174336
+               }
+            },
+            "location" : {
+               "lat" : 52.48624299999999,
+               "lng" : -1.890401
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.5688762,
+                  "lng" : -1.7098294
+               },
+               "southwest" : {
+                  "lat" : 52.385999,
+                  "lng" : -2.0174336
+               }
+            }
+         },
+         "types" : [ "locality", "political" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "administrative_area_level_3", "political" ]
+            },
+            {
+               "long_name" : "England",
+               "short_name" : "England",
+               "types" : [ "administrative_area_level_1", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Birmingham, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.6086993,
+                  "lng" : -1.7288582
+               },
+               "southwest" : {
+                  "lat" : 52.381088,
+                  "lng" : -2.0336485
+               }
+            },
+            "location" : {
+               "lat" : 52.49599550000001,
+               "lng" : -1.8564172
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.6086993,
+                  "lng" : -1.7288582
+               },
+               "southwest" : {
+                  "lat" : 52.381088,
+                  "lng" : -2.0336485
+               }
+            }
+         },
+         "types" : [ "administrative_area_level_3", "political" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "Birmingham",
+               "short_name" : "Birmingham",
+               "types" : [ "postal_town" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "Birmingham, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.56689480000001,
+                  "lng" : -1.6025317
+               },
+               "southwest" : {
+                  "lat" : 52.3301354,
+                  "lng" : -2.0458557
+               }
+            },
+            "location" : {
+               "lat" : 52.4533779,
+               "lng" : -1.85356
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.56689480000001,
+                  "lng" : -1.6025317
+               },
+               "southwest" : {
+                  "lat" : 52.3301354,
+                  "lng" : -2.0458557
+               }
+            }
+         },
+         "types" : [ "postal_town" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "West Midlands",
+               "short_name" : "West Mids",
+               "types" : [ "administrative_area_level_2", "political" ]
+            },
+            {
+               "long_name" : "England",
+               "short_name" : "England",
+               "types" : [ "administrative_area_level_1", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "West Midlands, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 52.6627172,
+                  "lng" : -1.4239381
+               },
+               "southwest" : {
+                  "lat" : 52.3477246,
+                  "lng" : -2.2068816
+               }
+            },
+            "location" : {
+               "lat" : 52.4750743,
+               "lng" : -1.829833
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 52.6627172,
+                  "lng" : -1.4239381
+               },
+               "southwest" : {
+                  "lat" : 52.3477246,
+                  "lng" : -2.2068816
+               }
+            }
+         },
+         "types" : [ "administrative_area_level_2", "political" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "England",
+               "short_name" : "England",
+               "types" : [ "administrative_area_level_1", "political" ]
+            },
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "England, UK",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 55.8111127,
+                  "lng" : 1.7629159
+               },
+               "southwest" : {
+                  "lat" : 49.8647517,
+                  "lng" : -6.4177822
+               }
+            },
+            "location" : {
+               "lat" : 52.3555177,
+               "lng" : -1.1743197
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 55.8111127,
+                  "lng" : 1.7629159
+               },
+               "southwest" : {
+                  "lat" : 49.9588004,
+                  "lng" : -5.7169817
+               }
+            }
+         },
+         "types" : [ "administrative_area_level_1", "political" ]
+      },
+      {
+         "address_components" : [
+            {
+               "long_name" : "United Kingdom",
+               "short_name" : "GB",
+               "types" : [ "country", "political" ]
+            }
+         ],
+         "formatted_address" : "United Kingdom",
+         "geometry" : {
+            "bounds" : {
+               "northeast" : {
+                  "lat" : 60.902396,
+                  "lng" : 33.916555
+               },
+               "southwest" : {
+                  "lat" : 34.5625145,
+                  "lng" : -8.649357199999999
+               }
+            },
+            "location" : {
+               "lat" : 55.378051,
+               "lng" : -3.435973
+            },
+            "location_type" : "APPROXIMATE",
+            "viewport" : {
+               "northeast" : {
+                  "lat" : 60.856553,
+                  "lng" : 1.7627096
+               },
+               "southwest" : {
+                  "lat" : 49.8669688,
+                  "lng" : -8.649357199999999
+               }
+            }
+         },
+         "types" : [ "country", "political" ]
+      }
+   ],
+   "status" : "OK"
+}
