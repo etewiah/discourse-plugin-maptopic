@@ -29,29 +29,35 @@ module MapTopic
       # end
 
 
-      topic_geo = MapTopic::TopicGeo.where(:topic_id => @post.topic.id).first_or_create
-
+      # if relevant geokey does not exist, create it
       geo_key = MapTopic::GeoKey.where(:bounds_value => params[:geo][:bounds_value].downcase).first
       unless geo_key
-        # todo - create a geo_key if does not exist..
-        create_geo_key params[:geo]
+        geo_key = MapTopic::GeoKey.create_from_city  params[:geo][:city]
       end
 
-      if geo_key
-        topic_geo.bounds_value = geo_key.bounds_value
-        topic_geo.bounds_type = geo_key.bounds_type
-        topic_geo.bounds_range = geo_key.bounds_range
-        topic_geo.latitude = geo_key.latitude
-        topic_geo.longitude = geo_key.longitude
-        topic_geo.city_lower = geo_key.city_lower
-        topic_geo.country_lower = geo_key.country_lower
-        topic_geo.display_name = geo_key.display_name
-        topic_geo.capability = params[:geo][:capability]
-      else
-        # binding.pry
+      topic_geo = MapTopic::TopicGeo.where(:topic_id => @post.topic.id).first
+      unless topic_geo
+        topic_geo = MapTopic::TopicGeo.create_from_geo_key geo_key, params[:geo][:capability]
+        topic_geo.topic_id = @post.topic.id 
+        topic_geo.save!
       end
+
+
+      # if geo_key
+      #   topic_geo.bounds_value = geo_key.bounds_value
+      #   topic_geo.bounds_type = geo_key.bounds_type
+      #   topic_geo.bounds_range = geo_key.bounds_range
+      #   topic_geo.latitude = geo_key.latitude
+      #   topic_geo.longitude = geo_key.longitude
+      #   topic_geo.city_lower = geo_key.city_lower
+      #   topic_geo.country_lower = geo_key.country_lower
+      #   topic_geo.display_name = geo_key.display_name
+      #   topic_geo.capability = params[:geo][:capability]
+      # else
+      #   # binding.pry
+      # end
       # todo - add category when setting geo
-      topic_geo.save!
+      
 
       ensure_category topic_geo.country_lower, topic_geo.city_lower, @post.topic, topic_geo.capability
 

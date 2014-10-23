@@ -72,7 +72,11 @@ describe MapTopic::GeoTopicsController, type: :controller do
 
     context "where geo_key does not exist" do
       it "creates geo_key for city requested" do
-        pending("implementaion")
+        xhr :get, :get_for_city, city: 'birmingham', use_route: :map_topic
+        result = ::JSON.parse(response.body)
+        result['geo_key']['city_lower'].should == "birmingham"
+        MapTopic::GeoKey.last.city_lower.should == "birmingham"
+        # pending("implementaion")
       end
     end
 

@@ -75,37 +75,39 @@ module MapTopic
     def ensure_geo_key_exists(city_name)
       geo_key= MapTopic::GeoKey.where(:city_lower => city_name.downcase).first
       unless geo_key
+        geo_key = MapTopic::GeoKey.create_from_city  city_name.downcase
+
         # TODO - add bounds json text field that will store the full bounds of the result
         # bounds_range: 20 makes no sense so not bothering with that anymore
-        results = Geocoder.search(city_name)
-        if geo = results.first
-          if geo.city
-            bounds_value = geo.city.downcase
-            bounds_type = "city"
-          else
-            if geo.types.include? 'country'
-              bounds_value = geo.country.downcase
-              bounds_type = "country"
-            else
-              bounds_value = geo.country
-              bounds_type = "unknown"
-            end
+        # results = Geocoder.search(city_name)
+        # if geo = results.first
+        #   if geo.city
+        #     bounds_value = geo.city.downcase
+        #     bounds_type = "city"
+        #   else
+        #     if geo.types.include? 'country'
+        #       bounds_value = geo.country.downcase
+        #       bounds_type = "country"
+        #     else
+        #       bounds_value = geo.country
+        #       bounds_type = "unknown"
+        #     end
 
-          end
-          # because geocoder will find a misspelt city like accrra, prefer its city to my input
-          city_name = geo.city ?  geo.city.downcase : city_name.downcase
-          geo_key = MapTopic::GeoKey.create({
-                                              display_name: bounds_value.titleize,
-                                              bounds_type: bounds_type,
-                                              bounds_value: bounds_value,
-                                              city_lower: city_name,
-                                              country_lower: geo.country.downcase,
-                                              show_criteria: "searched",
-                                              longitude: geo.longitude,
-                                              latitude: geo.latitude
-          })
+        #   end
+        #   # because geocoder will find a misspelt city like accrra, prefer its city to my input
+        #   city_name = geo.city ?  geo.city.downcase : city_name.downcase
+        #   geo_key = MapTopic::GeoKey.create({
+        #                                       display_name: bounds_value.titleize,
+        #                                       bounds_type: bounds_type,
+        #                                       bounds_value: bounds_value,
+        #                                       city_lower: city_name,
+        #                                       country_lower: geo.country.downcase,
+        #                                       show_criteria: "searched",
+        #                                       longitude: geo.longitude,
+        #                                       latitude: geo.latitude
+        #   })
 
-        end
+        # end
 
       end
       return geo_key

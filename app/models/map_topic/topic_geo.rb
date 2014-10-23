@@ -2,7 +2,12 @@ module MapTopic
     class TopicGeo < ActiveRecord::Base
         self.table_name = "topic_geos"
         # validates_uniqueness_of :bounds_value
-        after_validation :reverse_geocode
+        after_validation :reverse_geocode, :unless => :has_geo_data?
+
+        def has_geo_data?
+            self.city_lower? && self.country_lower?
+        end
+
         serialize :poll, JSON
         serialize :places, JSON
         serialize :happening, JSON
@@ -23,6 +28,23 @@ module MapTopic
                 # obj.region = geo.state ? geo.state : obj.region
             end
         end
+
+        def self.create_from_geo_key geo_key, capability
+            topic_geo = MapTopic::TopicGeo.create(
+                {
+                    bounds_value: geo_key.bounds_value,
+                    bounds_type: geo_key.bounds_type,
+                    bounds_range: geo_key.bounds_range,
+                    latitude: geo_key.latitude,
+                    longitude: geo_key.longitude,
+                    city_lower: geo_key.city_lower,
+                    country_lower: geo_key.country_lower,
+                    display_name: geo_key.display_name,
+                    capability: capability
+            })
+            return topic_geo
+        end
+
 
         # t.string :display_name
         # t.integer :topic_id
