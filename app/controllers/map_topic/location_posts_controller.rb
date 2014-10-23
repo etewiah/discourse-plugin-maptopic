@@ -4,7 +4,10 @@ module MapTopic
 
     before_action :check_user, only: [:set_location, :set_geo]
 
-
+# called when a new topic is created
+# sets a TopicGeo object on the topic
+# Bases the TopicGeo on GeoKey (at the moment for the city - bounds_value could in 
+# theory be a country or region or womex2014... )
     def set_geo
       unless(params[:post_id] && params[:geo] )
         render_error "incorrect params"
@@ -86,7 +89,7 @@ module MapTopic
       #   loc.title = params[:location_title] || "ll"
       # end
       location.save!
-binding.pry
+# binding.pry
 
       location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
       location_post.location_title = location.title

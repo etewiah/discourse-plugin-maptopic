@@ -1,4 +1,6 @@
 require 'spec_helper'
+require './plugins//discourse-plugin-maptopic/spec/map_topic_spec_helper'
+# require File.dirname(__FILE__) + '/../spec_helper'
 
 describe MapTopic::LocationPostsController, type: :controller do
   let(:topic) { create_topic(title: "Poll: Chitoge vs Onodera") }
@@ -7,10 +9,10 @@ describe MapTopic::LocationPostsController, type: :controller do
   let(:user2) { Fabricate(:user) }
   let(:admin) { Fabricate(:admin) }
   let(:birmingham_json) {{
-                       displayString: 'Birmingham',
-                       value: 'birmingham',
-                       longitude: "-1.890401",
-                       latitude: "52.48624299999999"
+                           displayString: 'Birmingham',
+                           value: 'birmingham',
+                           longitude: "-1.890401",
+                           latitude: "52.48624299999999"
   }}
 
 
@@ -19,6 +21,7 @@ describe MapTopic::LocationPostsController, type: :controller do
       xhr :get, :set_location, post_id: post.id,  use_route: :baa
       response.should be_forbidden
     end
+
 
     it "returns 400 if location missing" do
       log_in_user user1
@@ -35,16 +38,15 @@ describe MapTopic::LocationPostsController, type: :controller do
     context 'success' do
       let(:p2) { Fabricate(:post, user: user1) }
 
+      it "should work" do
+        expect{
+          xhr :get, :set_location, post_id: p2.id, location: birmingham_json,  use_route: :map_topic
+        }.to change(MapTopic::Location,:count).by(1)
+
+      end
+
       before do
         log_in_user user1
-
-        # FakeWeb.allow_net_connect = true
-        # Net::HTTP.get(URI.parse("http://maps.googleapis.com/maps/api/geocode/json?language=en&latlng=52.48624299999999%2C-1.890401&sensor=false"))
-        # req = FakeWeb.last_request  # => Net::HTTP::Get request object
-        # http://technicalpickles.com/posts/stop-net-http-dead-in-its-tracks-with-fakeweb/
-        geocoded_birmingham_file = File.expand_path("./plugins//discourse-plugin-maptopic/spec/fixtures/geocoded_birmingham.json")
-        FakeWeb.register_uri('http://maps.googleapis.com/maps/api/geocode/json?language=en&latlng=52.48624299999999%2C-1.890401&sensor=false', :response => geocoded_birmingham_file)
-
         xhr :get, :set_location, post_id: p2.id, location: birmingham_json,  use_route: :map_topic
       end
 

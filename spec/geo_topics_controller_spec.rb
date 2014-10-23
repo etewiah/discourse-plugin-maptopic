@@ -1,29 +1,7 @@
 require 'spec_helper'
-
-describe MapTopic::LocationPostsController, type: :controller do
-  let(:topic) { create_topic(title: "Poll: Chitoge vs Onodera") }
-  let!(:post) { create_post(topic: topic, raw: "Pick one.\n\n[poll]\n* Chitoge\n* Onodera\n[/poll]") }
-  let(:user1) { Fabricate(:user) }
-  let(:user2) { Fabricate(:user) }
-  let(:admin) { Fabricate(:admin) }
+require './plugins//discourse-plugin-maptopic/spec/map_topic_spec_helper'
 
 
-  describe 'set_location' do
-    it "returns 403 if no user is logged in" do
-      xhr :get, :set_location, post_id: post.id, option: "Chitoge", use_route: :poll
-      response.should be_forbidden
-    end
-  end
-  describe 'set_location' do
-    it "returns 403 if no user is logged in" do
-      log_in_user user1
-      xhr :get, :set_location, post_id: post.id, option: "Chitoge", use_route: :poll
-      binding.pry
-      response.should be_forbidden
-    end
-  end
-
-end
 
 describe MapTopic::GeoTopicsController, type: :controller do
   let(:topic) { create_topic(title: "Poll: Chitoge vs Onodera") }
@@ -34,12 +12,51 @@ describe MapTopic::GeoTopicsController, type: :controller do
   # let(:geo_key) { MapTopic::GeoKey.create({city_lower: "berlin"}) }
   # above does not work
 
+  # describe "GET index" do
+  #   it "assigns all posts as @posts" do
+  #     Posts::Post.stub(:all) { [mock_post] }
+  #      get :index
+  #      assigns(:posts).should eq([mock_post])
+  #   end
+  # end
+
   describe 'get_geo_keys' do
+    # get array of keys representing areas (typically cities) that can be displayed on a map
+    # TODO - add validations and model tests to ensure that they always have a longitude and latitude
     it "should return okay" do
-      xhr :get, :get_geo_keys, post_id: post.id, option: "Chitoge", use_route: :poll
+      xhr :get, :get_geo_keys,  use_route: :baa
       # binding.pry
       response.status.should eq(200)
     end
+
+    it "should all have longitudes and latitudes" do
+      pending("implementaion")
+      fail
+    end
+
+    it "should only return keys marked standard by default" do
+      pending("implementaion")
+    end
+
+    context 'with one key created' do
+
+      before do
+        MapTopic::GeoKey.create({city_lower: "berlin"})
+        xhr :get, :get_geo_keys, use_route: :map_topic
+      end
+
+
+      it "returns one item" do
+
+        response.should be_success
+        result = ::JSON.parse(response.body)
+        result.count.should == 1
+        # result['city'].should == "birmingham"
+        # result['success'].should == true
+        # result['url'].should be_present
+      end
+    end
+
   end
 
   describe 'get_for_city' do
@@ -49,9 +66,14 @@ describe MapTopic::GeoTopicsController, type: :controller do
     end
     it "returns city when default GeoKeys exists" do
       MapTopic::GeoKey.create({city_lower: "berlin"})
-      xhr :get, :get_for_city, post_id: post.id, option: "Chitoge", use_route: :map_topic
-      binding.pry
+      xhr :get, :get_for_city, city: 'berlin', use_route: :map_topic
       response.status.should eq(200)
+    end
+
+    context "where geo_key does not exist" do
+      it "creates geo_key for city requested" do
+        pending("implementaion")
+      end
     end
 
   end
