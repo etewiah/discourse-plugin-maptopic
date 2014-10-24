@@ -463,17 +463,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     });
   },
   showOffInfo: function() {
-    debugger;
     if (this.infoWindows.length > 0) {
+
       this.infoWindows[0].open(this.map, this.markers[0]);
     }
+    // for (var i = 0; i < this.infoWindows.length; i++) {
+    //   this.showNewInfowindow(this.infoWindows[i],this.markers[i])
+    // }
 
-    // this.infoWindows = [];
-    // this.infoWindows.push(infowindowInstance);
-    // infowindowInstance.open(this.map, marker);
-    // window.setTimeout(function() {
-    //   marker.showingInfoWindow = true;
-    // }, 1000);
   },
   mapClicked: function(lat, lng) {
     var latlng = new google.maps.LatLng(lat, lng);
@@ -497,7 +494,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           if (that.get('displayContext') === 'topicView') {
             talkPrompt = "write about this place";
           }
-          debugger;
 
           var contentString = '<div id="map-clickedlocation-content" >' +
             '<h4>' +
@@ -530,7 +526,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {
               // e.stopPropagation();
               e.preventDefault();
-              var locationName = e.srcElement.elements['clickedlocation-name'].value;
+              var locationName = e.target.elements['clickedlocation-name'].value;
               if (Ember.isBlank(locationName)) {
                 // TODO - warn about empty name
                 debugger;
