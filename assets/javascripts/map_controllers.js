@@ -3,6 +3,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   needs: ['composer','map'],
 
   actions: {
+    // triggered by start conversation button
     showNewTopicModal: function(topicType) {
       if (!Discourse.User.current()) {
         this.send('showLogin');

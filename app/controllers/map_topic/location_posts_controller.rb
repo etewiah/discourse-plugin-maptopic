@@ -24,9 +24,13 @@ module MapTopic
       end
 
       # might use below in the future if I decide to support initial locations ..
-      # if params[:initial_location]
-      #   create_location params[:initial_location]
-      # end
+      if params[:geo][:initial_location]
+      # TODO - do something with google place id to enhance location info
+        location = create_location params[:geo][:initial_location]
+        @post.location = location
+        @post.save!
+        # binding.pry
+      end
 
 
       # if relevant geokey does not exist, create it
@@ -41,22 +45,6 @@ module MapTopic
         topic_geo.topic_id = @post.topic.id 
         topic_geo.save!
       end
-
-
-      # if geo_key
-      #   topic_geo.bounds_value = geo_key.bounds_value
-      #   topic_geo.bounds_type = geo_key.bounds_type
-      #   topic_geo.bounds_range = geo_key.bounds_range
-      #   topic_geo.latitude = geo_key.latitude
-      #   topic_geo.longitude = geo_key.longitude
-      #   topic_geo.city_lower = geo_key.city_lower
-      #   topic_geo.country_lower = geo_key.country_lower
-      #   topic_geo.display_name = geo_key.display_name
-      #   topic_geo.capability = params[:geo][:capability]
-      # else
-      #   # binding.pry
-      # end
-      # todo - add category when setting geo
       
 
       ensure_category topic_geo.country_lower, topic_geo.city_lower, @post.topic, topic_geo.capability
@@ -131,21 +119,21 @@ module MapTopic
 
     private
 
+# poorly named...
     def create_location location
       # TODO - find location which is close enough to be considered the same..
-      location = MapTopic::Location.where(:longitude => location[:longitude], :latitude => location[:latitude]).first_or_initialize
-      location.title = location[:title] || ""
-      location.city = location[:city] || ""
-      location.country = location[:country] || ""
-      location.address = location[:address] || ""
-      location.gplace_id = location[:gplace_id] || ""
-
+      location_object = MapTopic::Location.where(:longitude => location[:longitude], :latitude => location[:latitude]).first_or_initialize
+      location_object.title = location[:title] || ""
+      location_object.city = location[:city] || ""
+      location_object.country = location[:country] || ""
+      location_object.address = location[:address] || ""
+      location_object.gplace_id = location[:gplace_id] || ""
       # below will not update if already exists:
       # do |loc|
       #   loc.title = params[:location_title] || "ll"
       # end
-      location.save!
-
+      location_object.save!
+      return location_object
     end
 
     def ensure_category country, city, topic, capability

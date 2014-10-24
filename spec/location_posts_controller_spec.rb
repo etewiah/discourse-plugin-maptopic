@@ -1,6 +1,8 @@
 require 'spec_helper'
 require './plugins//discourse-plugin-maptopic/spec/map_topic_spec_helper'
 # require File.dirname(__FILE__) + '/../spec_helper'
+birmingham_geo_json_file = File.read("./plugins//discourse-plugin-maptopic/spec/fixtures/birmingham_geo.json")
+birmingham_location_object_json_file = File.read("./plugins//discourse-plugin-maptopic/spec/fixtures/birmingham_location_object.json")
 
 describe MapTopic::LocationPostsController, type: :controller do
   let(:topic) { create_topic(title: "Poll: Chitoge vs Onodera") }
@@ -14,13 +16,15 @@ describe MapTopic::LocationPostsController, type: :controller do
                            longitude: "-1.890401",
                            latitude: "52.48624299999999"
   }}
-  let(:birmingham_geo_json) {{
-                               displayString: 'Birmingham',
-                               city: 'birmingham',
-                               longitude: "-1.890401",
-                               latitude: "52.48624299999999",
-                               bounds_value: "birmingham"
-  }}
+  let(:birmingham_geo_json) { JSON.parse birmingham_geo_json_file  }
+  # let(:birmingham_location_object_json) { JSON.parse birmingham_location_object_json_file  }
+  # let(:birmingham_geo_json) {{
+  #                              displayString: 'Birmingham',
+  #                              city: 'birmingham',
+  #                              longitude: "-1.890401",
+  #                              latitude: "52.48624299999999",
+  #                              bounds_value: "birmingham"
+  # }}
 
   # describe "POST create" do
   #   describe "with valid params" do
@@ -65,7 +69,8 @@ describe MapTopic::LocationPostsController, type: :controller do
       end
 
       it 'assigns default location' do
-        pending "implementation"
+        assigns(:post).location.should == MapTopic::Location.last
+        # pending "implementation"
       end
     end
 

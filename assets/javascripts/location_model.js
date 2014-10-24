@@ -40,9 +40,8 @@ Discourse.Location = Discourse.Model.extend({
 
 });
 Discourse.Location.reopenClass({
-  // TODO **  make use of result.place_id  (google place id...)
   locationFromPlaceSearch: function(result, city) {
-    // debugger;
+    debugger;
     var locationObject = {
       title: result.name,
       address: result.vicinity,

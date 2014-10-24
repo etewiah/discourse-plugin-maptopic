@@ -149,6 +149,8 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
         // }
       }, function(error) {
         debugger;
+        // todo - handle
+        // "Body is invalid; try to be a little more descriptive"
         composerModel.set('disableDrafts', false);
         bootbox.alert(error);
       });
