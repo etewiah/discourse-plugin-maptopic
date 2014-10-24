@@ -147,7 +147,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
       var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
       return cityObject;
     }
-  }.property('currentCity','geo'),
+  }.property('currentCity', 'geo'),
 
   renderMap: function() {
     var currentMarkerValues = this.get('markerValues');
@@ -255,7 +255,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   },
 
   // below ensures that after infoWindow is shown, showingInfoWindow is set
-  // so a second click know to do something else - like redirect to topic...
+  // so a second click knows to do something else - like redirect to topic...
   showNewInfowindow: function(infowindowInstance, marker) {
     if (this.newLocationMarker) {
       this.newLocationMarker.setMap(null);
@@ -389,6 +389,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         dataObjectType: dataObjectType
 
       });
+
+      // only reason I'm pusing into this array is so that I can get to infowindowInstance
+      // in 'showOffInfo' method.
+      that.infoWindows.pushObject(infowindowInstance);
+
+
       google.maps.event.addListener(marker, 'mouseover', function() {
         // debugger;
         that.showNewInfowindow(infowindowInstance, marker);
@@ -423,35 +429,51 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           // }
 
         });
-      });
 
+      });
 
     });
 
-// for indexView, I will not fitBounds in case
+    // for indexView, I will not fitBounds in case
     // if (displayContext === 'topicView') {
-      if (this.get('markers.length') > 1) {
-        this.map.fitBounds(bounds);
-      } else {
-        // if there is only one marker, set center to be that one
-        // this.map.setZoom(zoom);
-        // this.map.setCenter(mapCenter);
-        // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
-        this.map.fitBounds(bounds);
-        // seems silly but I really have to do all this to get the zoom looking half decent
-        google.maps.event.addListenerOnce(this.map, 'bounds_changed', function(event) {
-          if (this.getZoom() > 15) {
-            this.setZoom(15);
-          }
-        });
-      };
+    if (this.get('markers.length') > 1) {
+      this.map.fitBounds(bounds);
+    } else {
+      // if there is only one marker, set center to be that one
+      // this.map.setZoom(zoom);
+      // this.map.setCenter(mapCenter);
+      // http://stackoverflow.com/questions/4523023/using-setzoom-after-using-fitbounds-with-google-maps-api-v3
+      this.map.fitBounds(bounds);
+      // seems silly but I really have to do all this to get the zoom looking half decent
+      google.maps.event.addListenerOnce(this.map, 'bounds_changed', function(event) {
+        if (this.getZoom() > 15) {
+          this.setZoom(15);
+        }
+      });
+
+    };
     // };
     google.maps.event.addListener(this.map, 'click', function(event) {
       that.mapClicked(event.latLng.lat(), event.latLng.lng());
     });
     this.displaySearchBox();
+    google.maps.event.addListenerOnce(this.map, 'idle', function() {
+      // below highlights a random infowindow:
+      window.setTimeout(that.showOffInfo.bind(that), 3000);
+    });
+  },
+  showOffInfo: function() {
+    debugger;
+    if (this.infoWindows.length > 0) {
+      this.infoWindows[0].open(this.map, this.markers[0]);
+    }
 
-
+    // this.infoWindows = [];
+    // this.infoWindows.push(infowindowInstance);
+    // infowindowInstance.open(this.map, marker);
+    // window.setTimeout(function() {
+    //   marker.showingInfoWindow = true;
+    // }, 1000);
   },
   mapClicked: function(lat, lng) {
     var latlng = new google.maps.LatLng(lat, lng);
@@ -471,24 +493,22 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             map: that.map
           });
 
-
-          // if (that.userSelectionMarkers) {
-          //   $.each(that.userSelectionMarkers, function(index, value) {
-          //     value.setMap(null);
-          //   });
-          // };
-          // that.userSelectionMarkers = [];
-          // that.userSelectionMarkers.pushObject(that.newLocationMarker);
+          var talkPrompt = "start conversation";
+          if (that.get('displayContext') === 'topicView') {
+            talkPrompt = "write about this place";
+          }
+          debugger;
 
           var contentString = '<div id="map-clickedlocation-content" >' +
             '<h4>' +
             results[0].formatted_address +
             '</h4>' +
             '<form id="clickedlocation-form">' +
-            '<div id="clickedlocation-name-prompt" class="warning">Enter location name to start conversation:</div>' +
+            '<div id="clickedlocation-name-prompt" class="warning">Enter location name to ' +
+            talkPrompt + ':</div>' +
             '<input id="clickedlocation-name" type="text" /><br>' +
             '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-            'Start conversation</button></form>' +
+            talkPrompt + '</button></form>' +
             '</div>';
 
           infowindowForClickedLocation = new google.maps.InfoWindow({

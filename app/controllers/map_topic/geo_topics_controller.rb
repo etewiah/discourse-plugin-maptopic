@@ -26,7 +26,16 @@ module MapTopic
 # TODO - make sure this query does not return unlisted or private conversations..
       @city_conversations = MapTopic::TopicGeo.where(:city_lower => city)
 
+      @city_conversations = @city_conversations.select do |conv|
+        if conv.topic && conv.topic.location
+          true
+        else
+          false
+        end
+      end
+
       @other_conversations = MapTopic::TopicGeo.where("city_lower <> ?", city).limit(6)
+
       # if @city_conversations.length < 1
       #   # when a random city has been passed in, lets create a key for it
       #   ensure_geo_key_exists city

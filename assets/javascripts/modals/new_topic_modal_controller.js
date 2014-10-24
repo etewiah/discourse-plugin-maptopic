@@ -36,6 +36,11 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
     if (!this.get('validate')) {
       return;
     };
+    if (this.get('serverError')) return Discourse.InputValidation.create({
+      failed: true,
+      reason: this.get('serverError')
+
+    });
     if (this.blank('topicDetails')) return Discourse.InputValidation.create({
       failed: true,
       reason: "Details have to be at least 10 characters long."
@@ -54,7 +59,7 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       ok: true,
       reason: ""
     });
-  }.property('validate', 'topicDetails'),
+  }.property('validate', 'topicDetails','serverError'),
   titleValidation: function() {
     if (!this.get('validate')) {
       return;
@@ -148,11 +153,12 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
         //   Discourse.URL.routeTo(opts.post.get('url'));
         // }
       }, function(error) {
-        debugger;
+        self.set('serverError',error);
+        self.set('validate', true);
         // todo - handle
         // "Body is invalid; try to be a little more descriptive"
-        composerModel.set('disableDrafts', false);
-        bootbox.alert(error);
+        // composerModel.set('disableDrafts', false);
+        // bootbox.alert(error);
       });
 
 
