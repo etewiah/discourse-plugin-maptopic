@@ -1,6 +1,8 @@
 module MapTopic
     class GeoKey < ActiveRecord::Base
         self.table_name = "geo_keys"
+        serialize :geometry, JSON
+
         # city may be duplicated but bounds_value has to always stay unique - eg:
         # could have bounds_values of madrid_center and madrid_region ...
         validates_uniqueness_of :bounds_value
@@ -55,8 +57,12 @@ module MapTopic
                                                     country_lower: geo.country.downcase,
                                                     show_criteria: "searched",
                                                     longitude: geo.longitude,
-                                                    latitude: geo.latitude
+                                                    latitude: geo.latitude,
+                                                    geometry: geo.geometry
                 })
+                # TODO - add country code
+                #                                                     country_code: geo.country_code
+
 
             end
         end

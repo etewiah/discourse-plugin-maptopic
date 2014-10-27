@@ -9,6 +9,7 @@ describe 'GeoKey' do
   end
   it 'can be created from a city' do
     result = MapTopic::GeoKey.create_from_city 'birmingham'
+    binding.pry
     result.bounds_value.should == "birmingham"
     result.country_lower.should == "united kingdom"
     result.show_criteria.should == "searched"
