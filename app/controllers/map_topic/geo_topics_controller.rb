@@ -5,25 +5,27 @@ module MapTopic
     def get_geo_keys
       @geo_keys = MapTopic::GeoKey.all
       render_json_dump( @geo_keys.as_json )
-      
+
     end
 
     def get_for_city
 
       if params[:city]
-        city = params[:city].downcase
         # when a random city has been passed in, below ensures a key is created for it
-        geo_key =  ensure_geo_key_exists city
+        geo_key =  ensure_geo_key_exists params[:city].downcase
       else
         # TODO - log how often this is being called - pretty expensive as should be called as little as possible
         geo_key = get_nearest_location_to_request
-        unless geo_key
-          return render_error "error finding city"
-        end
-        city = geo_key.city_lower
       end
 
-# TODO - make sure this query does not return unlisted or private conversations..
+      unless geo_key
+        # this is a really ugly attempt to ensure that I always return a geo_key
+        # TODO - have a more sensible way of getting the default
+        geo_key = MapTopic::GeoKey.where(:city_lower => 'berlin').first
+      end
+      city = geo_key.city_lower
+
+      # TODO - make sure this query does not return unlisted or private conversations..
       @city_conversations = MapTopic::TopicGeo.where(:city_lower => city)
 
       @city_conversations = @city_conversations.select do |conv|
@@ -72,11 +74,9 @@ module MapTopic
 
       if request_location && request_location.data['longitude'] != "0"
         center_point = [request_location.data['latitude'],request_location.data['longitude']]
-        return MapTopic::GeoKey.near(center_point,5000).first
-      else
-        return MapTopic::GeoKey.where(:city_lower => 'berlin').first
+        nearest_location = MapTopic::GeoKey.near(center_point,5000).first
       end
-
+      return nearest_location
 
     end
 
@@ -85,38 +85,6 @@ module MapTopic
       geo_key= MapTopic::GeoKey.where(:city_lower => city_name.downcase).first
       unless geo_key
         geo_key = MapTopic::GeoKey.create_from_city  city_name.downcase
-
-        # TODO - add bounds json text field that will store the full bounds of the result
-        # bounds_range: 20 makes no sense so not bothering with that anymore
-        # results = Geocoder.search(city_name)
-        # if geo = results.first
-        #   if geo.city
-        #     bounds_value = geo.city.downcase
-        #     bounds_type = "city"
-        #   else
-        #     if geo.types.include? 'country'
-        #       bounds_value = geo.country.downcase
-        #       bounds_type = "country"
-        #     else
-        #       bounds_value = geo.country
-        #       bounds_type = "unknown"
-        #     end
-
-        #   end
-        #   # because geocoder will find a misspelt city like accrra, prefer its city to my input
-        #   city_name = geo.city ?  geo.city.downcase : city_name.downcase
-        #   geo_key = MapTopic::GeoKey.create({
-        #                                       display_name: bounds_value.titleize,
-        #                                       bounds_type: bounds_type,
-        #                                       bounds_value: bounds_value,
-        #                                       city_lower: city_name,
-        #                                       country_lower: geo.country.downcase,
-        #                                       show_criteria: "searched",
-        #                                       longitude: geo.longitude,
-        #                                       latitude: geo.latitude
-        #   })
-
-        # end
 
       end
       return geo_key

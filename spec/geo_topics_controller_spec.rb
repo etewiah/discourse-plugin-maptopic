@@ -61,19 +61,17 @@ describe MapTopic::GeoTopicsController, type: :controller do
   end
 
   describe 'get_for_city' do
-    it "returns 400 when no GeoKeys exist" do
-      xhr :get, :get_for_city, post_id: post.id, option: "Chitoge", use_route: :map_topic
-      response.status.should eq(400)
-    end
 
 
     context 'when some GeoKeys exists' do
       before(:each) do
+        # berlin has been hard coded as default city in geo_topics_controller
+        # TODO - fix that
         MapTopic::GeoKey.create({city_lower: "berlin"})
         MapTopic::GeoKey.create({city_lower: "london"})
       end
 
-      context 'and ip address is passed' do
+      context 'and ip address is passed which does not match any existing city' do
         before(:each) do
           australian_ip = "203.161.118.209"
           request.remote_addr = australian_ip
@@ -83,37 +81,46 @@ describe MapTopic::GeoTopicsController, type: :controller do
           before(:each) do
             VCR.use_cassette 'freegeoip' do
               xhr :get, :get_for_city, use_route: :map_topic
- end  
+            end
             # result = ::JSON.parse(response.body)
           end
 
-          it 'should return nearest city' do
+          it 'returns default city' do
             result = ::JSON.parse(response.body)
-            binding.pry
             result['geo_key']['city_lower'].should == "berlin"
           end
         end
       end
 
-      context 'and a city is specified' do
-        before(:each) do
-          xhr :get, :get_for_city, use_route: :map_topic
+      context 'and a city is specified for which a GeoKey exists' do
+        it "returns that city" do
+          xhr :get, :get_for_city, city: "berlin", use_route: :map_topic
           result = ::JSON.parse(response.body)
+          result['geo_key']['city_lower'].should == "berlin"
         end
+      end
 
+      context "and a city is specified for which no GeoKey exists" do
+        it "creates and returns geo_key for city requested" do
+          xhr :get, :get_for_city, city: 'birmingham', use_route: :map_topic
+          result = ::JSON.parse(response.body)
+          result['geo_key']['city_lower'].should == "birmingham"
+          MapTopic::GeoKey.last.city_lower.should == "birmingham"
+        end
+      end
 
+      context "and an invalid city value is passes" do
+        it 'returns default city' do
+          VCR.use_cassette 'geocoded_gibberrrrissssh' do
+            xhr :get, :get_for_city, city: 'gibberrrrissssh', use_route: :map_topic
+          end
+          result = ::JSON.parse(response.body)
+          result['geo_key']['city_lower'].should == "berlin"
+        end
       end
     end
 
-    context "where geo_key does not exist" do
-      it "creates geo_key for city requested" do
-        xhr :get, :get_for_city, city: 'birmingham', use_route: :map_topic
-        result = ::JSON.parse(response.body)
-        result['geo_key']['city_lower'].should == "birmingham"
-        MapTopic::GeoKey.last.city_lower.should == "birmingham"
-        # pending("implementaion")
-      end
-    end
+
 
   end
 end
