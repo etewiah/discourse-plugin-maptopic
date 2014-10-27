@@ -6,7 +6,9 @@
 # load the engine
 load File.expand_path('../lib/map_topic/engine.rb', __FILE__)
 gem 'geocoder', '1.2.4'
-gem 'vcr', '2.9.3'
+if Rails.env == "development" || Rails.env == "test"
+  gem 'vcr', '2.9.3'
+end
 # it seems declaring a gem here works because of something specific to discourse:
 # https://meta.discourse.org/t/specify-external-gem-dependencies-for-plugins/16430
 # does not work if a gem version is not specified and below does not work either:

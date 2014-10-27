@@ -25,6 +25,9 @@ module MapTopic
       end
       city = geo_key.city_lower
 
+      # TODO - where params[:city] is passed but is not the city returned in geo_key (maybe default
+      # city was returned) , should return a message to client in addition
+
       # TODO - make sure this query does not return unlisted or private conversations..
       @city_conversations = MapTopic::TopicGeo.where(:city_lower => city)
 
