@@ -1,5 +1,6 @@
 require 'spec_helper'
-require './plugins//discourse-plugin-maptopic/spec/map_topic_spec_helper'
+require './plugins/discourse-plugin-maptopic/spec/map_topic_spec_helper'
+require './plugins/discourse-plugin-maptopic/spec/vcr_setup'
 
 
 
@@ -64,10 +65,44 @@ describe MapTopic::GeoTopicsController, type: :controller do
       xhr :get, :get_for_city, post_id: post.id, option: "Chitoge", use_route: :map_topic
       response.status.should eq(400)
     end
-    it "returns city when default GeoKeys exists" do
-      MapTopic::GeoKey.create({city_lower: "berlin"})
-      xhr :get, :get_for_city, city: 'berlin', use_route: :map_topic
-      response.status.should eq(200)
+
+
+    context 'when some GeoKeys exists' do
+      before(:each) do
+        MapTopic::GeoKey.create({city_lower: "berlin"})
+        MapTopic::GeoKey.create({city_lower: "london"})
+      end
+
+      context 'and ip address is passed' do
+        before(:each) do
+          australian_ip = "203.161.118.209"
+          request.remote_addr = australian_ip
+        end
+
+        context 'and no city is specified' do
+          before(:each) do
+            VCR.use_cassette 'freegeoip' do
+              xhr :get, :get_for_city, use_route: :map_topic
+ end  
+            # result = ::JSON.parse(response.body)
+          end
+
+          it 'should return nearest city' do
+            result = ::JSON.parse(response.body)
+            binding.pry
+            result['geo_key']['city_lower'].should == "berlin"
+          end
+        end
+      end
+
+      context 'and a city is specified' do
+        before(:each) do
+          xhr :get, :get_for_city, use_route: :map_topic
+          result = ::JSON.parse(response.body)
+        end
+
+
+      end
     end
 
     context "where geo_key does not exist" do

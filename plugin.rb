@@ -6,6 +6,13 @@
 # load the engine
 load File.expand_path('../lib/map_topic/engine.rb', __FILE__)
 gem 'geocoder', '1.2.4'
+gem 'vcr', '2.9.3'
+# it seems declaring a gem here works because of something specific to discourse:
+# https://meta.discourse.org/t/specify-external-gem-dependencies-for-plugins/16430
+# does not work if a gem version is not specified and below does not work either:
+# group :development, :test do
+#   gem 'vcr'
+# end
 
 # register_asset "javascripts/discourse/templates/post.js.handlebars"
 register_asset "javascripts/discourse/templates/connectors/topic-title/map-for-topic.js.handlebars"
