@@ -85,15 +85,16 @@ module MapTopic
       #   loc.title = params[:location_title] || "ll"
       # end
       location.save!
-# binding.pry
 
-      location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
-      location_post.location_title = location.title
-      location_post.longitude = location.longitude
-      location_post.latitude = location.latitude
-      location_post.location_id = location.id
+      location_post = MapTopic::LocationPost.create_from_location location, @post.id
 
-      location_post.save!
+      # location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
+      # location_post.location_title = location.title
+      # location_post.longitude = location.longitude
+      # location_post.latitude = location.latitude
+      # location_post.location_id = location.id
+
+      # location_post.save!
       # todo - ensure there is a location_post for each location topic
       if @post.post_number == 1
         # this is the post associated with the topic so its location should also

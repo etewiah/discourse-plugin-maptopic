@@ -20,7 +20,54 @@ describe MapTopic::LocationPostsController, type: :controller do
   # let(:birmingham_location_object_json) { JSON.parse birmingham_location_object_json_file  }
 
 
-  describe 'set_geo' do
+  context 'set_location' do
+    context 'where user is not logged in ' do
+      it "returns 403 if no user is logged in" do
+        xhr :get, :set_location, post_id: post.id,  use_route: :map_topic
+        response.should be_forbidden
+      end
+    end
+
+    context 'where user is logged in ' do
+      # let(:p2) { Fabricate(:post, user: user1) }
+      before do
+        log_in_user user1
+      end
+      it "returns 400 if location missing" do
+        xhr :get, :set_location, post_id: post.id,  use_route: :map_topic
+        puts ::JSON.parse(response.body)
+        response.status.should eq(400)
+      end
+      it "returns 403 if user does not have permission to edit post" do
+        xhr :get, :set_location, post_id: post.id, location: {},  use_route: :map_topic
+        # puts ::JSON.parse(response.body)
+        response.status.should eq(403)
+      end
+
+      context ' and user has created topic being passed in ' do
+        let(:topic2) { create_topic(title: "Topic with location", user: user1) }
+        let!(:post2) { create_post(topic2: topic, raw: "Pick one.\n\n[poll]\n* Chitoge\n* Onodera\n[/poll]", user: user1) }
+        # let(:p2) { Fabricate(:post, user: user1) }
+
+
+        it "creates location and assigns it to post " do
+          xhr :get, :set_location, post_id: post2.id, location: birmingham_json, use_route: :map_topic
+          result = ::JSON.parse(response.body)
+          post2.location.id.should == result['id']
+          response.status.should eq(200)
+        end
+
+        it "creates location and assigns it to topic " do
+          pending "implementation"
+        end
+
+      end
+
+    end
+  end
+
+
+  context 'set_geo' do
     routes { MapTopic::Engine.routes }
 
     it "returns 400 if geo param missing" do
@@ -60,48 +107,42 @@ describe MapTopic::LocationPostsController, type: :controller do
     end
 
     describe 'setting location for a post' do
-      it "returns 403 if no user is logged in" do
-        xhr :get, :set_location, post_id: post.id,  use_route: :baa
-        response.should be_forbidden
-      end
+      # it "returns 403 if no user is logged in" do
+      #   xhr :get, :set_location, post_id: post.id,  use_route: :baa
+      #   response.should be_forbidden
+      # end
 
 
-      it "returns 400 if location missing" do
-        log_in_user user1
-        xhr :get, :set_location, post_id: post.id,  use_route: :map_topic
-        # binding.pry
-        response.status.should eq(400)
-      end
-      it "returns 403 if user does not have permission to edit post" do
-        log_in_user user1
-        xhr :get, :set_location, post_id: post.id, location: {},  use_route: :map_topic
-        response.status.should eq(403)
-      end
+      # it "returns 400 if location missing" do
+      #   log_in_user user1
+      #   xhr :get, :set_location, post_id: post.id,  use_route: :map_topic
+      #   # binding.pry
+      #   response.status.should eq(400)
+      # end
+      # it "returns 403 if user does not have permission to edit post" do
+      #   log_in_user user1
+      #   xhr :get, :set_location, post_id: post.id, location: {},  use_route: :map_topic
+      #   response.status.should eq(403)
+      # end
 
-      context 'success' do
-        let(:p2) { Fabricate(:post, user: user1) }
+      # context 'success' do
+      #   let(:p2) { Fabricate(:post, user: user1) }
 
-        # it "should work" do
-        #   expect{
-        #     xhr :get, :set_location, post_id: p2.id, location: birmingham_json,  use_route: :map_topic
-        #   }.to change(MapTopic::Location,:count).by(1)
+      #   before do
+      #     log_in_user user1
+      #     xhr :get, :set_location, post_id: p2.id, location: birmingham_json,  use_route: :map_topic
+      #   end
 
-        # end
+      #   it "returns success" do
 
-        before do
-          log_in_user user1
-          xhr :get, :set_location, post_id: p2.id, location: birmingham_json,  use_route: :map_topic
-        end
+      #     response.should be_success
+      #     result = ::JSON.parse(response.body)
+      #     result['city'].should == "birmingham"
+      #     # result['success'].should == true
+      #     # result['url'].should be_present
+      #   end
+      # end
 
-        it "returns success" do
-
-          response.should be_success
-          result = ::JSON.parse(response.body)
-          result['city'].should == "birmingham"
-          # result['success'].should == true
-          # result['url'].should be_present
-        end
-      end
     end
 
   end
