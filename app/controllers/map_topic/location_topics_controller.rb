@@ -85,25 +85,21 @@ module MapTopic
       location.country = params[:location][:country] || ""
       location.address = params[:location][:formattedAddress] || ""
 
-      # below will not update if already exists:
-      # do |loc|
-      #   loc.title = params[:location_title] || "ll"
-      # end
+
       location.save!
 
+      location_topic = MapTopic::LocationTopic.create_from_location location, @topic.id
+      # location_topic = MapTopic::LocationTopic.new()
+      # location_topic.topic_id = @topic.id
+      # location_topic.city = location.city.downcase
+      # location_topic.country = location.country.downcase
 
-      # location_topic = MapTopic::LocationTopic.where(:topic_id => @topic.id).first_or_initialize
-      location_topic = MapTopic::LocationTopic.new()
-      location_topic.topic_id = @topic.id
-      location_topic.city = location.city.downcase
-      location_topic.country = location.country.downcase
+      # location_topic.location_title = location.title
+      # location_topic.longitude = location.longitude
+      # location_topic.latitude = location.latitude
+      # location_topic.location_id = location.id
 
-      location_topic.location_title = location.title
-      location_topic.longitude = location.longitude
-      location_topic.latitude = location.latitude
-      location_topic.location_id = location.id
-
-      location_topic.save!
+      # location_topic.save!
 
       return render json: location.to_json
 
@@ -130,26 +126,26 @@ module MapTopic
     end
 
 
-    def get_location_from_city_name(city_name)
-      location_topic = MapTopic::LocationTopic.where(:location_title => city_name.downcase,:location_id => 0).first
-      if location_topic
-        return location_topic
-      else
-        location_coordinates = Geocoder.coordinates(city_name)
-        if location_coordinates
-          location_topic = MapTopic::LocationTopic.create({
-                                                            location_title: city_name.downcase,
-                                                            longitude: location_coordinates[1],
-                                                            latitude: location_coordinates[0],
-                                                            location_id: 0,
-                                                            topic_id: 0
-          })
-          return location_topic
-        else
-          return MapTopic::LocationTopic.where(:location_title =>'london',:location_id => 0).first
-        end
-      end
-    end
+    # def get_location_from_city_name(city_name)
+    #   location_topic = MapTopic::LocationTopic.where(:location_title => city_name.downcase,:location_id => 0).first
+    #   if location_topic
+    #     return location_topic
+    #   else
+    #     location_coordinates = Geocoder.coordinates(city_name)
+    #     if location_coordinates
+    #       location_topic = MapTopic::LocationTopic.create({
+    #                                                         location_title: city_name.downcase,
+    #                                                         longitude: location_coordinates[1],
+    #                                                         latitude: location_coordinates[0],
+    #                                                         location_id: 0,
+    #                                                         topic_id: 0
+    #       })
+    #       return location_topic
+    #     else
+    #       return MapTopic::LocationTopic.where(:location_title =>'london',:location_id => 0).first
+    #     end
+    #   end
+    # end
 
     def location_topics_query(options={})
       Topic.where("deleted_at" => nil)

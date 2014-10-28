@@ -14,7 +14,26 @@ module MapTopic
 
 
 
-# only need to run this once to correct error in setting primary_post location
+        def self.create_from_location location, topic_id
+
+            location_topic = MapTopic::LocationTopic.new()
+            location_topic.topic_id = topic_id
+            # do I need to ensuer city and country are downcased?
+            location_topic.city = location.city
+            location_topic.country = location.country
+
+            location_topic.location_title = location.title
+            location_topic.longitude = location.longitude
+            location_topic.latitude = location.latitude
+            location_topic.location_id = location.id
+
+            location_topic.save!
+
+            return location_topic
+        end
+
+
+        # only need to run this once to correct error in setting primary_post location
         def self.ensure_each_location_topic_has_location_post
             # MapTopic::LocationTopic.all.each{ |l| p l.location_title}
             MapTopic::LocationTopic.all.each do |location_topic|

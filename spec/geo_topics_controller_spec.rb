@@ -106,7 +106,6 @@ describe MapTopic::GeoTopicsController, type: :controller do
       context "and a city is specified for which no GeoKey exists" do
         it "should create and return geo_key for city requested" do
           xhr :get, :get_for_geo, geo: 'birmingham', use_route: :map_topic
-          binding.pry
           result = ::JSON.parse(response.body)
           result['geo_key']['city_lower'].should == "birmingham"
           MapTopic::GeoKey.last.city_lower.should == "birmingham"

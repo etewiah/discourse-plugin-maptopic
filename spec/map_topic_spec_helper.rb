@@ -24,3 +24,12 @@ RSpec.configure do |rspec|
   # or
   # rspec.deprecation_stream = File.open("/path/to/file", "w")
 end
+
+# TODO - improve this
+def create_brum_location
+  location = MapTopic::Location.new()
+  location.latitude = "52.455709"
+  location.longitude = "-1.886135999999965"
+  location.save!
+  return location
+end
