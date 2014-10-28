@@ -2,17 +2,18 @@
 
 {{#if model.isLocationTopic}}
 
-    {{#if model.hasLocation}}
+    {{#if model.hasGeo}}
 
       <div class="map-for-topic" style="">
-      {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" }} 
+      {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" geo=model.geo showSearchBox=true  }} 
       </div>
 
     {{else}}
-      <div class="map-for-topic" style="">
+    <div>Sorry, there has been an error.</div>
+{{!--       <div class="map-for-topic" style="">
       {{ topics-map displayContext="topicView"  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
       showSearchBox=false geo=model.geo }} 
-      </div>
+      </div> --}}
     {{/if}}
 
       <div class="map-for-topic-buttons" style="">

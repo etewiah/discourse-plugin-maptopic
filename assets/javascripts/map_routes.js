@@ -21,7 +21,8 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
   model: function(params) {
-    return Discourse.GeoTopic.geoTopicsForCity(params.city);
+    debugger;
+    return Discourse.GeoTopic.geoTopicsForCity(params.geo);
     // .then(function(result) {
     //   console.log(params);
     //   debugger;
@@ -41,31 +42,25 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
     // city may have been calculated server side so lets save that to avoid making calculation again
     // TODO - save in localStorage?
-    var currentCity = model.city;
+    var currentCity = model.geo;
 
+    var currentGeoKey = model.geo_key;
+    mapController.set('currentGeoKey', currentGeoKey);
 
-    var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+// TODO - investigate using above instead of below:
     var       currentCitySelection = {
         displayString: model.geo_key.display_name.capitalize(),
         value: model.geo_key.bounds_value.toLowerCase(),
         longitude: model.geo_key.longitude,
         latitude: model.geo_key.latitude
       };
-
-      // TODO - move below to geotopic model
-
-    // var currentCitySelection = selectionItems.findBy('value', currentCity.toLowerCase());
-    // // where a random city (passed by url for eg) is being used, below will add that city 
-    // if (!currentCitySelection) {
-    //   currentCitySelection = {
-    //     displayString: model.geo_key.display_name.capitalize(),
-    //     value: model.geo_key.bounds_value.toLowerCase(),
-    //     longitude: model.geo_key.longitude,
-    //     latitude: model.geo_key.latitude
-    //   };
-    //   selectionItems.pushObject(currentCitySelection);
-    // }
     mapController.set('currentCitySelection', currentCitySelection);
+
+
+// TODO - remove this:
+    var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+
+
 
     // mapController.get('currentCity') || this.paramsFor(this.routeName).currentCity;
     mapController.set('currentCity', currentCity);
@@ -83,9 +78,9 @@ Discourse.Route.buildRoutes(function() {
     this.route('root', {
       path: '/'
     });
-    // :val can be gigs, artists (performers??) or venues
+// TODO - rename city below to :geo
     this.route('fromOneParam', {
-      path: '/:city'
+      path: '/:geo'
     });
 
   });

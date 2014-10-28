@@ -22,14 +22,14 @@ Discourse.GeoTopic.reopenClass({
     return selectionItems;
   },
   // TODO **  make use of result.place_id  (google place id...)
-  geoTopicsForCity: function(city) {
-    if (!city) {
-      console.log('no city, will be expensive on server...');
+  geoTopicsForCity: function(geo) {
+    if (!geo) {
+      console.log('no geo, will be expensive on server...');
     };
-    var url = Discourse.getURL("/geo_topics/get_for_city");
+    var url = Discourse.getURL("/geo_topics/get_for_geo");
     return Discourse.ajax(url, {
       data: {
-        city: city
+        geo: geo
       }
     });
   },

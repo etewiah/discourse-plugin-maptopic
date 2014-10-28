@@ -10,19 +10,23 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         return;
       }
       var geo = {};
+      var currentGeoKey = this.get('controllers.map.currentGeoKey');
+      currentGeoKey.capability = topicType;
+
+
       // in future might allow country bounds etc..
       var currentCitySelection = this.get('controllers.map.currentCitySelection');
 
-      geo.bounds_value = currentCitySelection.value.toLowerCase();
-      geo.bounds_type = "city";
-      geo.bounds_range = 20;
-      geo.latitude = currentCitySelection.latitude
-      geo.longitude = currentCitySelection.longitude
-      geo.city_lower = currentCitySelection.value.toLowerCase();
-      // geo.country_lower = geo_key.country_lower
-      geo.display_name = currentCitySelection.displayString;
-      geo.capability = topicType;
-      this.send('showDiscourseModal', 'newTopicModal', geo);
+      // geo.bounds_value = currentCitySelection.value.toLowerCase();
+      // geo.bounds_type = "city";
+      // geo.bounds_range = 20;
+      // geo.latitude = currentCitySelection.latitude
+      // geo.longitude = currentCitySelection.longitude
+      // geo.city_lower = currentCitySelection.value.toLowerCase();
+      // // geo.country_lower = geo_key.country_lower
+      // geo.display_name = currentCitySelection.displayString;
+      // geo.capability = topicType;
+      this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
     },
     // had meant to show topic details next to index map - might come back to this
     // showPost: function(){
@@ -31,9 +35,9 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     //   var that = this;
     //   detailedTopic.then(function (result) {
     //     that.set('selectedTopic',result);
-    //     debugger;
     //   });
     // },
+
     // can be triggered by clicking on infowindow after either doubleclicking map
     // use hovering over marker from places search
     startLocationTopic: function(locationType, locationDetails, city, title) {
@@ -49,37 +53,28 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
         locationObject.title = title;
       }
 
-      debugger;
 
       var geo = {};
       geo.initial_location = locationObject;
       // in future might allow country bounds etc..
-      var currentCitySelection = this.get('controllers.map.currentCitySelection');
-
-      geo.bounds_value = currentCitySelection.value.toLowerCase();
-      geo.bounds_type = "city";
-      geo.bounds_range = 20;
-      geo.latitude = currentCitySelection.latitude
-      geo.longitude = currentCitySelection.longitude
-      geo.city_lower = currentCitySelection.value.toLowerCase();
-      // geo.country_lower = geo_key.country_lower
-      geo.display_name = currentCitySelection.displayString;
-      geo.capability = "info";
-      this.send('showDiscourseModal', 'newTopicModal', geo);
+      // var currentCitySelection = this.get('controllers.map.currentCitySelection');
 
 
-      // if (Discourse.User.current()) {
-      //   var composerController = this.get('controllers.composer');
-      //   var self = this;
-      //   composerController.open({
-      //     action: Discourse.Composer.CREATE_TOPIC,
-      //     draftKey: "new_topic"
-      //   }).then(function() {
-      //     composerController.content.set('locationObject', locationObject);
-      //   });
-      // } else {
-      //   this.send('showLogin');
-      // }
+      var currentGeoKey = this.get('controllers.map.currentGeoKey');
+      currentGeoKey.initial_location = locationObject;
+      currentGeoKey.capability = "info";
+
+      // geo.bounds_value = currentCitySelection.value.toLowerCase();
+      // geo.bounds_type = "city";
+      // geo.bounds_range = 20;
+      // geo.latitude = currentCitySelection.latitude
+      // geo.longitude = currentCitySelection.longitude
+      // geo.city_lower = currentCitySelection.value.toLowerCase();
+      // // geo.country_lower = geo_key.country_lower
+      // geo.display_name = currentCitySelection.displayString;
+      // geo.capability = "info";
+      this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
+
       //return true to bubble up to route...
       return false;
     },
@@ -114,7 +109,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   },
   cityShareLinks: function() {
     var link = window.location.href;
-    var title = "What's being said about " + this.get('content.city').capitalize();
+    var title = "What's being said about " + this.get('content.geo').capitalize();
     // if (link.indexOf("/") === 0) {
     //   link = window.location.protocol + "//" + window.location.host + link;
     // }
@@ -131,17 +126,16 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     }, this).compact();
   }.property('content'),
   cityQuestionsTitle: function() {
-    if (this.get('content.city')) {
-      return "Questions regarding " + this.get('content.city').capitalize();
+    if (this.get('content.geo')) {
+      return "Questions regarding " + this.get('content.geo').capitalize();
     };
-  }.property('content.city'),
+  }.property('content.geo'),
   markers: function() {
-    var city_conversations = this.get('content.city_conversations');
+    var geo_conversations = this.get('content.geo_conversations');
     var currentMarkerValues = [];
-    // debugger;
     // chapuzo to ensure I maximise no of markers on index page
     // will include posts in topic...
-    city_conversations.forEach(function(t) {
+    geo_conversations.forEach(function(t) {
       if (t.primary_location) {
         var markerInfo = {
           // context: 'index_view',
@@ -166,7 +160,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     return otherTopics;
   }.property('content'),
   cityQuestions: function() {
-    var topics = this.get('content.city_conversations');
+    var topics = this.get('content.geo_conversations');
     var cityQuestions = [];
     topics.forEach(function(t) {
       if (t.capability === "question") {
@@ -201,25 +195,7 @@ Discourse.MapController = Discourse.Controller.extend({
 
 
   actions: {
-    // showNewTopicModal: function(currentCitySelection, topicType) {
-    //   if (!Discourse.User.current()) {
-    //     this.send('showLogin');
-    //     return;
-    //   }
-    //   var geo = {};
-    //   // in future might allow country bounds etc..
 
-    //   geo.bounds_value = currentCitySelection.value.toLowerCase();
-    //   geo.bounds_type = "city";
-    //   geo.bounds_range = 20;
-    //   geo.latitude = currentCitySelection.latitude
-    //   geo.longitude = currentCitySelection.longitude
-    //   geo.city_lower = currentCitySelection.value.toLowerCase();
-    //   // geo.country_lower = geo_key.country_lower
-    //   geo.display_name = currentCitySelection.displayString;
-    //   geo.capability = topicType;
-    //   this.send('showDiscourseModal', 'newTopicModal', geo);
-    // },
     startConversation: function() {
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
@@ -242,13 +218,9 @@ Discourse.MapController = Discourse.Controller.extend({
     },
     // below is primary action passed into simple-dropdown component
     // but is also called by add_city_modal directly
-    cityChanged: function(newCity) {
-      // var params = {
-      //   currentCity: newCity
-      // }
-
-      // var topiclist = Discourse.TopicList.findWhereLocationPresent("", params);
-      var topiclist = Discourse.GeoTopic.geoTopicsForCity(newCity);
+    // TODO - rename to geoChanged
+    cityChanged: function(newGeo) {
+      var topiclist = Discourse.GeoTopic.geoTopicsForCity(newGeo);
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
     // initiateAddLocation: function(newLocation) {
@@ -260,7 +232,6 @@ Discourse.MapController = Discourse.Controller.extend({
 
 
   // currentCitySelection: function() {
-  //   debugger;
   //   var currentCity = this.get('currentCity') || Discourse.SiteSettings.maptopic.defaultCityName;
   //   return this.get('citySelectionItemsWithUrls').findBy('value', currentCity);
   // }.property('currentCity', 'citySelectionItemsWithUrls'),

@@ -36,6 +36,8 @@ module MapTopic
       # if relevant geokey does not exist, create it
       geo_key = MapTopic::GeoKey.where(:bounds_value => params[:geo][:bounds_value].downcase).first
       unless geo_key
+        # can't really see scenario where would get here as all set_geo will only be called by 
+        # client after a GeoKey has been created and map built from it client side
         geo_key = MapTopic::GeoKey.create_from_city  params[:geo][:city]
       end
 

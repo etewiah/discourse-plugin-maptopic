@@ -112,7 +112,7 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
         editReason: null
       }).then(function(post_result) {
         var geo = self.get('model');
-        // debugger;
+        debugger;
 
         var set_geo_endpoint = '/location_posts/set_geo';
         var map_topic = Discourse.ajax(set_geo_endpoint, {
@@ -161,17 +161,6 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
         // bootbox.alert(error);
       });
 
-
-      // if (this.get('controllers.map')) {
-      //   var mapController = this.get('controllers.map');
-      //   var topicTitle = this.get('topicTitle');
-      //   if (!Ember.isBlank(topicTitle)) {
-      //     mapController.send('cityChanged', topicTitle);
-      //     this.send('closeModal');
-      //   }
-      // } else {
-      //   debugger
-      // }
     }
   }
 });

@@ -41,13 +41,21 @@ Discourse.Topic.reopen({
     }
   }.property('location', 'geo'),
 
-  hasLocation: function() {
-    if (this.get('location')) {
+  // hasLocation: function() {
+  //   if (this.get('location')) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }.property('location'),
+
+  hasGeo: function() {
+    if (this.get('geo')) {
       return true;
     } else {
       return false;
     }
-  }.property('location'),
+  }.property('geo'),
 
   locationDetails: function() {
     if (this.get('location')) {

@@ -407,27 +407,14 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           that.placeSelected(event, detailsForMarker);
         } else {
           that.showNewInfowindow(infowindowInstance, marker);
-
-          // for (var i = 0; i < that.infoWindows.length; i++) {
-          //   that.infoWindows[i].close();
-          // }
-          // that.infoWindows = [];
-          // that.infoWindows.push(infowindowInstance);
-          // infowindowInstance.open(that.map, marker);
-          // marker.showingInfoWindow = true;
         }
       });
 
       google.maps.event.addListener(infowindowInstance, 'domready', function() {
+        // ensure document.getElementById("tmap-infowindow-content") exists....
         document.getElementById("tmap-infowindow-content").addEventListener("click", function(e) {
           e.stopPropagation();
           that.placeSelected(event, detailsForMarker);
-          // if (infowindowInstance.dataObjectType === 'topic') {
-          //   that.locationTopicSelected(e, infowindowInstance.dataObject);
-          // } else if (infowindowInstance.dataObjectType === 'post') {
-          //   that.locationPostSelected(e, infowindowInstance.dataObject);
-          // }
-
         });
 
       });
