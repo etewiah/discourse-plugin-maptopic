@@ -112,7 +112,6 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
         editReason: null
       }).then(function(post_result) {
         var geo = self.get('model');
-        debugger;
 
         var set_geo_endpoint = '/location_posts/set_geo';
         var map_topic = Discourse.ajax(set_geo_endpoint, {

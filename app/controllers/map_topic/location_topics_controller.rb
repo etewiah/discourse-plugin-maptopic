@@ -31,48 +31,34 @@ module MapTopic
       render json: get_nearest_location_to_request
     end
 
-    def get_for_city
-      distance = 20
-      # if params[:longitude] && params[:latitude]
-      #   longitude = params[:longitude]
-      #   latitude = params[:latitude]
-      #   center_point = [latitude,longitude]
-      if params[:city]
-        location = get_location_from_city_name(params[:city].downcase)
-      else
-        # TODO - log how often this is being called - pretty expensive as should be called as little as possible
-        location = get_nearest_location_to_request
-      end
-      center_point = [location.latitude,location.longitude]
+    # def get_for_city
+    #   distance = 20
+    #   # if params[:longitude] && params[:latitude]
+    #   #   longitude = params[:longitude]
+    #   #   latitude = params[:latitude]
+    #   #   center_point = [latitude,longitude]
+    #   if params[:city]
+    #     location = get_location_from_city_name(params[:city].downcase)
+    #   else
+    #     # TODO - log how often this is being called - pretty expensive as should be called as little as possible
+    #     location = get_nearest_location_to_request
+    #   end
+    #   center_point = [location.latitude,location.longitude]
 
-      #       if params[:filter_key] && params[:filter_value]
-      #   if params[:filter_key] == 'city'
-      #     @location_topic_ids = ::MapTopic::GigTopic.where("gig_city = ?", params[:filter_value]).limit(50).pluck('topic_id')
-      #   else
-      #     return render json: false
-      #   end
-      # else
-      #   @location_topic_ids = MapTopic::GigTopic.limit(50).pluck('topic_id')
-      # end
+    #   box = Geocoder::Calculations.bounding_box(center_point, distance)
+    #   @location_topic_ids = MapTopic::LocationTopic.within_bounding_box(box).limit(50).pluck('topic_id')
+    #   # using bounding_box only because pluck does not seem to work with near:
+    #   # MapTopic::LocationTopic.near('berlin').limit(50).pluck('topic_id')
 
-      # [40.4167754, -3.7037902]
-      # longitude: "-3.7037902",
-      # latitude: "40.4167754",
+    #   list = TopicList.new(:blaa, current_user, location_topics_query)
+    #   # dynamically adding an extra attribute - could get me into trouble as serializer now expects this..
+    #   list.class.module_eval { attr_accessor :city_info}
+    #   list.city_info = location.to_json
+    #   render_serialized(list, MapTopic::LocationTopicListSerializer,  root: 'topic_list')
 
-      box = Geocoder::Calculations.bounding_box(center_point, distance)
-      @location_topic_ids = MapTopic::LocationTopic.within_bounding_box(box).limit(50).pluck('topic_id')
-      # using bounding_box only because pluck does not seem to work with near:
-      # MapTopic::LocationTopic.near('berlin').limit(50).pluck('topic_id')
-
-      list = TopicList.new(:blaa, current_user, location_topics_query)
-      # dynamically adding an extra attribute - could get me into trouble as serializer now expects this..
-      list.class.module_eval { attr_accessor :city_info}
-      list.city_info = location.to_json
-      render_serialized(list, MapTopic::LocationTopicListSerializer,  root: 'topic_list')
-
-      # render list
-      # json: { status: 'ok'}
-    end
+    #   # render list
+    #   # json: { status: 'ok'}
+    # end
 
 
 # below deprecated?????

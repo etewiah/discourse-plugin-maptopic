@@ -15,7 +15,7 @@ module MapTopic
         end
         # http://stackoverflow.com/questions/13433865/geocoding-addresses-with-geocoder-gem-and-postgis-database-with-rgeo
         reverse_geocoded_by :latitude, :longitude do |obj, results|
-            binding.pry
+            # binding.pry
             # get here when I run
             # rake geocode:all CLASS=MapTopic::GeoKey SLEEP=2.25 BATCH=5
             # all this just to add country, but worthwhile...
