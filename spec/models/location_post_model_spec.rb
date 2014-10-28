@@ -12,11 +12,20 @@ describe 'LocationPost' do
   #   pending "to consider"
   #   pending "to test - country_code after migrating"
   # end
-  it 'can be created from a location and post id ' do
-    result = MapTopic::LocationPost.create_from_location location, post.id
-    binding.pry
+  context 'create_from_location' do
+    # let(:location_post) {MapTopic::LocationPost.create_from_location location, post.id  }
+    before do
+      result = MapTopic::LocationPost.create_from_location location, post
+    end
 
-    post.location.should == location
+    it 'will assign location to post' do
+      post.location.should == location
+    end
+
+    it 'will add location to array of locations for post topic ' do
+      post.topic.location.should == location
+    end
+
   end
 
 end

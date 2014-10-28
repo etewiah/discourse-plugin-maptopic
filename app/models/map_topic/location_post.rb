@@ -10,16 +10,18 @@ module MapTopic
 
 
 
-        def self.create_from_location location, post_id
+        def self.create_from_location location, post
             # currently I am only creating 1 location per post hence "first_or_ini..." instead of .new()
             # this might change in the future to allow multiple locations per post
-            location_post = MapTopic::LocationPost.where(:post_id => post_id).first_or_initialize
+            location_post = MapTopic::LocationPost.where(:post_id => post.id).first_or_initialize
             location_post.location_title = location.title
             location_post.longitude = location.longitude
             location_post.latitude = location.latitude
             location_post.location_id = location.id
 
             location_post.save!
+            # below ensures that
+            location_topic = MapTopic::LocationTopic.create_from_location location, post.topic.id
 
             return location_post
         end

@@ -86,7 +86,7 @@ module MapTopic
       # end
       location.save!
 
-      location_post = MapTopic::LocationPost.create_from_location location, @post.id
+      location_post = MapTopic::LocationPost.create_from_location location, @post
 
       # location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
       # location_post.location_title = location.title
