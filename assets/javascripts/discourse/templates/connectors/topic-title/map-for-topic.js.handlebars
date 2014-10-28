@@ -5,7 +5,7 @@
     {{#if model.hasGeo}}
 
       <div class="map-for-topic" style="">
-      {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" geo=model.geo showSearchBox=true  }} 
+      {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" geo=model.geo showSearchBox=false  }} 
       </div>
 
     {{else}}

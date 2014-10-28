@@ -241,21 +241,8 @@ Discourse.MapController = Discourse.Controller.extend({
   citySelectionItemsWithUrls: function() {
     var router = this.get('target');
     var selectionItems = Discourse.GeoTopic.getGeoIndexList(router);
-    //     var lsGeoIndexListUpToDate = true;
-    //     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
-    //     if (lsGeoIndexList) {
-    //       var selectionItems = JSON.parse(lsGeoIndexList);
-    //     } else {
-    //       lsGeoIndexListUpToDate = false;
-    // // todo - get from server
-    //       var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
-    //       selectionItems.forEach(function(item) {
-    //         item.url = this.get('target').generate('map.fromOneParam', {
-    //           city: item.value
-    //         });
-    //       }, this);
 
-    //     }
+
     var currentCitySelection = this.get('currentCitySelection');
     var currentCityInSelectionItems = selectionItems.findBy('value', currentCitySelection.value);
     if (!currentCityInSelectionItems) {

@@ -7,6 +7,7 @@ Discourse.GeoTopic.reopenClass({
     // var lsGeoIndexListUpToDate = true;
     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
     if (lsGeoIndexList) {
+      // If has been saved in local storage, return that
       var selectionItems = JSON.parse(lsGeoIndexList);
     } else {
       // lsGeoIndexListUpToDate = false;

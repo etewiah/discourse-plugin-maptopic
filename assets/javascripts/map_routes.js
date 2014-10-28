@@ -21,7 +21,6 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
   model: function(params) {
-    debugger;
     return Discourse.GeoTopic.geoTopicsForCity(params.geo);
     // .then(function(result) {
     //   console.log(params);
