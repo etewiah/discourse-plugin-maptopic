@@ -220,6 +220,7 @@ Discourse.MapController = Discourse.Controller.extend({
     // but is also called by add_city_modal directly
     // TODO - rename to geoChanged
     cityChanged: function(newGeo) {
+      debugger;
       var topiclist = Discourse.GeoTopic.geoTopicsForCity(newGeo);
       this.transitionToRoute('map.fromOneParam', topiclist);
     },

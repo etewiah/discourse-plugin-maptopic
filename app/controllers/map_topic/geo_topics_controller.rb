@@ -23,7 +23,6 @@ module MapTopic
         geo_key = MapTopic::GeoKey.where(:bounds_value => 'berlin').first
       end
       geo = geo_key.bounds_value
-
       # TODO - where params[:geo] is passed but is not the geo returned in geo_key (maybe default
       # geo was returned) , should return a message to client in addition
 
@@ -31,9 +30,11 @@ module MapTopic
       @geo_conversations = MapTopic::TopicGeo.where(:bounds_value => geo)
 # below rejects conversations without a topic or location - should not be necessary
       @geo_conversations = @geo_conversations.select do |conv|
-        if conv.topic && conv.topic.location
+        if conv.topic 
+          # && conv.topic.location
           true
         else
+          # binding.pry
           false
         end
       end

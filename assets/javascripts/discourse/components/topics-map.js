@@ -290,7 +290,6 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
     renderMapWithoutMarkers: function() {
         var geoDetails = this.get('geoDetails');
-        debugger;
         var mapCenter = new google.maps.LatLng(geoDetails.latitude, geoDetails.longitude);
 
 
@@ -313,6 +312,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             bounds.extend(neLatlng);
             bounds.extend(swLatlng);
             this.map.fitBounds(bounds);
+            // this.map.setZoom(this.map.getZoom() + 1);
         };
 
 
