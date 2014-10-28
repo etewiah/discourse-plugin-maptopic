@@ -8,8 +8,57 @@ module MapTopic
 
     end
 
-    def get_for_city
+    def get_for_geo
+      if params[:geo]
+        # when a random geo has been passed in, below ensures a key is created for it
+        geo_key =  ensure_geo_key_exists params[:geo].downcase
+      else
+        # TODO - log how often this is being called - pretty expensive as should be called as little as possible
+        geo_key = get_nearest_location_to_request
+      end
 
+      unless geo_key
+        # this is a really ugly attempt to ensure that I always return a geo_key
+        # TODO - have a more sensible way of getting the default
+        geo_key = MapTopic::GeoKey.where(:bounds_value => 'berlin').first
+      end
+      geo = geo_key.bounds_value
+
+      # TODO - where params[:geo] is passed but is not the geo returned in geo_key (maybe default
+      # geo was returned) , should return a message to client in addition
+
+      # TODO - make sure this query does not return unlisted or private conversations..
+      @geo_conversations = MapTopic::TopicGeo.where(:bounds_value => geo)
+# below rejects conversations without a topic or location - should not be necessary
+      @geo_conversations = @geo_conversations.select do |conv|
+        if conv.topic && conv.topic.location
+          true
+        else
+          false
+        end
+      end
+
+      @other_conversations = MapTopic::TopicGeo.where("bounds_value <> ?", geo).limit(6)
+
+      # return render json: @geo_conversations, each_serializer: MapTopic::GeoTopicSummarySerializer
+      geo_conversations_serialized = serialize_data(@geo_conversations, MapTopic::GeoTopicSummarySerializer)
+      other_conversations_serialized = serialize_data(@other_conversations, MapTopic::GeoTopicSummarySerializer)
+
+      return render_json_dump({
+                                "geo_key" => geo_key,
+                                "other_conversations" => other_conversations_serialized,
+                                "geo_conversations" => geo_conversations_serialized,
+                                "geo" => geo
+      })
+
+      # 2 calls below are the same:
+      # render_json_dump(serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer))
+      # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
+    end
+
+    # TODO - remove below:
+
+    def get_for_city
       if params[:city]
         # when a random city has been passed in, below ensures a key is created for it
         geo_key =  ensure_geo_key_exists params[:city].downcase
@@ -30,7 +79,7 @@ module MapTopic
 
       # TODO - make sure this query does not return unlisted or private conversations..
       @city_conversations = MapTopic::TopicGeo.where(:city_lower => city)
-
+# below rejects conversations without a topic or location - should not be necessary
       @city_conversations = @city_conversations.select do |conv|
         if conv.topic && conv.topic.location
           true
@@ -40,11 +89,6 @@ module MapTopic
       end
 
       @other_conversations = MapTopic::TopicGeo.where("city_lower <> ?", city).limit(6)
-
-      # if @city_conversations.length < 1
-      #   # when a random city has been passed in, lets create a key for it
-      #   ensure_geo_key_exists city
-      # end
 
       # return render json: @city_conversations, each_serializer: MapTopic::GeoTopicSummarySerializer
       city_conversations_serialized = serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer)
@@ -60,7 +104,6 @@ module MapTopic
       # 2 calls below are the same:
       # render_json_dump(serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer))
       # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
-
     end
 
 
@@ -84,10 +127,10 @@ module MapTopic
     end
 
 
-    def ensure_geo_key_exists(city_name)
-      geo_key= MapTopic::GeoKey.where(:city_lower => city_name.downcase).first
+    def ensure_geo_key_exists(geo_name)
+      geo_key= MapTopic::GeoKey.where(:city_lower => geo_name.downcase).first
       unless geo_key
-        geo_key = MapTopic::GeoKey.create_from_city  city_name.downcase
+        geo_key = MapTopic::GeoKey.create_from_geo  geo_name.downcase, "searched"
 
       end
       return geo_key
