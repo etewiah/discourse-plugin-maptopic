@@ -64,9 +64,10 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
 
   initiateMaps: function() {
     // var currentMarkerValues = this.get('markers');
-    if (this.get('defaultLocation.city')) {
-      this.set('cityForMap', this.get('defaultLocation.city'));
+    if (this.get('defaultLocation.bounds_value')) {
+      this.set('cityForMap', this.get('defaultLocation.bounds_value'));
     }
+    debugger;
     if (this.get('defaultLocation.latitude')) {
       var defaultLocation = this.get('defaultLocation');
     } else {
@@ -76,7 +77,7 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     var mapCenter = new google.maps.LatLng(defaultLocation.latitude,
       defaultLocation.longitude);
 
-
+// TODO - allow this to handle countries by using geometry object
     var zoom = 15;
     var icon = "http://maps.google.com/mapfiles/ms/icons/green-dot.png";
 

@@ -18,21 +18,6 @@ describe MapTopic::LocationPostsController, type: :controller do
   }}
   let(:birmingham_geo_json) { JSON.parse birmingham_geo_json_file  }
   # let(:birmingham_location_object_json) { JSON.parse birmingham_location_object_json_file  }
-  # let(:birmingham_geo_json) {{
-  #                              displayString: 'Birmingham',
-  #                              city: 'birmingham',
-  #                              longitude: "-1.890401",
-  #                              latitude: "52.48624299999999",
-  #                              bounds_value: "birmingham"
-  # }}
-
-  # describe "POST create" do
-  #   describe "with valid params" do
-  #     it "creates a new Post" do
-  #       expect {
-  #         post :create, {:post => valid_attributes}, valid_session
-  #       }.to change(Post, :count).by(1)
-  #     end
 
 
   describe 'set_geo' do

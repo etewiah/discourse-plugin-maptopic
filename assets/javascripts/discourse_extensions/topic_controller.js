@@ -35,6 +35,7 @@ require("discourse/controllers/topic")["default"].reopen({
 
 
   // below will trigger if a new location is set through select_location_modal
+  // name is misleading as there isn't a post necessarily being created:
   startLocationPost: function() {
     if (this.get('model.locationObject')) {
       if (Discourse.User.current()) {
@@ -49,6 +50,9 @@ require("discourse/controllers/topic")["default"].reopen({
           // // this ensures location is available for map markers:
           // postInTopic.set('location', locationObject);
         }
+        debugger;
+        // var update_location_endpoint = '/location_posts/set_location';
+        // because no post is being created yet, only setting location on topic
         var update_location_endpoint = '/location_topics/set_location';
         var map_topic = Discourse.ajax(update_location_endpoint, {
           data: {
@@ -62,7 +66,7 @@ require("discourse/controllers/topic")["default"].reopen({
         locs.pushObject(topic.locationObject);
         var that = this;
         map_topic.then(function(result) {
-          // debugger;
+          debugger;
         });
         // TODO - handle errors
 

@@ -56,7 +56,7 @@ module MapTopic
 
     end
 
-# should no longer need to use set_location in location_topics...
+# used for setting location on post (and topic) when post is being created
     def set_location
       unless(params[:post_id] && params[:location] )
         render_error "incorrect params"

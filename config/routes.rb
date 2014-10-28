@@ -3,7 +3,9 @@ MapTopic::Engine.routes.draw do
 
   # might be more accurate for set_geo to be a method in location_topic controller
   post "/location_posts/set_geo" => "location_posts#set_geo"
+  # below sets location where there is an associated post:
   post "/location_posts/set_location" => "location_posts#set_location"
+  # below sets location on a topic without the need for a post to have been created
   post "/location_topics/set_location" => "location_topics#set_location"
   # get "/location_posts/update_location" => "location_posts#update_location"
   # get "/location_topics/update_location" => "location_topics#update_location"

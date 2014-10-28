@@ -61,7 +61,7 @@ module MapTopic
     # end
 
 
-# below deprecated?????
+# used for setting location on topic when no post is being created
     def set_location
       unless(params[:topic_id] && params[:location] )
         render_error "incorrect params"
@@ -113,12 +113,6 @@ module MapTopic
     private
 
     def get_nearest_location_to_request
-      # if request.location && request.location.data['longitude'] != "0"
-      #   center_point = [request.location.data['latitude'],request.location.data['longitude']]
-      #   return MapTopic::LocationTopic.where(:location_id => 0).near(center_point,5000).first
-      # else
-      #   return MapTopic::LocationTopic.where(:location_title =>'berlin',:location_id => 0).first
-      # end
       request_location = Geocoder.search(request.remote_ip).first
 
       unless request_location && request_location.data['longitude'] != "0"
