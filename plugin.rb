@@ -16,7 +16,6 @@ end
 #   gem 'vcr'
 # end
 
-# register_asset "javascripts/discourse/templates/post.js.handlebars"
 register_asset "javascripts/discourse/templates/connectors/topic-title/map-for-topic.js.handlebars"
 register_asset "javascripts/discourse/templates/connectors/composer-open/composer-location-selection.js.handlebars"
 # register_asset "javascripts/discourse/templates/composer.js.handlebars"
@@ -53,8 +52,12 @@ register_asset "javascripts/map_routes.js"
 register_asset "javascripts/discourse/templates/map_landing.js.handlebars"
 register_asset "javascripts/discourse/templates/map_with_sidebox_desktop.js.handlebars"
 register_asset "javascripts/discourse/templates/map_with_sidebox_mobile.js.handlebars"
-register_asset "javascripts/discourse/templates/map_full_page.js.handlebars"
+# register_asset "javascripts/discourse/templates/map_full_page.js.handlebars"
 
+register_asset "javascripts/manage_controllers.js"
+register_asset "javascripts/manage_views.js"
+register_asset "javascripts/manage_routes.js"
+register_asset "javascripts/discourse/templates/manage_user_geo_keys.js.handlebars"
 
 register_asset "stylesheets/desktop/maptopic.scss", :desktop
 register_asset "stylesheets/mobile/maptopic.scss", :mobile

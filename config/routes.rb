@@ -13,7 +13,7 @@ MapTopic::Engine.routes.draw do
 # TODO - change get requests for above to post
   get "/geo_topics/get_geo_keys" => "geo_topics#get_geo_keys"
   get "/geo_topics/get_for_geo" => "geo_topics#get_for_geo"
-  # get "/geo_topics/get_for_geo_2" => "geo_topics#get_for_geo_2"
+  get "/geo_topics/get_for_geo_old" => "geo_topics#get_for_geo_old"
 # TODO - remove below:
   # get "/geo_topics/get_for_city" => "geo_topics#get_for_city"
 # TODO - remove below:
@@ -30,6 +30,8 @@ MapTopic::Engine.routes.draw do
   # TODO - render useful serverside content for search engine etc..
   get "/map" => "location_topics#landing"
   get "/map/*path" => "location_topics#landing"
+  get "/manage/user_geo_keys" => "location_topics#landing"
+  get "/manage" => "location_topics#landing"
 
 
 end

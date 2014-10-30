@@ -1,7 +1,7 @@
 module MapTopic
 
     class GeoTopicItemSerializer < ListableTopicSerializer
-        attributes :locations, :category_id, :capability
+        attributes :locations, :category_id, :capability, :views
         # attributes :views,
         #     :like_count,
         #     :starred,

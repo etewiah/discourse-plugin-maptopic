@@ -70,18 +70,15 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
 
 Discourse.Route.buildRoutes(function() {
-
   this.resource('map', {
     path: '/map'
   }, function() {
     this.route('root', {
       path: '/'
     });
-// TODO - rename city below to :geo
     this.route('fromOneParam', {
       path: '/:geo'
     });
-
   });
-
 });
+
