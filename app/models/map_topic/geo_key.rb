@@ -36,6 +36,7 @@ module MapTopic
         def self.create_from_geo geo_name, show_criteria
             results = Geocoder.search(geo_name)
             if geo = results.first
+                # binding.pry
                 if geo.city
                     # bounds_value = geo.city.downcase
                     display_name = geo.city.titleize
@@ -50,13 +51,18 @@ module MapTopic
                         # bounds_value = geo.country.downcase
                         bounds_type = "country"
                         display_name = geo.country.titleize
+                    elsif geo.types.include? 'continent'
+                        # bounds_value = geo.country.downcase
+                        bounds_type = "continent"
+                        display_name = geo.address.titleize
                     else
+                        # binding.pry
                         # bounds_value = geo.country
-                        display_name = "unknown"
+                        display_name = geo.address.titleize
                         bounds_type = "unknown"
                     end
-
                 end
+                country_lower = geo.country ? geo.country.downcase : "unknown"
                 # bounds value is the geo_name passed in
                 # reason for this is that bounds_value cannot be duplicated but geo_name could be misspelt
                 # I want a new record with each misspell - even though I will have duplicate data in db
@@ -69,7 +75,7 @@ module MapTopic
                                                     bounds_type: bounds_type,
                                                     bounds_value: geo_name,
                                                     city_lower: city_lower,
-                                                    country_lower: geo.country.downcase,
+                                                    country_lower: country_lower,
                                                     show_criteria: show_criteria,
                                                     longitude: geo.longitude,
                                                     latitude: geo.latitude,
