@@ -13,6 +13,7 @@ MapTopic::Engine.routes.draw do
 # TODO - change get requests for above to post
   get "/geo_topics/get_geo_keys" => "geo_topics#get_geo_keys"
   get "/geo_topics/get_for_geo" => "geo_topics#get_for_geo"
+  get "/geo_topics/get_for_geo_2" => "geo_topics#get_for_geo_2"
 # TODO - remove below:
   # get "/geo_topics/get_for_city" => "geo_topics#get_for_city"
 # TODO - remove below:

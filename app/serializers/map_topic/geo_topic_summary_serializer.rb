@@ -1,3 +1,4 @@
+# still using this??
 module MapTopic
   class GeoTopicSummarySerializer < ApplicationSerializer
 

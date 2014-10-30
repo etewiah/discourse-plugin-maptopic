@@ -305,8 +305,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             that.mapClicked(event.latLng.lat(), event.latLng.lng());
         });
 
-        if (geoDetails && geoDetails.geometry) {
+        if (geoDetails && geoDetails.geometry.bounds) {
             var bounds = new google.maps.LatLngBounds();
+            // seach for "world" - it has geometry but no bounds....
             var neLatlng = new google.maps.LatLng(geoDetails.geometry.bounds.northeast.lat, geoDetails.geometry.bounds.northeast.lng);
             var swLatlng = new google.maps.LatLng(geoDetails.geometry.bounds.southwest.lat, geoDetails.geometry.bounds.southwest.lng);
             bounds.extend(neLatlng);

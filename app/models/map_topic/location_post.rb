@@ -20,7 +20,8 @@ module MapTopic
             location_post.location_id = location.id
 
             location_post.save!
-            # below ensures that
+
+            # below ensures that each location for a post has a corresponding location in the topic
             location_topic = MapTopic::LocationTopic.create_from_location location, post.topic.id
 
             return location_post
