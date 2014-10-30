@@ -109,7 +109,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   },
   cityShareLinks: function() {
     var link = window.location.href;
-    var title = "What's being said about " + this.get('content.geo').capitalize();
+    var title = "What's being said about " + this.get('content.geo_key.display_name');
     // if (link.indexOf("/") === 0) {
     //   link = window.location.protocol + "//" + window.location.host + link;
     // }
@@ -126,21 +126,23 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     }, this).compact();
   }.property('content'),
   cityQuestionsTitle: function() {
-    if (this.get('content.geo')) {
-      return "Questions regarding " + this.get('content.geo').capitalize();
+    if (this.get('content.geo_key.display_name')) {
+      return "Questions regarding " + this.get('content.geo_key.display_name');
     };
-  }.property('content.geo'),
+  }.property('content'),
   markers: function() {
-    var geo_conversations = this.get('content.geo_conversations');
+    var geo_conversations = this.get('content.geo_topics');
     var currentMarkerValues = [];
-    // chapuzo to ensure I maximise no of markers on index page
-    // will include posts in topic...
+
     geo_conversations.forEach(function(t) {
-      if (t.primary_location) {
+      // if (t.primary_location) {
+      if (t.locations.length > 0) {
+        // using the first location in a topic is a bit lazy
+        // TODO - look for more sensible way of geting primary location
         var markerInfo = {
           // context: 'index_view',
-          topic: t.topic,
-          location: t.primary_location
+          topic: t,
+          location: t.locations[0]
         };
         currentMarkerValues.push(markerInfo);
       } else {}
@@ -149,10 +151,10 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     return currentMarkerValues;
   }.property('content'),
   otherTopics: function() {
-    var other_conversations = this.get('content.other_conversations');
+    var other_conversations = this.get('content.other_topics');
     var otherTopics = [];
     other_conversations.forEach(function(t) {
-      var topicObject = Discourse.Topic.create(t.topic);
+      var topicObject = Discourse.Topic.create(t);
       // basic-topic-list needs fancy_title
       topicObject.set('fancy_title', topicObject.get('title'));
       otherTopics.push(topicObject);
@@ -160,11 +162,12 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     return otherTopics;
   }.property('content'),
   cityQuestions: function() {
-    var topics = this.get('content.geo_conversations');
+    var topics = this.get('content.geo_topics');
     var cityQuestions = [];
+    debugger;
     topics.forEach(function(t) {
       if (t.capability === "question") {
-        var topicObject = Discourse.Topic.create(t.topic);
+        var topicObject = Discourse.Topic.create(t);
         // basic-topic-list needs fancy_title
         topicObject.set('fancy_title', topicObject.get('title'));
         cityQuestions.push(topicObject);
@@ -220,7 +223,6 @@ Discourse.MapController = Discourse.Controller.extend({
     // but is also called by add_city_modal directly
     // TODO - rename to geoChanged
     cityChanged: function(newGeo) {
-      debugger;
       var topiclist = Discourse.GeoTopic.geoTopicsForCity(newGeo);
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
@@ -247,7 +249,6 @@ Discourse.MapController = Discourse.Controller.extend({
     var currentCitySelection = this.get('currentCitySelection');
     var currentCityInSelectionItems = selectionItems.findBy('value', currentCitySelection.value);
     if (!currentCityInSelectionItems) {
-      debugger;
       selectionItems.pushObject(currentCitySelection);
       // lsGeoIndexListUpToDate = false;
     };

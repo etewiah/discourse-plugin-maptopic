@@ -8,7 +8,7 @@ module MapTopic
 
     end
 
-    def get_for_geo_2
+    def get_for_geo
       if params[:geo]
         # when a random geo has been passed in, below ensures a key is created for it
         geo_key =  ensure_geo_key_exists params[:geo].downcase
@@ -53,8 +53,9 @@ module MapTopic
                                 "geo_topics" => geo_topic_list_serialized,
                                 "other_topics" => other_topic_list_serialized,
                                 "geo_key" => geo_key,
+                                "geo" => geo
       })
-
+      # need to add geo above as its the key used in ember route
 
 
       # @other_conversations = MapTopic::TopicGeo.where("bounds_value <> ?", geo).limit(6)
@@ -75,7 +76,7 @@ module MapTopic
       # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
     end
 
-    def get_for_geo
+    def get_for_geo_old
       if params[:geo]
         # when a random geo has been passed in, below ensures a key is created for it
         geo_key =  ensure_geo_key_exists params[:geo].downcase

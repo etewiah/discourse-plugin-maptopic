@@ -41,7 +41,7 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
     // city may have been calculated server side so lets save that to avoid making calculation again
     // TODO - save in localStorage?
-    var currentCity = model.geo;
+    var currentCity = model.geo_key.bounds_value;
 
     var currentGeoKey = model.geo_key;
     mapController.set('currentGeoKey', currentGeoKey);
@@ -63,7 +63,7 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
     // mapController.get('currentCity') || this.paramsFor(this.routeName).currentCity;
     mapController.set('currentCity', currentCity);
-    Discourse.set('title', currentCity.capitalize() + ' - recent conversations');
+    Discourse.set('title', model.geo_key.display_name + ' - recent conversations');
   }
 
 });
