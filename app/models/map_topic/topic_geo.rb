@@ -11,6 +11,8 @@ module MapTopic
         serialize :poll, JSON
         serialize :places, JSON
         serialize :happening, JSON
+        serialize :geometry, JSON
+
 
         belongs_to :topic
 
@@ -40,7 +42,8 @@ module MapTopic
                     city_lower: geo_key.city_lower,
                     country_lower: geo_key.country_lower,
                     display_name: geo_key.display_name,
-                    capability: capability
+                    capability: capability,
+                    geometry: geo_key.geometry
             })
             return topic_geo
         end
