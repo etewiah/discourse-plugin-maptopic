@@ -35,7 +35,7 @@ require("discourse/controllers/topic")["default"].reopen({
 
 
   // below will trigger if a new location is set through select_location_modal
-  // name is misleading as there isn't a post necessarily being created:
+  // name is misleading as there isn't a post  being created:
   startLocationPost: function() {
     if (this.get('model.locationObject')) {
       if (Discourse.User.current()) {

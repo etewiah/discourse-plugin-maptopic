@@ -93,6 +93,7 @@ describe MapTopic::LocationPostsController, type: :controller do
       end
 
       it 'creates a geo for the topic' do
+        # how does assigns(:post) end up being the same as p1???
         assigns(:post).topic.geo.should== MapTopic::TopicGeo.last
       end
 
@@ -102,48 +103,22 @@ describe MapTopic::LocationPostsController, type: :controller do
 
       it 'assigns default location' do
         assigns(:post).location.should == MapTopic::Location.last
+        # binding.pry
         # pending "implementation"
       end
-    end
 
-    describe 'setting location for a post' do
-      # it "returns 403 if no user is logged in" do
-      #   xhr :get, :set_location, post_id: post.id,  use_route: :baa
-      #   response.should be_forbidden
-      # end
+      it 'creates and assigns correct category' do
+        assigns(:post).topic.category.parent_category.name.should == MapTopic::TopicGeo.last.country_lower.titleize
+        assigns(:post).topic.category.name.should == MapTopic::TopicGeo.last.city_lower.titleize
+        
+      end
 
-
-      # it "returns 400 if location missing" do
-      #   log_in_user user1
-      #   xhr :get, :set_location, post_id: post.id,  use_route: :map_topic
-      #   # binding.pry
-      #   response.status.should eq(400)
-      # end
-      # it "returns 403 if user does not have permission to edit post" do
-      #   log_in_user user1
-      #   xhr :get, :set_location, post_id: post.id, location: {},  use_route: :map_topic
-      #   response.status.should eq(403)
-      # end
-
-      # context 'success' do
-      #   let(:p2) { Fabricate(:post, user: user1) }
-
-      #   before do
-      #     log_in_user user1
-      #     xhr :get, :set_location, post_id: p2.id, location: birmingham_json,  use_route: :map_topic
-      #   end
-
-      #   it "returns success" do
-
-      #     response.should be_success
-      #     result = ::JSON.parse(response.body)
-      #     result['city'].should == "birmingham"
-      #     # result['success'].should == true
-      #     # result['url'].should be_present
-      #   end
-      # end
 
     end
+
+    # describe 'setting location for a post' do
+    #   # it "returns 403 if no user is logged in" do
+    # end
 
   end
 end

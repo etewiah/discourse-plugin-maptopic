@@ -4,10 +4,10 @@ module MapTopic
 
     before_action :check_user, only: [:set_location, :set_geo]
 
-# called when a new topic is created
-# sets a TopicGeo object on the topic
-# Bases the TopicGeo on GeoKey (at the moment for the city - bounds_value could in 
-# theory be a country or region or womex2014... )
+    # called when a new topic is created
+    # sets a TopicGeo object on the topic
+    # Bases the TopicGeo on GeoKey (at the moment for the city - bounds_value could in
+    # theory be a country or region or womex2014... )
     def set_geo
       unless(params[:post_id] && params[:geo] )
         render_error "incorrect params"
@@ -25,7 +25,7 @@ module MapTopic
 
       # might use below in the future if I decide to support initial locations ..
       if params[:geo][:initial_location]
-      # TODO - do something with google place id to enhance location info
+        # TODO - do something with google place id to enhance location info
         location = create_location params[:geo][:initial_location]
         @post.location = location
         @post.save!
@@ -36,7 +36,7 @@ module MapTopic
       # if relevant geokey does not exist, create it
       geo_key = MapTopic::GeoKey.where(:bounds_value => params[:geo][:bounds_value].downcase).first
       unless geo_key
-        # can't really see scenario where would get here as all set_geo will only be called by 
+        # can't really see scenario where would get here as all set_geo will only be called by
         # client after a GeoKey has been created and map built from it client side
         geo_key = MapTopic::GeoKey.create_from_geo  params[:geo][:city], "searched"
       end
@@ -44,10 +44,10 @@ module MapTopic
       topic_geo = MapTopic::TopicGeo.where(:topic_id => @post.topic.id).first
       unless topic_geo
         topic_geo = MapTopic::TopicGeo.create_from_geo_key geo_key, params[:geo][:capability]
-        topic_geo.topic_id = @post.topic.id 
+        topic_geo.topic_id = @post.topic.id
         topic_geo.save!
       end
-      
+
 
       ensure_category topic_geo.country_lower, topic_geo.city_lower, @post.topic, topic_geo.capability
 
@@ -56,7 +56,11 @@ module MapTopic
 
     end
 
-# used for setting location on post (and topic) when post is being created
+    # used for setting location on post (and topic) when post is being created
+    # assumption here is that set_geo has already been called and category set
+    # TODO - handle scenarios where locations are added to a topic that was never created
+    # as a geo-topic..  (so check and ensure geo and category are set)
+    # or maybe should leave as is ...
     def set_location
       unless(params[:post_id] && params[:location] )
         render_error "incorrect params"
@@ -86,32 +90,27 @@ module MapTopic
       # end
       location.save!
 
+      # below ensures that location is set for topic too:
       location_post = MapTopic::LocationPost.create_from_location location, @post
 
-      # location_post = MapTopic::LocationPost.where(:post_id => @post.id).first_or_initialize
-      # location_post.location_title = location.title
-      # location_post.longitude = location.longitude
-      # location_post.latitude = location.latitude
-      # location_post.location_id = location.id
-
-      # location_post.save!
-      # todo - ensure there is a location_post for each location topic
       if @post.post_number == 1
-        # this is the post associated with the topic so its location should also
-        # be associated with the topic
-        location_topic = MapTopic::LocationTopic.where(:topic_id => @post.topic_id).first_or_initialize
-        location_topic.city = location.city.downcase
-        location_topic.country = location.country.downcase
+        # should not get here - now using set_geo for new topics...
+        # binding.pry
+        # # this is the post associated with the topic so its location should also
+        # # be associated with the topic
+        # location_topic = MapTopic::LocationTopic.where(:topic_id => @post.topic_id).first_or_initialize
+        # location_topic.city = location.city.downcase
+        # location_topic.country = location.country.downcase
 
-        location_topic.location_title = location.title
-        location_topic.longitude = location.longitude
-        location_topic.latitude = location.latitude
-        location_topic.location_id = location.id
+        # location_topic.location_title = location.title
+        # location_topic.longitude = location.longitude
+        # location_topic.latitude = location.latitude
+        # location_topic.location_id = location.id
 
-        location_topic.save!
+        # location_topic.save!
 
-        topic = @post.topic
-        ensure_category location.country, location.city, topic, ""
+        # topic = @post.topic
+        # ensure_category location.country, location.city, topic, ""
 
       end
 
@@ -122,7 +121,7 @@ module MapTopic
 
     private
 
-# poorly named...
+    # poorly named...
     def create_location location
       # TODO - find location which is close enough to be considered the same..
       location_object = MapTopic::Location.where(:longitude => location[:longitude], :latitude => location[:latitude]).first_or_initialize
@@ -139,29 +138,18 @@ module MapTopic
       return location_object
     end
 
+
+# TODO - reopen topic model and add this there:
     def ensure_category country, city, topic, capability
       admin_user = User.where(:admin => true).last
       question_color = '0E76BD' # darker blue
       # 'F7941D' # orange
       # question_color = '92278F' # purple
       countries_color = '8C6238' #brown
+      cities_color = nil
       # gigs_color = 'EA1D25' #red
 
-      country_cat = Category.where(:name => country.titleize).first_or_initialize
-      unless country_cat.user
-        country_cat.user_id = admin_user.id
-        country_cat.color = countries_color
-        country_cat.save!
-        # below is the 'about category topic':
-        country_cat_topic = country_cat.topic
-        country_cat_topic.visible = false
-        country_cat_topic.save!
-
-      end
-      # create(:name => 'China', :color => '8C6238', :user_id => admin_user.id)
-
-
-      # topic.category = city_cat
+      country_cat = create_geo_category country.titleize, admin_user, countries_color, nil
 
       if capability && capability == "question"
         capability_cat_name = city.titleize + " - Question"
@@ -178,19 +166,40 @@ module MapTopic
       else
 
         # TODO - handle scenarios where there might not be a city
-        city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
-        unless city_cat.user
-          city_cat.user_id = admin_user.id
-          city_cat.save!
-          city_cat_topic = city_cat.topic
-          city_cat_topic.visible = false
-          city_cat_topic.save!
-        end
+        city_cat = create_geo_category city.titleize, admin_user, cities_color, country_cat
+
+        # city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
+        # unless city_cat.user
+        #   city_cat.user_id = admin_user.id
+        #   city_cat.save!
+        #   city_cat_topic = city_cat.topic
+        #   city_cat_topic.visible = false
+        #   city_cat_topic.save!
+        # end
         topic.category = city_cat
       end
       topic.save!
+      # binding.pry
+    end
 
-
+    def create_geo_category name, admin_user, color, parent 
+      if parent
+        geo_category = Category.where(:name => name, :parent_category_id => parent.id).first_or_initialize
+      else
+        geo_category = Category.where(:name => name).first_or_initialize
+      end
+      unless geo_category.user
+        geo_category.user_id = admin_user.id
+        if color
+          geo_category.color = color
+        end
+        geo_category.save!
+        # below is the 'about category topic':
+        geo_category_topic = geo_category.topic
+        geo_category_topic.visible = false
+        geo_category_topic.save!
+      end
+      return geo_category
     end
 
     def check_user
