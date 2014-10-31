@@ -1,0 +1,40 @@
+{
+  "capability": "question",
+  "id": 36,
+  "display_name": "unknown",
+  "longitude": 10.0794644,
+  "latitude": 46.5288067,
+  "bounds_type": "unknown",
+  "bounds_value": "alps",
+  "bounds_range": null,
+  "country_lower": "unknown",
+  "city_lower": "unknown",
+  "show_criteria": "searched",
+  "geometry": {
+    "bounds": {
+      "northeast": {
+        "lat": 48.80822,
+        "lng": 17.1566092
+      },
+      "southwest": {
+        "lat": 43.1694052,
+        "lng": 4.908709099999999
+      }
+    },
+    "location": {
+      "lat": 46.5288067,
+      "lng": 10.0794644
+    },
+    "location_type": "APPROXIMATE",
+    "viewport": {
+      "northeast": {
+        "lat": 48.80822,
+        "lng": 17.1566092
+      },
+      "southwest": {
+        "lat": 43.1694052,
+        "lng": 4.908709099999999
+      }
+    }
+  }
+}

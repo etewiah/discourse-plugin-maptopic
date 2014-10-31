@@ -25,6 +25,11 @@ RSpec.configure do |rspec|
   # rspec.deprecation_stream = File.open("/path/to/file", "w")
 end
 
+def get_json_from_fixture file_name
+  json_file = File.read("./plugins//discourse-plugin-maptopic/spec/fixtures/#{file_name}.json")
+  return JSON.parse json_file 
+end
+
 # TODO - improve this
 def create_brum_location
   location = MapTopic::Location.new()

@@ -38,7 +38,7 @@ module MapTopic
       unless geo_key
         # can't really see scenario where would get here as all set_geo will only be called by
         # client after a GeoKey has been created and map built from it client side
-        geo_key = MapTopic::GeoKey.create_from_geo  params[:geo][:city], "searched"
+        geo_key = MapTopic::GeoKey.create_from_geo  params[:geo][:bounds_value].downcase, "searched"
       end
 
       topic_geo = MapTopic::TopicGeo.where(:topic_id => @post.topic.id).first
@@ -49,7 +49,7 @@ module MapTopic
       end
 
 
-      ensure_category topic_geo.country_lower, topic_geo.city_lower, @post.topic, topic_geo.capability
+      ensure_category @post.topic, topic_geo.capability
 
       return render json: topic_geo.as_json
       # location.to_json
@@ -139,8 +139,10 @@ module MapTopic
     end
 
 
-# TODO - reopen topic model and add this there:
-    def ensure_category country, city, topic, capability
+    # TODO - reopen topic model and add this there:
+    def ensure_category topic, capability
+      country = topic.geo.country_lower
+      city = topic.geo.city_lower
       admin_user = User.where(:admin => true).last
       question_color = '0E76BD' # darker blue
       # 'F7941D' # orange
@@ -148,41 +150,55 @@ module MapTopic
       countries_color = '8C6238' #brown
       cities_color = nil
       # gigs_color = 'EA1D25' #red
-
-      country_cat = create_geo_category country.titleize, admin_user, countries_color, nil
-
-      if capability && capability == "question"
-        capability_cat_name = city.titleize + " - Question"
-        capability_cat = Category.where(:name => capability_cat_name, :parent_category_id => country_cat.id).first_or_initialize
-        unless capability_cat.user
-          capability_cat.user_id = admin_user.id
-          capability_cat.color = question_color
-          capability_cat.save!
-          capability_cat_topic = capability_cat.topic
-          capability_cat_topic.visible = false
-          capability_cat_topic.save!
-        end
-        topic.category = capability_cat
-      else
-
-        # TODO - handle scenarios where there might not be a city
-        city_cat = create_geo_category city.titleize, admin_user, cities_color, country_cat
-
-        # city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
-        # unless city_cat.user
-        #   city_cat.user_id = admin_user.id
-        #   city_cat.save!
-        #   city_cat_topic = city_cat.topic
-        #   city_cat_topic.visible = false
-        #   city_cat_topic.save!
+      # binding.pry
+      # assuming bounds_value will never be 'unknown'
+      if city == topic.geo.bounds_value
+        country_cat = create_geo_category country.titleize, admin_user, countries_color, nil
+        # if capability && capability == "question"
+        #   capability_cat_name = city.titleize + " - Question"
         # end
+        city_cat = create_geo_category city.titleize, admin_user, cities_color, country_cat
         topic.category = city_cat
+      else
+        region_or_country_cat = create_geo_category topic.geo.bounds_value.titleize, admin_user, countries_color, nil
+        topic.category = region_or_country_cat
       end
+
+
+      # if capability && capability == "question"
+      #   capability_cat_name = city.titleize + " - Question"
+      #   capability_cat = Category.where(:name => capability_cat_name, :parent_category_id => country_cat.id).first_or_initialize
+      #   unless capability_cat.user
+      #     capability_cat.user_id = admin_user.id
+      #     capability_cat.color = question_color
+      #     capability_cat.save!
+      #     capability_cat_topic = capability_cat.topic
+      #     capability_cat_topic.visible = false
+      #     capability_cat_topic.save!
+      #   end
+      #   topic.category = capability_cat
+      # else
+
+      #   # TODO - handle scenarios where there might not be a city
+      #   city_cat = create_geo_category city.titleize, admin_user, cities_color, country_cat
+
+      #   # city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
+      #   # unless city_cat.user
+      #   #   city_cat.user_id = admin_user.id
+      #   #   city_cat.save!
+      #   #   city_cat_topic = city_cat.topic
+      #   #   city_cat_topic.visible = false
+      #   #   city_cat_topic.save!
+      #   # end
+      #   topic.category = city_cat
+      # end
+
+
       topic.save!
       # binding.pry
     end
 
-    def create_geo_category name, admin_user, color, parent 
+    def create_geo_category name, admin_user, color, parent
       if parent
         geo_category = Category.where(:name => name, :parent_category_id => parent.id).first_or_initialize
       else
