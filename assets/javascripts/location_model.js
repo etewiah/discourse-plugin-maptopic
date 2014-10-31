@@ -3,7 +3,20 @@ Discourse.GeoTopic = Discourse.Model.extend({
 
 });
 Discourse.GeoTopic.reopenClass({
-  getGeoIndexList: function(router){
+  removeFromLlsGeoIndexList: function(geoKey) {
+    var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
+    if (lsGeoIndexList) {
+      var selectionItems = JSON.parse(lsGeoIndexList);
+
+      var newSelectionItems = selectionItems.rejectBy('value', geoKey.value);
+      // debugger;
+      Discourse.KeyValueStore.set({
+        key: 'lsGeoIndexList',
+        value: JSON.stringify(newSelectionItems)
+      });
+    }
+  },
+  getGeoIndexList: function(router) {
     // var lsGeoIndexListUpToDate = true;
     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
     if (lsGeoIndexList) {
@@ -11,10 +24,10 @@ Discourse.GeoTopic.reopenClass({
       var selectionItems = JSON.parse(lsGeoIndexList);
     } else {
       // lsGeoIndexListUpToDate = false;
-// todo - get from server
+      // todo - get from server
       var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
       selectionItems.forEach(function(item) {
-        item.url =  router.generate('map.fromOneParam', {
+        item.url = router.generate('map.fromOneParam', {
           city: item.value
         });
       }, this);

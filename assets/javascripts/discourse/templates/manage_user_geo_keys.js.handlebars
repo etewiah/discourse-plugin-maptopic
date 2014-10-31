@@ -1,13 +1,61 @@
-manage user geo keys
 
-  <span  >
-    <span class="wrapper-dropdown-5" tabindex="1">
-      <span class="dd-current" style="min-width: 50px;display: inline-block;" >
-        {{ currentSelectionItem.displayString }}</span>
-      <ul  class="dropdown">
-        {{#each item in sortedSelectionItems }}
-          <li {{ bind-attr class=item.class }}><a {{ bind-attr href=item.url }} {{ bind-attr data-val=item.value }}  >{{ item.displayString }}</a></li>
-        {{/each}}
-      </ul>
-    </span>
-  ​</span>
+
+<div class='container'>
+  <div class="row">
+    <div class="full-width">
+
+      <div id='left-manage-panel' style="width: 49%;float: left;">
+        <h4>User values</h4>
+        <span class="" tabindex="1">
+          <ul class="nav nav-stacked">
+            {{#each item in citySelectionItemsWithUrls }}
+            <li {{ bind-attr class=item.class }}>
+            <a style="width: 70%;float: left;">{{ item.displayString }}</a>
+
+            <a class='icon expand' style="width: 10%;float: left;display: inline-table;" href='#' 
+            title="remove title"
+            {{action "removeUserGeoKey" item}}>
+              {{fa-icon trash-o label="trash label" }}
+            </a>
+            </li>
+            {{/each}}
+          </ul>
+        </span>
+      </div>
+
+
+
+      <div id='last-manage-panel' style="width: 49%;float: left;padding-left:2%">
+        <h4>Server values</h4>
+        <span class="" tabindex="2">
+          <span class="dd-current" style="min-width: 50px;display: inline-block;">
+            {{ currentSelectionItem.displayString }}</span>
+          <ul class="nav nav-stacked">
+            {{#each item in content }}
+            <li {{ bind-attr class=item.class }}>
+            <a>{{ item.display_name }} ( {{item.show_criteria }} )</a>
+            </li>
+            {{/each}}
+          </ul>
+        </span>
+      </div>
+
+
+      <div id='right-manage-panel' style="width: 49%;float: left;">
+        <h4>Server values</h4>
+        <span class="" tabindex="2">
+          <span class="dd-current" style="min-width: 50px;display: inline-block;">
+            {{ currentSelectionItem.displayString }}</span>
+          <ul class="">
+            {{#each item in serverGeoKeys }}
+            <li {{ bind-attr class=item.class }}><a {{ bind-attr href=item.url }} {{ bind-attr data-val=item.value }}>{{ item.displayString }}</a>
+            </li>
+            {{/each}}
+          </ul>
+        </span>
+      </div>
+
+
+    </div>
+  </div>
+</div>
