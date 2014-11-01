@@ -164,7 +164,6 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
   cityQuestions: function() {
     var topics = this.get('content.geo_topics');
     var cityQuestions = [];
-    debugger;
     topics.forEach(function(t) {
       if (t.capability === "question") {
         var topicObject = Discourse.Topic.create(t);

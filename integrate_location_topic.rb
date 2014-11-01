@@ -75,7 +75,14 @@ module ExtendTopicViewSerializerForLocationTopic
     klass.attributes :location
     klass.attributes :locations
     klass.attributes :geo
+    # when a new category has been created with a new topic, redirecting to that topic errors because the new
+    # category is not available - below makes 
+    # klass.attributes :category
   end
+
+  # def category
+  #   object.topic.category.as_json
+  # end
   #
   def location
     ::MapTopic::LocationDetailedSerializer.new( object.topic.location, root: false )
@@ -92,6 +99,8 @@ module ExtendTopicViewSerializerForLocationTopic
   # def locations
   #   ::MapTopic::LocationDetailedSerializer.new( object.topic.locations, root: false )
   # end
+
+  # TODO - get locations from 
   def locations
     return @locations if @locations.present?
     @locations = []

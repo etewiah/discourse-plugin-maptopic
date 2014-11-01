@@ -92,8 +92,8 @@ describe MapTopic::LocationPostsController, type: :controller do
       it 'returns relevant TopicGeo' do
         response.should be_success
         result = ::JSON.parse(response.body)
-        result['city_lower'].should == "birmingham"
-        result['id'] == MapTopic::TopicGeo.last.id
+        result['topic_geo']['city_lower'].should == "birmingham"
+        result['topic_geo']['id'] == MapTopic::TopicGeo.last.id
       end
 
       it 'creates a geo for the topic' do
@@ -130,7 +130,7 @@ describe MapTopic::LocationPostsController, type: :controller do
         response.should be_success
         result = ::JSON.parse(response.body)
         # result['city_lower'].should == "birmingham"
-        result['id'] == MapTopic::TopicGeo.last.id
+        result['topic_geo']['id'] == MapTopic::TopicGeo.last.id
       end
 
       it 'creates a geo for the topic' do

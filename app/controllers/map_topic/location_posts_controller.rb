@@ -51,9 +51,17 @@ module MapTopic
 
       ensure_category @post.topic, topic_geo.capability
 
-      return render json: topic_geo.as_json
-      # location.to_json
+      category_serialized = serialize_data(@post.topic.category, ::CategorySerializer, root: false)
+      topic_serialized = serialize_data(@post.topic, ::BasicTopicSerializer, root: false)
+      # other_conversations_serialized = serialize_data(@other_conversations, MapTopic::GeoTopicSummarySerializer)
 
+      return render_json_dump({
+                                "category" => category_serialized,
+                                "topic" => topic_serialized,
+                                "topic_geo" => topic_geo.as_json
+      })
+
+      # return render json: topic_geo.as_json
     end
 
     # used for setting location on post (and topic) when post is being created
@@ -163,36 +171,6 @@ module MapTopic
         region_or_country_cat = create_geo_category topic.geo.bounds_value.titleize, admin_user, countries_color, nil
         topic.category = region_or_country_cat
       end
-
-
-      # if capability && capability == "question"
-      #   capability_cat_name = city.titleize + " - Question"
-      #   capability_cat = Category.where(:name => capability_cat_name, :parent_category_id => country_cat.id).first_or_initialize
-      #   unless capability_cat.user
-      #     capability_cat.user_id = admin_user.id
-      #     capability_cat.color = question_color
-      #     capability_cat.save!
-      #     capability_cat_topic = capability_cat.topic
-      #     capability_cat_topic.visible = false
-      #     capability_cat_topic.save!
-      #   end
-      #   topic.category = capability_cat
-      # else
-
-      #   # TODO - handle scenarios where there might not be a city
-      #   city_cat = create_geo_category city.titleize, admin_user, cities_color, country_cat
-
-      #   # city_cat = Category.where(:name => city.titleize, :parent_category_id => country_cat.id).first_or_initialize
-      #   # unless city_cat.user
-      #   #   city_cat.user_id = admin_user.id
-      #   #   city_cat.save!
-      #   #   city_cat_topic = city_cat.topic
-      #   #   city_cat_topic.visible = false
-      #   #   city_cat_topic.save!
-      #   # end
-      #   topic.category = city_cat
-      # end
-
 
       topic.save!
       # binding.pry

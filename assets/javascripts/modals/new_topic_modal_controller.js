@@ -59,7 +59,7 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       ok: true,
       reason: ""
     });
-  }.property('validate', 'topicDetails','serverError'),
+  }.property('validate', 'topicDetails', 'serverError'),
   titleValidation: function() {
     if (!this.get('validate')) {
       return;
@@ -125,9 +125,18 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
 
         });
         map_topic.then(function(set_geo_result) {
+          // because a new category might have been created based on the location, I need to add it to
+          // the odd categoriesById collections that discourse keeps client side
+          var topicCategory = Discourse.Category.create(set_geo_result.category);
+          // var categoriesById = Discourse.Site.currentProp('categoriesById');
+          // categoriesById[topicCategory.id] = topicCategory;
+
+          //       return Discourse.Category.list().findProperty('id', categoryId);
+          //  need to do below to ensure the above line in topic model works to retrieve category
+          var sortedCategories = Discourse.Site.currentProp('sortedCategories');
+          sortedCategories.pushObject(topicCategory);
           Discourse.URL.routeTo(post_result.post.get('url'));
 
-          // return post_result;
         });
         // return map_topic;
 
@@ -152,7 +161,7 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
         //   Discourse.URL.routeTo(opts.post.get('url'));
         // }
       }, function(error) {
-        self.set('serverError',error);
+        self.set('serverError', error);
         self.set('validate', true);
         // todo - handle
         // "Body is invalid; try to be a little more descriptive"
