@@ -2,7 +2,7 @@
   <div>
 
     {{#if model.posts}}
-    <h4>Posts about this place:</h4>
+    <h4 style="text-align: center;">Posts about this place:</h4>
     {{#each model.posts itemController="group/post"}}
     <div class='item'>
       <div class='clearfix info'>
@@ -30,16 +30,17 @@
 
   <div>
     {{#if googlePlaceDetails}}
-    <h4>Details from Google Places:</h4>
+    <h4 style="text-align: center;">Details from Google Places:</h4>
     <div style="width: 49%;float: left;">
-      <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
-      <img src="https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=40">website is: {{ googlePlaceDetails.website }}
+      <div style="padding-bottom: 20px;">{{ model.location.address}}</div>
+      
+      website is: {{ googlePlaceDetails.website }}
     </div>
     <div style="width: 49%;float: left;">
       <img {{ bind-attr src=primaryImageUrl }}>
     </div>
     {{else}}
-      <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
+{{!--       <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
       <div> <ul>
       {{#each place in nearbyPlacesDetails}}
         <li>
@@ -47,7 +48,7 @@
         </li>
       {{/each}}
 
-      </ul> </div>
+      </ul> </div> --}}
      {{/if}}
   </div>
 </div>

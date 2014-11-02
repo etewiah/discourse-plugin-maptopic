@@ -16,22 +16,11 @@ module MapTopic
       # longitude = params[:geo][:longitude]
       # latitude = params[:geo][:latitude]
 
-
       @post = Post.find(params[:post_id])
       if current_user.guardian.ensure_can_edit!(@post)
         render status: :forbidden, json: false
         return
       end
-
-      # might use below in the future if I decide to support initial locations ..
-      if params[:geo][:initial_location]
-        # TODO - do something with google place id to enhance location info
-        location = create_location params[:geo][:initial_location]
-        @post.location = location
-        @post.save!
-        # binding.pry
-      end
-
 
       # if relevant geokey does not exist, create it
       geo_key = MapTopic::GeoKey.where(:bounds_value => params[:geo][:bounds_value].downcase).first
@@ -48,6 +37,13 @@ module MapTopic
         topic_geo.save!
       end
 
+      # below needs to run after geo has been created for topic
+      if params[:geo][:initial_location]
+        # TODO - do something with google place id to enhance location info
+        location = create_location params[:geo][:initial_location]
+              # below ensures that location is set for topic too:
+        location_post = MapTopic::LocationPost.create_from_location location, @post
+      end
 
       ensure_category @post.topic, topic_geo.capability
 

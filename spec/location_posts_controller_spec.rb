@@ -105,9 +105,19 @@ describe MapTopic::LocationPostsController, type: :controller do
         MapTopic::GeoKey.last.city_lower.should == "birmingham"
       end
 
-      it 'assigns initial location' do
+      it 'assigns initial location for post' do
         assigns(:post).location.should == MapTopic::Location.last
       end
+
+      it 'assigns initial location for topic' do
+        assigns(:post).topic.location.should == MapTopic::Location.last
+      end
+
+      it 'assigns initial location to topic.geo.places' do
+        # binding.pry
+        assigns(:post).topic.geo.places[0]['location_id'].should == MapTopic::Location.last.id
+      end
+
 
       it 'creates and assigns correct category' do
         assigns(:post).topic.category.parent_category.name.should == MapTopic::TopicGeo.last.country_lower.titleize
