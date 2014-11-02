@@ -36,13 +36,12 @@ Discourse.PlaceDetailsModalController = Discourse.Controller.extend(Discourse.Mo
       });
     } else {
       // search for closeby places
-      debugger;
       var latlng = new google.maps.LatLng(placeDetails.location.latitude, placeDetails.location.longitude);
 
 
       var request = {
         location: latlng,
-        radius: '500'
+        radius: '50'
           // types: ['store']
       };
 
@@ -50,7 +49,7 @@ Discourse.PlaceDetailsModalController = Discourse.Controller.extend(Discourse.Mo
       var that = this;
       service.nearbySearch(request, function(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-          debugger;
+          // debugger;
           that.set('nearbyPlaces', results);
           // for (var i = 0; i < results.length; i++) {
           //   var place = results[i];

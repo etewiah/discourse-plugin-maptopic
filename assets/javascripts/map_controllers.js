@@ -1,6 +1,6 @@
 // Discourse.MapControllerMixin = Em.Mixin.create({
 Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
-  needs: ['composer','map'],
+  needs: ['composer', 'map'],
 
   actions: {
     // triggered by start conversation button
@@ -40,40 +40,30 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
 
     // can be triggered by clicking on infowindow after either doubleclicking map
     // use hovering over marker from places search
-    startLocationTopic: function(locationType, locationDetails, city, title) {
+    startLocationTopic: function(locationType, locationInfo, city, title) {
       if (!Discourse.User.current()) {
         this.send('showLogin');
         return;
       }
+      debugger;
+      this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
 
-      if (locationType === "placeSearch") {
-        var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
-      } else if (locationType === "gmapLocation") {
-        var locationObject = Discourse.Location.locationFromGmap(locationDetails);
-        locationObject.title = title;
-      }
+      // if (locationType === "placeSearch") {
+      //   var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
+      // } else if (locationType === "gmapLocation") {
+      //   var locationObject = Discourse.Location.locationFromGmap(locationDetails);
+      //   locationObject.title = title;
+      // }
 
+      // var geo = {};
+      // geo.initial_location = locationObject;
 
-      var geo = {};
-      geo.initial_location = locationObject;
-      // in future might allow country bounds etc..
-      // var currentCitySelection = this.get('controllers.map.currentCitySelection');
+      // var currentGeoKey = this.get('controllers.map.currentGeoKey');
+      // currentGeoKey.initial_location = locationObject;
+      // currentGeoKey.capability = "info";
 
+      // this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
 
-      var currentGeoKey = this.get('controllers.map.currentGeoKey');
-      currentGeoKey.initial_location = locationObject;
-      currentGeoKey.capability = "info";
-
-      // geo.bounds_value = currentCitySelection.value.toLowerCase();
-      // geo.bounds_type = "city";
-      // geo.bounds_range = 20;
-      // geo.latitude = currentCitySelection.latitude
-      // geo.longitude = currentCitySelection.longitude
-      // geo.city_lower = currentCitySelection.value.toLowerCase();
-      // // geo.country_lower = geo_key.country_lower
-      // geo.display_name = currentCitySelection.displayString;
-      // geo.capability = "info";
-      this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
 
       //return true to bubble up to route...
       return false;

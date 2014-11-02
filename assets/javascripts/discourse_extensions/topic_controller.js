@@ -120,37 +120,24 @@ require("discourse/controllers/topic")["default"].reopen({
     // replyWithLocation: function(geocodedLocation, title) {
     // when a location is double clicked and 'go' is clicked on the resulting infowindow
     // TODO - replace this with "exploreLocation" which will call explore_place modal....
-    replyWithLocation: function(locationType, locationDetails, city, title) {
-      if (locationType === "placeSearch") {
-        // currently placeSearch is disabled within topic map so should not end up here
-        debugger;
-        var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
-      } else if (locationType === "gmapLocation") {
-        var locationObject = Discourse.Location.locationFromGmap(locationDetails);
-        locationObject.title = title;
-      } else {
-        debugger;
-      }
+    replyWithLocation: function(locationType, locationInfo, city, title) {
+      // debugger;
 
-      this.send('replyWithLocationObject', locationObject);
-      // if (Discourse.User.current()) {
-      //   var composerController = this.get('controllers.composer');
-      //   var topic = this.get('model');
-      //   // var self = this;
+      this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
 
-      //   var opts = {
-      //     action: Discourse.Composer.REPLY,
-      //     draftKey: topic.get('draft_key'),
-      //     draftSequence: topic.get('draft_sequence'),
-      //     topic: topic
-      //   };
-
-      //   composerController.open(opts).then(function() {
-      //     composerController.content.set('locationObject', locationObject);
-      //   });
+      // if (locationType === "placeSearch") {
+      //   // currently placeSearch is disabled within topic map so should not end up here
+      //   debugger;
+      //   var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
+      // } else if (locationType === "gmapLocation") {
+      //   var locationObject = Discourse.Location.locationFromGmap(locationDetails);
+      //   locationObject.title = title;
       // } else {
-      //   this.send('showLogin');
+      //   debugger;
       // }
+
+      // this.send('replyWithLocationObject', locationObject);
+
       //return true to bubble up to route...
       return false;
     },

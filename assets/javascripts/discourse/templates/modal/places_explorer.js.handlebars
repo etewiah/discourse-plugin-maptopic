@@ -1,0 +1,27 @@
+<div class="modal-body">
+  <div>
+  </div>
+
+  <div>
+
+    <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
+    <div>
+      <ul>
+        {{#each place in nearbyPlacesDetails}}
+        <li>
+          {{ place.name }}, {{ place.vicinity }}
+        </li>
+        {{/each}}
+
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer">
+  <button class='btn btn-primary' {{action replyWithLocation model.location }}>
+    
+  </button>
+
+  <a {{action closeModal}}>{{i18n cancel}}</a>
+</div>
