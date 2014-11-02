@@ -3,14 +3,53 @@
   </div>
 
   <div>
-
-    <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
+  You selected:
+    <h5 style="padding-bottom: 20px;">{{ model.clickedLocation.formatted_address }}</h5>
     <div>
-      <ul>
+      Enter a name for this place to start a conversation about it
+      <br>
+                {{text-field placeholder="Type the name for this place" value=placeName 
+                id="place-name" autofocus="autofocus"}}
+      
+        <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action namedCitySelected}}>
+            Go
+          </button>
+    </div>
+    <div>
+      Or select one of these nearby places:
+    </div>
+    <div>
+        <ul class="nav nav-stacked">
+          {{#each place in nearbyPlacesDetails}}
+              <li>
+              <a style="width: 70%;float: left;" {{action searchResultSelected place}}>
+              <span>{{ place.name }},</span>
+              <span>{{ place.vicinity }},</span>
+              </a> 
+              <a class='icon expand' style="width:20%;float: left;display: inline-table;" href='#' 
+              title="remove title"
+              {{action searchResultSelected place}}>
+                {{fa-icon comment label="talk label" }} Talk about this
+              </a>
+              </li>
+            {{/each}}
+          </ul>
+
+      <ul class="nav nav-stacked">
         {{#each place in nearbyPlacesDetails}}
-        <li>
-          {{ place.name }}, {{ place.vicinity }}
-        </li>
+
+            <li>
+            <a style="width: 70%;" {{action searchResultSelected place}}>
+            <span>{{ place.name }},</span>
+            <span>{{ place.vicinity }},</span>
+            </a> 
+            <a class='icon expand' style="width:20%;display: inline-table;" href='#' 
+            title="remove title"
+            {{action searchResultSelected place}}>
+              {{fa-icon comment label="talk label" }} Talk about this
+            </a>
+            </li>
+
         {{/each}}
 
       </ul>
@@ -19,9 +58,5 @@
 </div>
 
 <div class="modal-footer">
-  <button class='btn btn-primary' {{action replyWithLocation model.location }}>
-    
-  </button>
-
   <a {{action closeModal}}>{{i18n cancel}}</a>
 </div>

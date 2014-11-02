@@ -1,16 +1,31 @@
 Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
   needs: ['topic'],
   actions: {
-    goToPost: function(post) {
+    // goToPost: function(post) {
+    //   var topicController = this.get('controllers.topic');
+    //   var postNumber = post.get('post_number');
+    //   topicController.set('currentPost', postNumber);
+    //   // to do - ensure scroll to correct post:
+    //   Discourse.URL.jumpToPost(postNumber);
+    //   // this.set('model.activePost', post);
+    //   this.send('closeModal');
+    // },
+    
+    namedCitySelected: function() {
+      var clickedLocation = this.get('model.clickedLocation');
+      // todo = see if I can get city and country from geo...
+      var locationObject = Discourse.Location.locationFromGmap(clickedLocation, "city", "country");
+      var placeName = this.get('placeName');
+      locationObject.title = placeName;
+      debugger;
+
       var topicController = this.get('controllers.topic');
-      var postNumber = post.get('post_number');
-      topicController.set('currentPost', postNumber);
-      // to do - ensure scroll to correct post:
-      Discourse.URL.jumpToPost(postNumber);
-      // this.set('model.activePost', post);
+      topicController.send('replyWithLocationObject', locationObject);
       this.send('closeModal');
     },
-    replyWithLocation: function(locationObject) {
+    searchResultSelected: function(searchResult) {
+      debugger;
+      var locationObject = Discourse.Location.locationFromPlaceSearch(searchResult, "");
       var topicController = this.get('controllers.topic');
       topicController.send('replyWithLocationObject', locationObject);
       this.send('closeModal');
@@ -38,7 +53,6 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
     var that = this;
     service.nearbySearch(request, function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        debugger;
         that.set('nearbyPlaces', results);
         // for (var i = 0; i < results.length; i++) {
         //   var place = results[i];
@@ -48,26 +62,12 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
     });
     // service.nearbySearch(request, callback);
   },
-  googlePlaceDetails: function() {
-    return this.get('googlePlace');
-  }.property('googlePlace'),
+  // googlePlaceDetails: function() {
+  //   return this.get('googlePlace');
+  // }.property('googlePlace'),
 
   nearbyPlacesDetails: function() {
     return this.get('nearbyPlaces');
-  }.property('nearbyPlaces'),
-
-  primaryImageUrl: function() {
-    var photos = this.get('googlePlaceDetails.photos');
-    if (photos && photos.length > 0) {
-      // debugger;
-      return photos[0].getUrl({
-        'maxWidth': 350,
-        'maxHeight': 350
-      })
-    } else {
-      return null;
-    };
-    // return "https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=40";
-  }.property('googlePlaceDetails'),
+  }.property('nearbyPlaces')
 
 });

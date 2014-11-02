@@ -242,9 +242,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         google.maps.event.addListener(infowindowInstance, 'domready', function() {
           document.getElementById("tmap-search-result-form").addEventListener("submit", function(e) {
             e.preventDefault();
-            // console.log(infowindowInstance);
-            debugger;
-            that.sendAction('mapClickedAction', 'placeSearch', infowindowInstance.searchResult, that.get('geoDetails.value'));
+            // startLocationTopic method in map_controller:
+            that.sendAction('searchClickedAction', infowindowInstance.searchResult, that.get('geoDetails'));
           });
         });
 
@@ -528,16 +527,17 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
               // e.stopPropagation();
               e.preventDefault();
               // var locationName = e.target.elements['clickedlocation-name'].value;
-
+              var geo = that.get('geoDetails');
               var locationInfo = {
                 'clickedLocation': results[0],
-                map: that.map
+                map: that.map,
+                geo: geo
               }
-              debugger;
+debugger;
               // clear that.newLocationMarker;
               that.newLocationMarker.setMap(null);
               // for map in topic, below is replyWithLocation in topic controller
-              that.sendAction('mapClickedAction', 'gmapLocation', locationInfo, '', "locationName");
+              that.sendAction('mapClickedAction', locationInfo);
 
               // if (Ember.isBlank(locationName)) {
               //     // TODO - warn about empty name

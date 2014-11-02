@@ -38,32 +38,31 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     //   });
     // },
 
-    // can be triggered by clicking on infowindow after either doubleclicking map
-    // use hovering over marker from places search
-    startLocationTopic: function(locationType, locationInfo, city, title) {
+    // triggered by clicking on infowindow after doubleclicking map
+    showExplorerModal: function(locationInfo) {
       if (!Discourse.User.current()) {
         this.send('showLogin');
         return;
       }
       debugger;
+      locationInfo.context = "index_map";
       this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
+    },
 
-      // if (locationType === "placeSearch") {
-      //   var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
-      // } else if (locationType === "gmapLocation") {
-      //   var locationObject = Discourse.Location.locationFromGmap(locationDetails);
-      //   locationObject.title = title;
-      // }
+    // triggered by clicking on search result infowindow 
+    startLocationTopic: function(searchResult, geo) {
+      if (!Discourse.User.current()) {
+        this.send('showLogin');
+        return;
+      }
+      var locationObject = Discourse.Location.locationFromPlaceSearch(searchResult, "");
 
-      // var geo = {};
-      // geo.initial_location = locationObject;
+      var currentGeoKey = this.get('controllers.map.currentGeoKey');
+      // could have used the geo object thats passed in - same same
 
-      // var currentGeoKey = this.get('controllers.map.currentGeoKey');
-      // currentGeoKey.initial_location = locationObject;
-      // currentGeoKey.capability = "info";
-
-      // this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
-
+      currentGeoKey.initial_location = locationObject;
+      currentGeoKey.capability = "info";
+      this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
 
       //return true to bubble up to route...
       return false;
