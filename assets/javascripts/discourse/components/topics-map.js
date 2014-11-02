@@ -305,7 +305,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             that.mapClicked(event.latLng.lat(), event.latLng.lng());
         });
 
-        if (geoDetails && geoDetails.geometry.bounds) {
+        if (geoDetails && geoDetails.geometry && geoDetails.geometry.bounds) {
             var bounds = new google.maps.LatLngBounds();
             // seach for "world" - it has geometry but no bounds....
             var neLatlng = new google.maps.LatLng(geoDetails.geometry.bounds.northeast.lat, geoDetails.geometry.bounds.northeast.lng);
@@ -551,11 +551,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
         // this.get("controller").addEvent(lat, lng);
     },
-    placeSelected: function(event, detailsForMarker) {
-        // if (displayContext === 'index_view'){
-
-        // }
-        this.sendAction('markerSelectedAction', detailsForMarker);
+    placeSelected: function(event, placeDetails) {
+        // will call showPlaceDetails in topic_controller
+        placeDetails.map = this.map;
+        this.sendAction('markerSelectedAction', placeDetails);
     },
 
 

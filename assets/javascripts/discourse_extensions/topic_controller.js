@@ -20,7 +20,7 @@ require("discourse/controllers/topic")["default"].reopen({
   }.property('url'),
 
   setUserPreferredCity: function() {
-    var geo =  this.get('model.geo');
+    var geo = this.get('model.geo');
     if (geo) {
       // below should really be geo.bounds_value but in the case of belfast
       // its wrong - should investigate
@@ -104,9 +104,9 @@ require("discourse/controllers/topic")["default"].reopen({
       return false;
     },
     // called when marker on topics map is clicked:
-    showPlaceDetails: function(detailsForMarker) {
-      // this.send('showLocationSelectorModal',detailsForMarker);
-      this.send('showDiscourseModal', 'placeDetailsModal', detailsForMarker);
+    showPlaceDetails: function(placeDetails) {
+      // this.send('showLocationSelectorModal',placeDetails);
+      this.send('showDiscourseModal', 'placeDetailsModal', placeDetails);
     },
     showLocationSelector: function() {
       if (Discourse.User.current()) {
@@ -119,6 +119,7 @@ require("discourse/controllers/topic")["default"].reopen({
     },
     // replyWithLocation: function(geocodedLocation, title) {
     // when a location is double clicked and 'go' is clicked on the resulting infowindow
+    // TODO - replace this with "exploreLocation" which will call explore_place modal....
     replyWithLocation: function(locationType, locationDetails, city, title) {
       if (locationType === "placeSearch") {
         // currently placeSearch is disabled within topic map so should not end up here

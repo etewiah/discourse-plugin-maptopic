@@ -76,7 +76,7 @@ module ExtendTopicViewSerializerForLocationTopic
     klass.attributes :locations
     klass.attributes :geo
     # when a new category has been created with a new topic, redirecting to that topic errors because the new
-    # category is not available - below makes 
+    # category is not available - below was an attempt to fix that but didn't work
     # klass.attributes :category
   end
 

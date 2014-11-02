@@ -7,6 +7,7 @@ module MapTopic
 
 
     # only need to run this once to correct missing geometry in existing geo_keys..
+    # run on klavao 30 oct 2014
     def self.ensure_each_geo_key_has_geometry
       MapTopic::GeoKey.all.each do |geo_key|
         if geo_key.geometry

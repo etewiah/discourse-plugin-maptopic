@@ -1,47 +1,62 @@
 <div class="modal-body">
   <div>
-    <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
-  </div>
-  <div>
 
-
-
-  {{#if model.posts}}
-  <h4>Posts about this place:</h4>
-  {{#each model.posts itemController="group/post"}}
+    {{#if model.posts}}
+    <h4>Posts about this place:</h4>
+    {{#each model.posts itemController="group/post"}}
     <div class='item'>
       <div class='clearfix info'>
-        {{#link-to 'user' user class="avatar-link"}}<div class='avatar-wrapper'>{{avatar user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}}
-
-{{bound-avatar-template avatar_template "small"}} 
+        {{#link-to 'user' user class="avatar-link"}}
+        <div class='avatar-wrapper'>{{avatar user imageSize="large" extraClasses="actor" ignoreTitle="true"}}</div>{{/link-to}} {{bound-avatar-template avatar_template "small"}}
 
         <span>{{ name }}</span>
         <span class='time'>{{format-date path="created_at" leaveAgo="true"}}</span>
         <span class="">
-          <a {{action goToPost this }} >go to post</a>
+          <a {{action goToPost this }}>go to post</a>
         </span>
         <span>
-          
+
         </span>
       </div>
       <p class='excerpt'>
       </p>
     </div>
-  {{/each}}
-  {{else}}
+    {{/each}} 
+    {{else}}
     <h4>There are no posts about this place.</h4>
-  {{/if}}
+    {{/if}}
 
   </div>
 
   <div>
+    {{#if googlePlaceDetails}}
+    <h4>Details from Google Places:</h4>
+    <div style="width: 49%;float: left;">
+      <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
+      <img src="https://lh3.googleusercontent.com/-XdUIqdMkCWA/AAAAAAAAAAI/AAAAAAAAAAA/4252rscbv5M/photo.jpg?sz=40">website is: {{ googlePlaceDetails.website }}
+    </div>
+    <div style="width: 49%;float: left;">
+      <img {{ bind-attr src=primaryImageUrl }}>
+    </div>
+    {{else}}
+      <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
+      <div> <ul>
+      {{#each place in nearbyPlacesDetails}}
+        <li>
+          {{ place.name }}, {{ place.vicinity }}
+        </li>
+      {{/each}}
+
+      </ul> </div>
+     {{/if}}
   </div>
+  }
 </div>
 
 <div class="modal-footer">
-          <button class='btn btn-primary'  {{action replyWithLocation model.location }}>
-            Say something about this place
-          </button>
+  <button class='btn btn-primary' {{action replyWithLocation model.location }}>
+    Say something about this place
+  </button>
 
   <a {{action closeModal}}>{{i18n cancel}}</a>
 </div>
