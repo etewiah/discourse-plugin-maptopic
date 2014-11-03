@@ -18,7 +18,7 @@ describe 'LocationTopic' do
   end
   # it 'can be created from a country' do
   #   VCR.use_cassette 'geocoded_zambia' do
-  #     result = MapTopic::GeoKey.create_from_geo 'zambia', 'searched'
+  #     result = MapTopic::GeoKey.create_from_geo_name 'zambia', 'searched'
   #     result.bounds_value.should == "zambia"
   #     result.country_lower.should == "zambia"
   #   end

@@ -33,7 +33,7 @@ module MapTopic
 
 
 
-        def self.create_from_geo geo_name, show_criteria
+        def self.create_from_geo_name geo_name, show_criteria
             results = Geocoder.search(geo_name)
             if geo = results.first
                 # binding.pry

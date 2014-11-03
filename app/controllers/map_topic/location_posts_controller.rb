@@ -27,7 +27,7 @@ module MapTopic
       unless geo_key
         # can't really see scenario where would get here as all set_geo will only be called by
         # client after a GeoKey has been created and map built from it client side
-        geo_key = MapTopic::GeoKey.create_from_geo  params[:geo][:bounds_value].downcase, "searched"
+        geo_key = MapTopic::GeoKey.create_from_geo_name  params[:geo][:bounds_value].downcase, "searched"
       end
 
       topic_geo = MapTopic::TopicGeo.where(:topic_id => @post.topic.id).first

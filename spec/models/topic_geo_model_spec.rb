@@ -3,7 +3,7 @@ require './plugins//discourse-plugin-maptopic/spec/map_topic_spec_helper'
 # require File.dirname(__FILE__) + '/../spec_helper'
 
 describe 'TopicGeo' do
-	let(:geo_key) { MapTopic::GeoKey.create_from_geo 'birmingham', "searched" }
+	let(:geo_key) { MapTopic::GeoKey.create_from_geo_name 'birmingham', "searched" }
 	let(:location) { create_brum_location() }
 
 	it 'can be created from a geo_key' do

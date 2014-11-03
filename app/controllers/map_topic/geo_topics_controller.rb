@@ -201,8 +201,7 @@ module MapTopic
     def ensure_geo_key_exists(geo_name)
       geo_key= MapTopic::GeoKey.where(:city_lower => geo_name.downcase).first
       unless geo_key
-        geo_key = MapTopic::GeoKey.create_from_geo  geo_name.downcase, "searched"
-
+        geo_key = MapTopic::GeoKey.create_from_geo_name  geo_name.downcase, "searched"
       end
       return geo_key
     end
