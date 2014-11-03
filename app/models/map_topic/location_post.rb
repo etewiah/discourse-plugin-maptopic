@@ -25,8 +25,8 @@ module MapTopic
       location_topic = MapTopic::LocationTopic.create_from_location location, post.topic.id
 
       if post.topic.geo
-
-
+        # ensures place json includes post location
+        post.topic.geo.add_or_update_place location
       end
 
       return location_post

@@ -23,6 +23,7 @@ describe 'LocationPost' do
     end
 
     it 'will add location to array of locations for post topic ' do
+      post.topic.locations[0].should == location
       post.topic.location.should == location
     end
 

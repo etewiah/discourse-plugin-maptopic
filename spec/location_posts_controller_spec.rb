@@ -114,7 +114,7 @@ describe MapTopic::LocationPostsController, type: :controller do
       end
 
       it 'assigns initial location to topic.geo.places' do
-        # binding.pry
+        binding.pry
         assigns(:post).topic.geo.places[0]['location_id'].should == MapTopic::Location.last.id
       end
 

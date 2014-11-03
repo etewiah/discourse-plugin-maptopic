@@ -113,12 +113,46 @@ module MapTopic
       end
     end
 
-    # only need to run this once to migrate geo_keys which had previously been created as locationtopics..
-    def self.migrate_topic_geo_values
+    def self.ensure_topic_geos_have_geometry
+      # todo....
+    end
+
+    # updated 3 nov 2014
+    # run below before ensure_topics_have_topic_geo_and_places
+    def self.ensure_topic_geos_have_places
+      MapTopic::TopicGeo.all.each do |topic_geo|
+        if topic_geo.topic && topic_geo.topic.locations
+          topic_geo.topic.locations.each do |location|
+            topic_geo.topic.geo.add_or_update_place location
+          end
+        else
+          binding.pry
+        end
+        topic_geo.hot_till = Date.today + 6.months
+        topic_geo.hot_from = Date.today
+        topic_geo.save!
+      end
+    end
+
+    # only need to run this once to ensure all geo_topics have geo and geo.places json set ..
+    # code updated 3 nov 2014
+    # run below after ensure_topic_geos_have_places
+    def self.ensure_topics_have_topic_geo_and_places
+      # migrate_topic_geo_values
 
       # topic = Topic.find(12)
       Topic.all.each do |topic|
-        create_geo_for_topic topic
+        unless topic.geo
+          if topic.location && topic.location.city
+            binding.pry
+
+            create_geo_for_topic topic
+            topic.locations.each do |location|
+              binding.pry
+              topic.geo.add_or_update_place location
+            end
+          end
+        end
       end
 
       # had thought of adding locations to geo but its not really necessary
@@ -151,24 +185,32 @@ module MapTopic
     def self.create_geo_for_topic topic
 
       if topic.location && topic.location.city
-        topic_geo = MapTopic::TopicGeo.where(:topic_id => topic.id).first_or_create
+        # topic_geo = MapTopic::TopicGeo.where(:topic_id => topic.id).first_or_create
 
         geo_key = MapTopic::GeoKey.where(:bounds_value => topic.location.city.downcase).first
         if geo_key
-          topic_geo.bounds_value = geo_key.bounds_value
-          topic_geo.bounds_type = geo_key.bounds_type
-          topic_geo.bounds_range = geo_key.bounds_range
-          topic_geo.latitude = geo_key.latitude
-          topic_geo.longitude = geo_key.longitude
-          topic_geo.city_lower = geo_key.city_lower
-          topic_geo.country_lower = geo_key.country_lower
-          topic_geo.display_name = geo_key.display_name
-          topic_geo.capability = "info"
+          topic_geo = MapTopic::TopicGeo.create_from_geo_key
+          topic_geo.topic_id = topic.id
+          topic.save!
+
+          # topic_geo.save!
+
+
+          # topic_geo.bounds_value = geo_key.bounds_value
+          # topic_geo.bounds_type = geo_key.bounds_type
+          # topic_geo.bounds_range = geo_key.bounds_range
+          # topic_geo.latitude = geo_key.latitude
+          # topic_geo.longitude = geo_key.longitude
+          # topic_geo.city_lower = geo_key.city_lower
+          # topic_geo.country_lower = geo_key.country_lower
+          # topic_geo.display_name = geo_key.display_name
+          # topic_geo.capability = "info"
           # TODO - may add extra category to denote question capability
         else
           binding.pry
         end
-        topic_geo.save!
+      else
+        binding.pry
       end
 
     end
