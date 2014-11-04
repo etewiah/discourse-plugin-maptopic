@@ -13,7 +13,6 @@ padding-right: 50px;
   overflow: hidden;
   background: dark-light-diff($primary, $secondary, 90%, -75%);
   > li {
-   
     &:last-of-type {
       border-bottom: 0;
     }

@@ -4,7 +4,9 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
 
   actions: {
     // triggered by start conversation button
-    showNewTopicModal: function(topicType) {
+    // or by places explorer model - in which case will have location object
+    showNewTopicModal: function(topicType, locationObject) {
+      debugger;
       if (!Discourse.User.current()) {
         this.send('showLogin');
         return;
@@ -13,38 +15,19 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       var currentGeoKey = this.get('controllers.map.currentGeoKey');
       currentGeoKey.capability = topicType;
 
-
       // in future might allow country bounds etc..
       var currentCitySelection = this.get('controllers.map.currentCitySelection');
 
-      // geo.bounds_value = currentCitySelection.value.toLowerCase();
-      // geo.bounds_type = "city";
-      // geo.bounds_range = 20;
-      // geo.latitude = currentCitySelection.latitude
-      // geo.longitude = currentCitySelection.longitude
-      // geo.city_lower = currentCitySelection.value.toLowerCase();
-      // // geo.country_lower = geo_key.country_lower
-      // geo.display_name = currentCitySelection.displayString;
-      // geo.capability = topicType;
       this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
     },
-    // had meant to show topic details next to index map - might come back to this
-    // showPost: function(){
-
-    //   var detailedTopic = Discourse.Topic.find(this.get('model.topics.firstObject.id'),{});
-    //   var that = this;
-    //   detailedTopic.then(function (result) {
-    //     that.set('selectedTopic',result);
-    //   });
-    // },
 
     // triggered by clicking on infowindow after doubleclicking map
     showExplorerModal: function(locationInfo) {
-      if (!Discourse.User.current()) {
-        this.send('showLogin');
-        return;
-      }
-      debugger;
+      // if (!Discourse.User.current()) {
+      //   this.send('showLogin');
+      //   return;
+      // }
+      // debugger;
       locationInfo.context = "index_map";
       this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
     },
@@ -67,7 +50,9 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       //return true to bubble up to route...
       return false;
     },
+    // what triggers this?
     initiateAddLocationToTopic: function() {
+      debugger;
       if (Ember.isEmpty(this.get('locationObject.title'))) {
         return;
       };

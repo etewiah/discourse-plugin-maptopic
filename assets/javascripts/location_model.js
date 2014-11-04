@@ -55,7 +55,7 @@ Discourse.Location = Discourse.Model.extend({
 });
 Discourse.Location.reopenClass({
   locationFromPlaceSearch: function(result, city) {
-    debugger;
+    // debugger;
     var locationObject = {
       title: result.name,
       address: result.vicinity,

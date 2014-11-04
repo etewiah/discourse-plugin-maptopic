@@ -5,34 +5,39 @@
   <div>
     <h style="padding-bottom: 20px;">{{ model.clickedLocation.formatted_address }}</h>
     <div>
-      
       <br>
                 {{text-field placeholder="Place Name" value=placeName 
                 id="place-name" autofocus="autofocus"}}
-      
-                    <button class='btn btn-primary' style="width:22%;" 
-              title="talk.."
-              {{action namedCitySelected }}>
-                {{fa-icon comment-o label="talk label" }} Talk about this
+
+              <button class='btn btn-primary' style="width:22%;" 
+                  title="Do you have something to say about this place? Go on then, say it..."
+                  {{action namedCitySelected }}>
+                  {{fa-icon comment-o label="talk label" }} Talk about this
               </button>
+      <br>
+         {{input-tip validation=placeNameValidation}}      
+
     </div>
     {{#if nearbyPlacesDetails}}
     <div>
-      Nearby places:
+      <h3 style="margin-bottom: 2%;margin-top: 2%;" >Places nearby:</h3>
     </div>
     <div>
-        <ul class="list-stacked">
+        <ul class="nav list-stacked">
           {{#each place in nearbyPlacesDetails}}
               <li>
-              <a style="width: 70%;float: left;" {{action searchResultSelected place}}>
+              <a style="padding-left: 0px;" {{action searchResultSelected place}}>
+              <div style="width: 77%;float: left;">
               <span>{{ place.name }},</span>
               <span>{{ place.vicinity }},</span>
-              </a> 
-              <button class='btn btn-primary' style="margin-top:1%;width:22%;float: right;display: inline-table;" 
-              title="talk.."
-              {{action searchResultSelected place}}>
+              </div>
+              <button class='btn btn-primary' style="" 
+              title="Do you have something to say about this place? Go on then, say it..."
+              >
                 {{fa-icon comment-o label="talk label" }} Talk about this
               </button>
+              </a> 
+              
               </li>
             {{/each}}
           </ul>

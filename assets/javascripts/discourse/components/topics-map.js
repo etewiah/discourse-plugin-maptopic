@@ -489,7 +489,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             map: that.map
           });
 
-            var talkPrompt = "explore";
+          var talkPrompt = "Select";
           // var talkPrompt = "start conversation";
           // if (that.get('displayContext') === 'topicView') {
           //   talkPrompt = "write about this place";
@@ -499,12 +499,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             '<h4>' +
             results[0].formatted_address +
             '</h4>' +
-            '<form id="clickedlocation-form">' +
+            '<div id="clickedlocation-div">' +
             // '<div id="clickedlocation-name-prompt" class="warning">Enter location name to ' +
             // talkPrompt + ':</div>' +
             // '<input id="clickedlocation-name" type="text" /><br>' +
-            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-            talkPrompt + '</button></form>' +
+            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" >' +
+            talkPrompt + '</button></div>' +
             '</div>';
 
           infowindowForClickedLocation = new google.maps.InfoWindow({
@@ -523,9 +523,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
 
           google.maps.event.addListener(infowindowForClickedLocation, 'domready', function() {
-            document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {
-              // e.stopPropagation();
-              e.preventDefault();
+            // document.getElementById("clickedlocation-form").addEventListener("submit", function(e) {
+
+            // e.preventDefault(); for submit etc
+            document.getElementById("map-clickedlocation-content").addEventListener("click", function(e) {
+              e.stopPropagation(); // for click events
+              // e.preventDefault(); for submit etc
               // var locationName = e.target.elements['clickedlocation-name'].value;
               var geo = that.get('geoDetails');
               var locationInfo = {

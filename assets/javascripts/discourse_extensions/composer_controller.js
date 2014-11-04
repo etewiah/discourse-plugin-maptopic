@@ -17,7 +17,7 @@ require("discourse/controllers/composer")["default"].reopen({
       // });
     };
     dfr.then(function(result){
-      debugger;
+      // debugger;
     })
     return dfr;
   },
