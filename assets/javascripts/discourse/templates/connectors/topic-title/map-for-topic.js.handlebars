@@ -5,13 +5,14 @@
     {{#if model.hasGeo}}
 
       <div class="map-for-topic" style="">
-      {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" geo=model.geo showSearchBox=false  }} 
+      {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" 
+      mapClickedAction="showExplorerModalForTopic" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" geo=model.geo showSearchBox=false  }} 
       </div>
 
     {{else}}
     <div>Sorry, there has been an error.</div>
 {{!--       <div class="map-for-topic" style="">
-      {{ topics-map displayContext="topicView"  markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
+      {{ topics-map displayContext="topicView"  markerSelectedAction="showPlaceDetails" mapClickedAction="showExplorerModalForTopic" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
       showSearchBox=false geo=model.geo }} 
       </div> --}}
     {{/if}}
@@ -55,7 +56,7 @@
       <div class="row" style="float: left;width: 100%;">
         
           {{ topics-map showSearchBox=false 
-           markerSelectedAction="showPlaceDetails" mapClickedAction="replyWithLocation" 
+           markerSelectedAction="showPlaceDetails" mapClickedAction="showExplorerModalForTopic" 
            markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps"
             geo=model.geo
           }}

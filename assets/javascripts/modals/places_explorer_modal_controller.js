@@ -45,14 +45,18 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
 
     var request = {
       location: latlng,
-      radius: '50'
+      radius: '2500',
+      types: ['cafe','night_club','restaurant','museum','bar','food','store']
+      // []|night_club|restaurant|museum|bar|food|store']
         // types: ['store']
     };
 
     var service = new google.maps.places.PlacesService(placeDetails.map);
     var that = this;
     service.nearbySearch(request, function(results, status) {
+      debugger;
       if (status == google.maps.places.PlacesServiceStatus.OK) {
+        debugger;
         that.set('nearbyPlaces', results);
         // for (var i = 0; i < results.length; i++) {
         //   var place = results[i];

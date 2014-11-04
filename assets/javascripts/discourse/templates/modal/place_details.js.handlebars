@@ -34,7 +34,10 @@
     <div style="width: 49%;float: left;">
       <div style="padding-bottom: 20px;">{{ model.location.address}}</div>
       
-      website is: {{ googlePlaceDetails.website }}
+      {{#if googlePlaceDetails.website }}
+        website: <a {{ bind-attr href=googlePlaceDetails.website }} > {{ googlePlaceDetails.website }} </a>
+      {{/if}}
+      
     </div>
     <div style="width: 49%;float: left;">
       <img {{ bind-attr src=primaryImageUrl }}>

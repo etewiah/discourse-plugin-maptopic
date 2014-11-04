@@ -3,48 +3,50 @@
   </div>
 
   <div>
-  You selected:
-    <h5 style="padding-bottom: 20px;">{{ model.clickedLocation.formatted_address }}</h5>
+    <h style="padding-bottom: 20px;">{{ model.clickedLocation.formatted_address }}</h>
     <div>
-      Enter a name for this place to start a conversation about it
+      
       <br>
-                {{text-field placeholder="Type the name for this place" value=placeName 
+                {{text-field placeholder="Place Name" value=placeName 
                 id="place-name" autofocus="autofocus"}}
       
-        <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action namedCitySelected}}>
-            Go
-          </button>
+                    <button class='btn btn-primary' style="width:22%;" 
+              title="talk.."
+              {{action namedCitySelected }}>
+                {{fa-icon comment-o label="talk label" }} Talk about this
+              </button>
+    </div>
+    {{#if nearbyPlacesDetails}}
+    <div>
+      Nearby places:
     </div>
     <div>
-      Or select one of these nearby places:
-    </div>
-    <div>
-        <ul class="nav nav-stacked">
+        <ul class="list-stacked">
           {{#each place in nearbyPlacesDetails}}
               <li>
               <a style="width: 70%;float: left;" {{action searchResultSelected place}}>
               <span>{{ place.name }},</span>
               <span>{{ place.vicinity }},</span>
               </a> 
-              <a class='icon expand' style="width:20%;float: left;display: inline-table;" href='#' 
-              title="remove title"
+              <button class='btn btn-primary' style="margin-top:1%;width:22%;float: right;display: inline-table;" 
+              title="talk.."
               {{action searchResultSelected place}}>
-                {{fa-icon comment label="talk label" }} Talk about this
-              </a>
+                {{fa-icon comment-o label="talk label" }} Talk about this
+              </button>
               </li>
             {{/each}}
           </ul>
 
-      <ul class="nav nav-stacked">
+      <ul class="">
         {{#each place in nearbyPlacesDetails}}
 
             <li>
-            <a style="width: 70%;" {{action searchResultSelected place}}>
+            <div style="width: 70%;" {{action searchResultSelected place}}>
             <span>{{ place.name }},</span>
             <span>{{ place.vicinity }},</span>
-            </a> 
-            <a class='icon expand' style="width:20%;display: inline-table;" href='#' 
-            title="remove title"
+            </div> 
+            <a class='icon expand' style="width:22%;display: inline-table;" href='#' 
+            title="talk.."
             {{action searchResultSelected place}}>
               {{fa-icon comment label="talk label" }} Talk about this
             </a>
@@ -54,6 +56,7 @@
 
       </ul>
     </div>
+    {{/if}}
   </div>
 </div>
 

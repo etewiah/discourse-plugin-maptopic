@@ -119,9 +119,7 @@ require("discourse/controllers/topic")["default"].reopen({
     },
     // replyWithLocation: function(geocodedLocation, title) {
     // when a location is double clicked and 'go' is clicked on the resulting infowindow
-    // TODO - replace this with "exploreLocation" which will call explore_place modal....
-    replyWithLocation: function(locationInfo) {
-      debugger;
+    showExplorerModalForTopic: function(locationInfo) {
       locationInfo.context = "topic_map";
 
       this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
@@ -143,7 +141,6 @@ require("discourse/controllers/topic")["default"].reopen({
       return false;
     },
     replyWithLocationObject: function(locationObject) {
-      debugger;
 
       // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {

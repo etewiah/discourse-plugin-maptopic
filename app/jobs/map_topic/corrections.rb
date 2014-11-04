@@ -149,6 +149,7 @@ module MapTopic
             topic.locations.each do |location|
               binding.pry
               # topic.geo.add_or_update_place location
+              # topic here might not have ref to geo even though its been set
               topic_geo.add_or_update_place location
             end
           end

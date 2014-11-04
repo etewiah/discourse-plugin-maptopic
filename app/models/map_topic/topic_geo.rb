@@ -31,6 +31,7 @@ module MapTopic
       end
     end
 
+    # up to caller here to set topic_id on returned object
     def self.create_from_geo_key geo_key, capability
       topic_geo = MapTopic::TopicGeo.create(
         {
@@ -45,16 +46,20 @@ module MapTopic
           capability: capability,
           geometry: geo_key.geometry
       })
+
+      # TODO - figure out decent logic for this:
+      topic_geo.hot_till = Date.today + 6.months
+      topic_geo.hot_from = Date.today
       return topic_geo
     end
 
     def add_or_update_place location
-# the idea of having the place col is that it saves me having to query deeply for the basic info that I
-# will need to display a nice infowindow when showing index of topics...
+      # the idea of having the place col is that it saves me having to query deeply for the basic info that I
+      # will need to display a nice infowindow when showing index of topics...
       topic_places = self.places || []
 
       # TODO - ensure there are no duplicates...
-      
+
       # place = {}
       place = topic_places.select{ |p| p['location_id'] == location.id }[0]
       unless place

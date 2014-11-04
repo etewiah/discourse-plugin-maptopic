@@ -533,20 +533,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
                 map: that.map,
                 geo: geo
               }
-debugger;
+
               // clear that.newLocationMarker;
               that.newLocationMarker.setMap(null);
-              // for map in topic, below is replyWithLocation in topic controller
+              // for map in topic, below is showExplorerModalForTopic in topic controller
               that.sendAction('mapClickedAction', locationInfo);
 
-              // if (Ember.isBlank(locationName)) {
-              //     // TODO - warn about empty name
-              //     debugger;
-              // } else {
-              //     // clear that.newLocationMarker;
-              //     that.newLocationMarker.setMap(null);
-              //     that.sendAction('mapClickedAction', 'gmapLocation', results[0], '', locationName);
-              // }
             });
           });
 
