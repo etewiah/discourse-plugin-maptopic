@@ -1,5 +1,5 @@
 Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
-  needs: ['topic','mapFromOneParam'],
+  needs: ['topic', 'mapFromOneParam'],
   actions: {
     // goToPost: function(post) {
     //   var topicController = this.get('controllers.topic');
@@ -12,7 +12,7 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
     // },
 
     namedCitySelected: function() {
-      var placeName = this.get('placeName');      
+      var placeName = this.get('placeName');
       if (placeName.length < 2) {
         this.set('validate', true);
         return;
@@ -21,8 +21,6 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
       // todo = see if I can get city and country from geo...
       var locationObject = Discourse.Location.locationFromGmap(clickedLocation, "city", "country");
       locationObject.title = placeName;
-
-      debugger;
 
 
       this.send('sendActionToController', locationObject);
@@ -34,18 +32,20 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
       this.send('sendActionToController', locationObject);
     },
     sendActionToController: function(locationObject) {
+      if (!Discourse.User.current()) {
+        this.send('showLogin');
+        return;
+      }
       var context = this.get('content.context');
       if (context === "index_map") {
         var targetController = this.get('controllers.mapFromOneParam');
         targetController.send('showNewTopicModal', 'info', locationObject);
-        debugger;
-
       } else {
         var topicController = this.get('controllers.topic');
         topicController.send('replyWithLocationObject', locationObject);
         this.send('closeModal');
       };
-      
+
     }
 
   },
@@ -59,8 +59,6 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
     // });
     // If too short
     if (this.blank('placeName') || this.get('placeName').length < 3) {
-      debugger;
-
       return Discourse.InputValidation.create({
         failed: true,
         reason: "Place name has to be at least 3 characters long."
@@ -74,6 +72,7 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
     });
   }.property('validate', 'placeName'),
   onShow: function() {
+    this.set('placeName', '');
     var placeDetails = this.get('content');
     var latitude = placeDetails.clickedLocation.geometry.location.lat();
     var longitude = placeDetails.clickedLocation.geometry.location.lng();
@@ -90,17 +89,16 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
         // []|night_club|restaurant|museum|bar|food|store']
         // types: ['store']
     };
-
     var service = new google.maps.places.PlacesService(placeDetails.map);
     var that = this;
     service.nearbySearch(request, function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         // debugger;
         that.set('nearbyPlaces', results.slice(0, 10));
-        // for (var i = 0; i < results.length; i++) {
-        //   var place = results[i];
-        //   createMarker(results[i]);
-        // }
+      }
+      else{
+        // clear out any previous results I may have
+        that.set('nearbyPlaces', null);
       }
     });
     // service.nearbySearch(request, callback);

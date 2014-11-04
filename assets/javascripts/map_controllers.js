@@ -6,7 +6,6 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     // triggered by start conversation button
     // or by places explorer model - in which case will have location object
     showNewTopicModal: function(topicType, locationObject) {
-      debugger;
       if (!Discourse.User.current()) {
         this.send('showLogin');
         return;
@@ -17,6 +16,9 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
 
       // in future might allow country bounds etc..
       var currentCitySelection = this.get('controllers.map.currentCitySelection');
+      if (locationObject) {
+        currentGeoKey.initial_location = locationObject;
+      };
 
       this.send('showDiscourseModal', 'newTopicModal', currentGeoKey);
     },

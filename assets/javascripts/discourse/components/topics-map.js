@@ -358,7 +358,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         var title = detailsForMarker.topic.title;
         // .get('title') + "( " + detailsForMarker.location.title + " )";
         addressString = detailsForMarker.location.title +
-          '<br><small>click for more...</small>';
+          '<button class="btn btn-infowindow btn-primary btn-small" style="margin-bottom:5px" >' +
+          '<i class="fa fa-comment-o" aria-hidden="true"></i>' +
+         'Go to conversation</button></div>';
+          // '<br><small>click for more...</small>';
         var dataObject = detailsForMarker.topic;
         var dataObjectType = 'topic';
       } else {
@@ -503,7 +506,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             // '<div id="clickedlocation-name-prompt" class="warning">Enter location name to ' +
             // talkPrompt + ':</div>' +
             // '<input id="clickedlocation-name" type="text" /><br>' +
-            '<button class="btn btn-primary btn-small" style="margin-bottom:5px" >' +
+            '<button class="btn btn-infowindow btn-primary btn-small" style="margin-bottom:5px" >' +
             talkPrompt + '</button></div>' +
             '</div>';
 

@@ -1,13 +1,17 @@
 Discourse.NewTopicModalView = Discourse.ModalBodyView.extend({
   templateName: 'modal/new_topic',
   title: function() {
-    var topicType = this.controller.get('model.capability');
-    var cityName = this.controller.get('model.display_name');
-
+    var topicType = this.get('controller.model.capability');
+    if (this.get('controller.model.initial_location.title')) {
+      var name = this.get('controller.model.initial_location.title');
+    } else {
+      var name = this.get('controller.model.display_name');
+    };
+    // debugger;
     if (topicType && topicType === "question") {
-      return "Ask for information regarding " + cityName;
+      return "Ask for information regarding " + name;
     } else if (topicType && topicType === "info") {
-      return "Start a conversation about " + cityName;
+      return "Start a conversation about " + name;
     } else {
       debugger;
     };

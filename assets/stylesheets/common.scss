@@ -5,6 +5,14 @@ max-width: 1200px;
 padding-right: 50px;
 }
 */
+
+#clickedlocation-div {
+  text-align: center;  
+}
+.btn-infowindow {
+  width: 100%;
+}
+
 /* based on nav-stacked */
 .list-stacked {
   position: relative;
@@ -177,11 +185,12 @@ padding-right: 50px;
 .tall-maps {
     height: 900px;
 }
-#tmap-infowindow-content {
+#tmap-infowindow-content, #map-clickedlocation-content, #smap-infowindow-content, #map-infowindow-content {
     cursor: pointer;
     cursor: hand;
     min-height: 50px;
 }
+/*
 #smap-infowindow-content {
     cursor: pointer;
     cursor: hand;
@@ -192,3 +201,4 @@ padding-right: 50px;
     cursor: hand;
     min-height: 50px;
 }
+*/

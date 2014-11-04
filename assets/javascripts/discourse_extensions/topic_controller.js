@@ -118,25 +118,10 @@ require("discourse/controllers/topic")["default"].reopen({
 
     },
     // replyWithLocation: function(geocodedLocation, title) {
-    // when a location is double clicked and 'go' is clicked on the resulting infowindow
+    // when a location is double clicked and 'select' is clicked on the resulting infowindow
     showExplorerModalForTopic: function(locationInfo) {
       locationInfo.context = "topic_map";
-
       this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
-
-      // if (locationType === "placeSearch") {
-      //   // currently placeSearch is disabled within topic map so should not end up here
-      //   debugger;
-      //   var locationObject = Discourse.Location.locationFromPlaceSearch(locationDetails, city);
-      // } else if (locationType === "gmapLocation") {
-      //   var locationObject = Discourse.Location.locationFromGmap(locationDetails);
-      //   locationObject.title = title;
-      // } else {
-      //   debugger;
-      // }
-
-      // this.send('replyWithLocationObject', locationObject);
-
       //return true to bubble up to route...
       return false;
     },

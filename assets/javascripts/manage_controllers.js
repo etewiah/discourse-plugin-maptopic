@@ -3,6 +3,10 @@ Discourse.ManageUserGeoKeysController = Discourse.ObjectController.extend({
   actions: {
     removeUserGeoKey: function(geoKey){
       Discourse.GeoTopic.removeFromLlsGeoIndexList(geoKey);
+    },
+    clearLsGeoKeys: function(){
+      debugger;
+      Discourse.KeyValueStore.remove('lsGeoIndexList');
     }
   },
   citySelectionItemsWithUrls: function() {
