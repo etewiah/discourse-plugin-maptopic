@@ -25,6 +25,18 @@
             </a>
             </li>
             {{/each}}
+            {{#each item in citySelectionItemsWithUrls }}
+            <li {{ bind-attr class=item.class }}>
+            <a style="">{{ item.displayString }}
+
+            <span class='icon expand' style="" href='#' 
+            title="remove title"
+            {{action "removeUserGeoKey" item}}>
+              {{fa-icon trash-o label="trash label" }}
+            </span>
+            </a>
+            </li>
+            {{/each}}
           </ul>
         </span>
       </div>

@@ -7,7 +7,8 @@
     Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' action='cityChanged' newLocationAction='showAddCityModal' currentSelectionItem=currentCitySelection }}
 
 
-    <small></small>
+    <small style="font-size: 55%;margin-left:3%"> 
+    <a {{ action showAddCityModal }}>Click here for more locations.</a>   </small>
 {{!-- {{#if isAdmin}}
 {{/if}}
  --}}

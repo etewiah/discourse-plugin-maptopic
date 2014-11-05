@@ -32,9 +32,12 @@ module MapTopic
 
 
 
-
         def self.create_from_geo_name geo_name, show_criteria
+            # geo_key = nil 
             results = Geocoder.search(geo_name)
+
+
+# TODO - stop using geo to refer to random shit
             if geo = results.first
                 # binding.pry
                 if geo.city

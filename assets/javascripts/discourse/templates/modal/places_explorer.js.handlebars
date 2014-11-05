@@ -5,6 +5,7 @@
   <div>
     <h style="padding-bottom: 20px;">{{ model.clickedLocation.formatted_address }}</h>
     <div>
+      <form {{action namedCitySelected on="submit"}}>
       <br>
                 {{text-field placeholder="Place Name" value=placeName 
                 id="place-name" autofocus="autofocus"}}
@@ -15,7 +16,8 @@
                   {{fa-icon comment-o label="talk label" }} Talk about this
               </button>
       <br>
-         {{input-tip validation=placeNameValidation}}      
+         {{input-tip validation=placeNameValidation}}  
+      </form>    
 
     </div>
     {{#if nearbyPlacesDetails}}

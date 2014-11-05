@@ -8,6 +8,21 @@ module MapTopic
 
     end
 
+# I use geo to refer to a string like 'morroco'
+# should really have used the word geo_name ..
+    def get_geo_key
+      unless(params[:geo] )
+        render_error "incorrect params"
+        return
+      end
+      geo_key =  ensure_geo_key_exists params[:geo].downcase
+      unless geo_key
+        render json: {"error" => {"message" => "geo_not_found"}}
+        return
+      end
+      return render json: geo_key.as_json
+    end
+
     def get_for_geo
       if params[:geo]
         # when a random geo has been passed in, below ensures a key is created for it
@@ -33,7 +48,7 @@ module MapTopic
       .where("archetype <> ?", Archetype.private_message)
       .where(id: @geo_topic_ids)
 
-# TODO - use hotness or other criteria below:
+      # TODO - use hotness or other criteria below:
       @other_topic_ids = MapTopic::TopicGeo.where("bounds_value <> ?", geo).limit(10).pluck('topic_id')
       other_topics =  Topic.where("deleted_at" => nil)
       .where("visible")

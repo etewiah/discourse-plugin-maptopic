@@ -1,6 +1,6 @@
 Discourse.AddCityModalView =  Discourse.ModalBodyView.extend({
   templateName: 'modal/add_city',
-  title: "New city",
+  title: "Type in a city, country or region",
   // classNames: ['create-account'],
 
   // _setup: function() {

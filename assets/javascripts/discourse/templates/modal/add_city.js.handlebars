@@ -1,21 +1,23 @@
-{{#unless complete}}
 <div class="modal-body">
-  <div>
-    <div>
-    </div>
-  </div>
 
+{{#if suggestedLocationName }}
+
+  Do you mean {{ suggestedLocationName }}?            
+  <button class='btn btn-primary' {{action addNewCity}}>Yes</button>
+  <button class='btn btn-danger' {{action clearSuggestion}}>No</button>
+
+{{else}}
   <form {{action "addNewCity" on="submit"}}>
     <table>
       <tr>
         <td style="" class="label">
-          <label for='location-city-name'>
+          <label for='location-name'>
           </label>
         </td>
       </tr>
       <tr class="input">
         <td style="">
-          {{text-field placeholder="Type in any city or town here" value=cityName id="location-city-name" autofocus="autofocus"}}
+          {{text-field placeholder="location name" value=locationName id="location-name" autofocus="autofocus"}}
         </td>
         <td>
 
@@ -24,23 +26,23 @@
 
       <tr class="instructions">
         <td>
+         {{input-tip validation=locationNameValidation}}  
+
           <label></label>
         </td>
       </tr>
     </table>
   </form>
+{{/if}}
 
 
 </div>
 
 <div class="modal-footer">
-    {{#if readyToAdd}}
-          <button class='btn btn-large btn-primary' {{bind-attr disabled="submitDisabled" }} {{action addNewCity}}>
-            Add
+{{#unless suggestedLocationName }}
+          <button class='btn btn-large btn-primary' {{action addNewCity}}>
+            Go
           </button>
-    {{/if}}
-          {{#if formSubmitted}} &nbsp; <i class='fa fa-spinner fa-spin'></i>
-          {{else}} &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
-          {{/if}}
-</div>
 {{/unless}}
+          &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
+</div>

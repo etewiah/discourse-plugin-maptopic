@@ -10,7 +10,7 @@ MapTopic::Engine.routes.draw do
   # get "/location_posts/update_location" => "location_posts#update_location"
   # get "/location_topics/update_location" => "location_topics#update_location"
 
-# TODO - change get requests for above to post
+  get "/geo_topics/get_geo_key" => "geo_topics#get_geo_key"
   get "/geo_topics/get_geo_keys" => "geo_topics#get_geo_keys"
   get "/geo_topics/get_for_geo" => "geo_topics#get_for_geo"
   get "/geo_topics/get_for_geo_old" => "geo_topics#get_for_geo_old"
