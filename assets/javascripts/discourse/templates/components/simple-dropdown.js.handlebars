@@ -4,7 +4,21 @@
         {{ currentSelectionItem.displayString }}</span>
       <ul  class="dropdown">
         {{#each item in sortedSelectionItems }}
-          <li {{ bind-attr class=item.class }}><a {{ bind-attr href=item.url }} {{ bind-attr data-val=item.value }}  >{{ item.displayString }}</a></li>
+          <li {{ bind-attr class=item.class }}>
+          <a {{ bind-attr href=item.url }} {{ bind-attr data-val=item.value }} 
+          data-action="selectItem" >
+
+            <span class="location-string"  {{ bind-attr data-val=item.value }} >
+              {{ item.displayString }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </span>
+
+            <span class='icon expand' style="" >
+            &nbsp;
+             <i data-action="removeItem" {{ bind-attr data-val=item.value }} class="dd-icon-remove fa fa-trash-o" aria-hidden="true">
+             </i>
+            </span>
+          </a>
+          </li>
         {{/each}}
       </ul>
     </span>

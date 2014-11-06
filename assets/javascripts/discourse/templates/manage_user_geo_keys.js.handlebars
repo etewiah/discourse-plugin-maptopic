@@ -14,23 +14,12 @@
         <h4>User values</h4>
         <span class="" tabindex="1">
           <ul class="nav nav-stacked">
-            {{#each item in citySelectionItemsWithUrls }}
-            <li {{ bind-attr class=item.class }}>
-            <a style="width: 70%;float: left;">{{ item.displayString }}</a>
 
-            <a class='icon expand' style="width: 10%;float: left;display: inline-table;" href='#' 
-            title="remove title"
-            {{action "removeUserGeoKey" item}}>
-              {{fa-icon trash-o label="trash label" }}
-            </a>
-            </li>
-            {{/each}}
             {{#each item in citySelectionItemsWithUrls }}
             <li {{ bind-attr class=item.class }}>
             <a style="">{{ item.displayString }}
 
-            <span class='icon expand' style="" href='#' 
-            title="remove title"
+            <span class='icon expand' style="float: right;background-color: red;" 
             {{action "removeUserGeoKey" item}}>
               {{fa-icon trash-o label="trash label" }}
             </span>

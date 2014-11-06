@@ -64,6 +64,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       };
       this.send('closeModal');
     },
+
     topicSelected: function(detailsForMarker) {
       var topic = Discourse.Topic.create(
         detailsForMarker.topic
@@ -201,6 +202,11 @@ Discourse.MapController = Discourse.Controller.extend({
       var topiclist = Discourse.GeoTopic.geoTopicsForCity(newGeo);
       this.transitionToRoute('map.fromOneParam', topiclist);
     },
+    // triggered by locations dropdown
+    removeLocation: function(geoKey) {
+      debugger;
+      Discourse.GeoTopic.removeFromLlsGeoIndexList(geoKey);
+    }
     // initiateAddLocation: function(newLocation) {
     //   this.send('showAddCityModal');
     // }

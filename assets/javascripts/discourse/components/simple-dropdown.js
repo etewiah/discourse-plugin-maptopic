@@ -1,16 +1,26 @@
 // https://github.com/silviomoreto/bootstrap-select/blob/master/bower.json
+// http://tympanus.net/codrops/2012/10/04/custom-drop-down-list-styling/
 Discourse.SimpleDropdownComponent = Ember.Component.extend({
 
   // dropdownId: 'dd',
   tagName: 'span',
 
-  resortSelectionItems: function(){
+  // actions: {
+  //   removeUserGeoKey: function(){
+  //     debugger;
+  //   }
+  // },
+
+  resortSelectionItems: function() {
     var selectionItems = this.get('selectionItems');
-    if(selectionItems){
-      var selectionItemsWithoutNcPrompt = selectionItems.rejectBy('value','new_city');
+    if (selectionItems) {
+      var selectionItemsWithoutNcPrompt = selectionItems.rejectBy('value', 'new_city');
       var sortedSelectionItems = selectionItemsWithoutNcPrompt.sortBy('value');
-      sortedSelectionItems.push({displayString: "new location",value: "new_city"})
-      this.set('sortedSelectionItems',sortedSelectionItems);
+      sortedSelectionItems.push({
+        displayString: "new location",
+        value: "new_city"
+      })
+      this.set('sortedSelectionItems', sortedSelectionItems);
       // this.set
     }
   }.observes('selectionItems.@each').on('init'),
@@ -47,6 +57,18 @@ Discourse.SimpleDropdownComponent = Ember.Component.extend({
     // var dd = new DropDown(ddElement);
 
     ddElement.on('click', function(event) {
+      if (event.target.dataset.action === "removeItem") {
+        var selectionItems = self.get('selectionItems');
+        var currentSelectionItem = selectionItems.findBy('value', event.target.dataset.val);
+        selectionItems.removeObject(currentSelectionItem);
+        // above removes item from display list
+        // below removes from store (localstorage for now)
+        // debugger;
+        self.sendAction('removeItemAction', currentSelectionItem);
+        event.stopPropagation();
+        event.preventDefault();
+        return;
+      };
       if (event.target.dataset.val) {
         if (event.target.dataset.val === "new_city") {
           self.sendAction('newLocationAction');

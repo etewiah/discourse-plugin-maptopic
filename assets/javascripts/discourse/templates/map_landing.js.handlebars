@@ -4,7 +4,8 @@
 <div class="row">  
   <h1 style="margin-bottom:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
 
-    Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' action='cityChanged' newLocationAction='showAddCityModal' currentSelectionItem=currentCitySelection }}
+    Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' 
+    action='cityChanged' newLocationAction='showAddCityModal' removeItemAction='removeLocation' currentSelectionItem=currentCitySelection }}
 
 
     <small style="font-size: 55%;margin-left:3%"> 
