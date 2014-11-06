@@ -99,6 +99,7 @@ require("discourse/controllers/topic")["default"].reopen({
   // }.observes('topic'),
 
   actions: {
+
     sharePopup: function(target, url) {
       window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=600,height=' + Discourse.ShareLink.popupHeight(target));
       return false;
@@ -120,8 +121,16 @@ require("discourse/controllers/topic")["default"].reopen({
     // replyWithLocation: function(geocodedLocation, title) {
     // when a location is double clicked and 'select' is clicked on the resulting infowindow
     showExplorerModalForTopic: function(locationInfo) {
+      debugger;
       locationInfo.context = "topic_map";
       this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
+      //return true to bubble up to route...
+      return false;
+    },
+    showEditorModalForTopic: function(locationInfo) {
+      debugger;
+      // locationInfo.context = "topic_map";
+      this.send('showDiscourseModal', 'placeManagerModal', locationInfo);
       //return true to bubble up to route...
       return false;
     },

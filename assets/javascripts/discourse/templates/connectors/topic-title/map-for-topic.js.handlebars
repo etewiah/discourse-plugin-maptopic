@@ -33,6 +33,12 @@
               Invite your friends
           </button>
 
+          {{#each marker in model.markers }}
+            <button class='btn btn-primary  btn-map-for-topic' style="background-color:gray;" 
+            {{action showEditorModalForTopic marker}}><i class="fa fa-map-marker"></i>
+                {{ marker.location.title }}
+            </button>
+          {{/each}}
 
         </div>
       </div>

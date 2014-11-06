@@ -137,7 +137,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // used to decide center of map if there are no markers
     // TODO - this will have to change to support more scenarios
     // like countries, regions etc
-    // ---- once I confirm that geo exists in all cases, will replace geoDetails with geo...
+    // ---- once I confirm that geo exists in all cases, will replace geoDetails directly with geo...
     if (this.get('geo')) {
       return this.get('geo');
     } else {
@@ -326,18 +326,18 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // var mapCenter = new google.maps.LatLng(currentMarkerValues[0].latitude,
     //   currentMarkerValues[0].longitude);
     var geoDetails = this.get('geoDetails');
-    var mapCenter = new google.maps.LatLng(geoDetails.latitude, geoDetails.longitude);
 
+    var mapCenter = new google.maps.LatLng(geoDetails.latitude, geoDetails.longitude);
     this.mapOptions.center = mapCenter;
     this.mapOptions.mapTypeId = google.maps.MapTypeId.ROADMAP;
-
     this.map = new google.maps.Map(document.getElementById(
         'topics-map-canvas'),
       this.mapOptions);
 
+
+
     var bounds = new google.maps.LatLngBounds();
     // TODO - ensure I have unique markers where location is same
-
     this.infoWindows = [];
     this.markers = [];
     var that = this;
