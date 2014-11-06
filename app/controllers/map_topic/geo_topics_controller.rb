@@ -1,6 +1,25 @@
 module MapTopic
   class GeoTopicsController < ApplicationController
     include CurrentUser
+    before_action :check_user, only: [:update_geo_places]
+
+
+    def update_geo_places
+      unless(params[:places] && params[:topic_id] )
+        render_error "incorrect params"
+        return
+      end
+      
+      @topic = Topic.find(params[:topic_id])
+      if current_user.guardian.ensure_can_edit!(@topic)
+        render status: :forbidden, json: false
+        return
+      end
+      @topic.places = params[:places]
+      @topic.save!
+      return render_json_dump @topic.as_json
+
+    end
 
     def get_geo_keys
       @geo_keys = MapTopic::GeoKey.all
@@ -141,56 +160,6 @@ module MapTopic
       # render_json_dump(serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer))
       # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
     end
-
-    # TODO - remove below:
-
-    #     def get_for_city
-    #       if params[:city]
-    #         # when a random city has been passed in, below ensures a key is created for it
-    #         geo_key =  ensure_geo_key_exists params[:city].downcase
-    #       else
-    #         # TODO - log how often this is being called - pretty expensive as should be called as little as possible
-    #         geo_key = get_nearest_location_to_request
-    #       end
-
-    #       unless geo_key
-    #         # this is a really ugly attempt to ensure that I always return a geo_key
-    #         # TODO - have a more sensible way of getting the default
-    #         geo_key = MapTopic::GeoKey.where(:city_lower => 'berlin').first
-    #       end
-    #       city = geo_key.city_lower
-
-    #       # TODO - where params[:city] is passed but is not the city returned in geo_key (maybe default
-    #       # city was returned) , should return a message to client in addition
-
-    #       # TODO - make sure this query does not return unlisted or private conversations..
-    #       @city_conversations = MapTopic::TopicGeo.where(:city_lower => city)
-    # # below rejects conversations without a topic or location - should not be necessary
-    #       @city_conversations = @city_conversations.select do |conv|
-    #         if conv.topic && conv.topic.location
-    #           true
-    #         else
-    #           false
-    #         end
-    #       end
-
-    #       @other_conversations = MapTopic::TopicGeo.where("city_lower <> ?", city).limit(6)
-
-    #       # return render json: @city_conversations, each_serializer: MapTopic::GeoTopicSummarySerializer
-    #       city_conversations_serialized = serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer)
-    #       other_conversations_serialized = serialize_data(@other_conversations, MapTopic::GeoTopicSummarySerializer)
-
-    #       return render_json_dump({
-    #                                 "geo_key" => geo_key,
-    #                                 "other_conversations" => other_conversations_serialized,
-    #                                 "city_conversations" => city_conversations_serialized,
-    #                                 "city" => city
-    #       })
-
-    #       # 2 calls below are the same:
-    #       # render_json_dump(serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer))
-    #       # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
-    #     end
 
 
     private
