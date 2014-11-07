@@ -1,0 +1,48 @@
+{{#if placeDetailsConfirmed}}
+  <h4 style="text-align: center;">Details from Google Places.........:</h4>
+  <div style="width: 49%;float: left;">
+    <div style="padding-bottom: 20px;">{{ googlePlaceDetails.name }}</div>
+
+    <div style="padding-bottom: 20px;">{{ googlePlaceDetails.vicinity }}</div>
+
+    Website:
+    {{#if googlePlaceDetails.website }}<a {{ bind-attr href=googlePlaceDetails.website }}> {{ googlePlaceDetails.website }} </a>
+    {{/if}}
+
+  </div>
+  <div style="width: 49%;float: left;">
+    <img {{ bind-attr src=primaryImageUrl }}>
+  </div>
+
+            <button class='btn btn-primary' {{action editPlaceDetails }} title="">
+              {{fa-icon thumbs-o-up label="talk label" }}Edit....
+            </button>
+
+{{else}} 
+        <h4 style="text-align: center;">Please confirm these details:</h4>
+          <div style="">
+            <div style="padding-bottom: 20px;">{{ googlePlaceDetails.name }}</div>
+
+            <div style="padding-bottom: 20px;">{{ googlePlaceDetails.vicinity }}</div>
+
+            Website:
+            {{#if googlePlaceDetails.website }}<a {{ bind-attr href=googlePlaceDetails.website }}> {{ googlePlaceDetails.website }} </a>
+            {{/if}}
+
+          </div>
+          {{#each photo in placePhotos}}
+          <div style="">
+            <img {{ bind-attr src=photo.url }}>
+          </div>
+          {{/each}}
+
+          <div class="row">
+            <button class='btn btn-primary' {{action confirmPlaceDetails }} title="">
+              {{fa-icon thumbs-o-up label="talk label" }}Confirm place details
+            </button>
+            <button class='btn btn-primary' {{action searchForPlace }} title="">
+              {{fa-icon thumbs-o-up label="talk label" }}Search
+            </button>
+          </div>
+
+{{/if}} 

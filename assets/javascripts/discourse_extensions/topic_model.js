@@ -69,7 +69,7 @@ Discourse.Topic.reopen({
   markers: function() {
     var currentMarkerValues = [];
     var locations = this.get('locations');
-    debugger;
+    // debugger;
     if (locations) {
       locations.forEach(function(loc) {
         var markerInfo = {
@@ -90,7 +90,7 @@ Discourse.Topic.reopen({
           // currently some posts have locations that are not in the topic locations collection
           // so this is a workaround that should not be needed in the future:
           if (!markerInfo) {
-            debugger;
+            // debugger;
             var loc = p.get('location');
             var markerInfo = {
               context: 'topic_view',

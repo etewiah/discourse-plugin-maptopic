@@ -16,6 +16,7 @@ end
 #   gem 'vcr'
 # end
 
+
 register_asset "javascripts/discourse/templates/connectors/topic-title/map-for-topic.js.handlebars"
 register_asset "javascripts/discourse/templates/connectors/composer-open/composer-location-selection.js.handlebars"
 # register_asset "javascripts/discourse/templates/composer.js.handlebars"
@@ -28,6 +29,8 @@ register_asset "javascripts/discourse/templates/modal/select_location.js.handleb
 register_asset "javascripts/discourse/templates/components/selectable-map.js.handlebars"
 register_asset "javascripts/discourse/templates/components/topics-map.js.handlebars"
 register_asset "javascripts/discourse/templates/components/simple-dropdown.js.handlebars"
+register_asset "javascripts/discourse/templates/components/geo-place-control.js.handlebars"
+register_asset "javascripts/discourse/components/geo-place-control.js"
 register_asset "javascripts/discourse/components/simple-dropdown.js"
 register_asset "javascripts/discourse/components/topics-map.js"
 register_asset "javascripts/discourse/components/selectable-map.js"

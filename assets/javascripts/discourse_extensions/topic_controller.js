@@ -122,7 +122,6 @@ require("discourse/controllers/topic")["default"].reopen({
     // when a location is double clicked and 'select' is clicked on the resulting infowindow
     showExplorerModalForTopic: function(locationInfo) {
       // var map = this.get('model.geo.map');
-      debugger;
       locationInfo.context = "topic_map";
       this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
       //return true to bubble up to route...
@@ -130,7 +129,6 @@ require("discourse/controllers/topic")["default"].reopen({
     },
     showEditorModalForTopic: function(locationInfo) {
       locationInfo.topic_id = this.get('model.id');
-      debugger;
       locationInfo.map = locationInfo.map || this.get('model.geo.map');
       this.send('showDiscourseModal', 'placeManagerModal', locationInfo);
       //return true to bubble up to route...

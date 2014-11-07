@@ -4,65 +4,48 @@
   </div>
 
   <div>
-    {{#if googlePlaceDetails}}
-    {{#if }}
-    <h4 style="text-align: center;">Details from Google Places:</h4>
-    <div style="width: 49%;float: left;">
-      <div style="padding-bottom: 20px;">{{ model.location.address}}</div>
-      
-      {{#if googlePlaceDetails.website }}
-        website: <a {{ bind-attr href=googlePlaceDetails.website }} > {{ googlePlaceDetails.website }} </a>
-      {{/if}}
-      
-    </div>
-    <div style="width: 49%;float: left;">
-      <img {{ bind-attr src=primaryImageUrl }}>
-    </div>
-    {{else}}
 
+    {{#if googlePlaceDetails}} 
+      {{ geo-place-control googlePlaceDetails=googlePlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails" }}
 
-    {{#if nearbyPlacesDetails}}
-    <div>
-      <h3 style="margin-bottom: 2%;margin-top: 2%;" >Places nearby:</h3>
-    </div>
-    <div>
-        <ul class="nav list-stacked" style="padding: 5px 5px 5px 5px;">
-          {{#each place in nearbyPlacesDetails}}
-              <li>
-              <a style="padding-left: 5px;" {{action correctSearchResultSelected place}}>
-              <div style="width: 77%;float: left;">
-              <span>{{ place.name }},</span>
-              <span>{{ place.vicinity }},</span>
-              </div>
-              <button class='btn btn-primary' style="" 
-              title="Do you have something to say about this place? Go on then, say it..."
-              >
-                {{fa-icon thumbs-o-up label="talk label" }} This is it
-              </button>
-              </a> 
-              
-              </li>
-            {{/each}}
-          </ul>
+    {{else}} 
+        {{#if nearbyPlacesDetails}}
+            <div>
+              <h3 style="margin-bottom: 2%;margin-top: 2%;">Places nearby:</h3>
+            </div>
+            <div>
+              <ul class="nav list-stacked" style="padding: 5px 5px 5px 5px;">
+                {{#each place in nearbyPlacesDetails}}
+                <li>
+                  <a style="padding-left: 5px;" {{action correctSearchResultSelected place}}>
+                    <div style="width: 77%;float: left;">
+                      <span>{{ place.name }},</span>
+                      <span>{{ place.vicinity }},</span>
+                    </div>
+                    <button class='btn btn-primary' style="" title="">
+                      {{fa-icon thumbs-o-up label="talk label" }} This is it
+                    </button>
+                  </a>
 
-    </div>
+                </li>
+                {{/each}}
+              </ul>
+            </div>
+        {{/if}} 
+    {{!--
+    <button class='btn btn-primary' {{action searchForLocation model.location }}>
+      Search for more info about this place
+    </button>--}} 
     {{/if}}
-
-
-{{!--   <button class='btn btn-primary' {{action searchForLocation model.location }}>
-    Search for more info about this place
-  </button> --}}
-
-
-     {{/if}}
   </div>
 </div>
 
 <div class="modal-footer">
 
-{{!--   <button class='btn btn-primary' {{action replyWithLocation model.location }}>
+  {{!--
+  <button class='btn btn-primary' {{action replyWithLocation model.location }}>
     Say something about this place
   </button>
- --}}
+  --}}
   <a {{action closeModal}}>{{i18n cancel}}</a>
 </div>
