@@ -121,6 +121,7 @@ require("discourse/controllers/topic")["default"].reopen({
     // replyWithLocation: function(geocodedLocation, title) {
     // when a location is double clicked and 'select' is clicked on the resulting infowindow
     showExplorerModalForTopic: function(locationInfo) {
+      // var map = this.get('model.geo.map');
       debugger;
       locationInfo.context = "topic_map";
       this.send('showDiscourseModal', 'placesExplorerModal', locationInfo);
@@ -128,8 +129,9 @@ require("discourse/controllers/topic")["default"].reopen({
       return false;
     },
     showEditorModalForTopic: function(locationInfo) {
+      locationInfo.topic_id = this.get('model.id');
       debugger;
-      // locationInfo.context = "topic_map";
+      locationInfo.map = locationInfo.map || this.get('model.geo.map');
       this.send('showDiscourseModal', 'placeManagerModal', locationInfo);
       //return true to bubble up to route...
       return false;
@@ -157,6 +159,9 @@ require("discourse/controllers/topic")["default"].reopen({
       }
       //return true to bubble up to route...
       return false;
-    }
+    },
+    // updateTopicPlace: function(googlePlaceResult){
+    //   debugger;
+    // }
   }
 });

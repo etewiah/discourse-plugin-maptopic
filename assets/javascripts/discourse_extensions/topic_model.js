@@ -69,6 +69,7 @@ Discourse.Topic.reopen({
   markers: function() {
     var currentMarkerValues = [];
     var locations = this.get('locations');
+    debugger;
     if (locations) {
       locations.forEach(function(loc) {
         var markerInfo = {
@@ -89,6 +90,7 @@ Discourse.Topic.reopen({
           // currently some posts have locations that are not in the topic locations collection
           // so this is a workaround that should not be needed in the future:
           if (!markerInfo) {
+            debugger;
             var loc = p.get('location');
             var markerInfo = {
               context: 'topic_view',
@@ -119,21 +121,6 @@ Discourse.Topic.reopen({
       });
     }
 
-
-    // if (this.get('location')) {
-    //   var markerInfo = {
-    //     topic: this,
-    //     location: this.get('location'),
-    //     // latitude: latitude,
-    //     // longitude: longitude,
-    //     // // title: show_time.title,
-    //     // start_time_string: this.get('start_time_string'),
-    //     // title: this.get('title'),
-    //     // venueAddress: this.get('venue_address'),
-    //     // venueName: this.get('venue_name')
-    //   };
-    //   currentMarkerValues.push(markerInfo);
-    // }
     return currentMarkerValues;
     // locationCount below is not accurate, just a value that increments each time
     // a new reply with a location is added (done in extension to composer model)

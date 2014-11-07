@@ -118,9 +118,14 @@ module MapTopic
     end
 
     # updated 3 nov 2014
+    # this ensures that topics that were created recently and have a geo, also have places set
     # run below before ensure_topics_have_topic_geo_and_places
     def self.ensure_topic_geos_have_places
       MapTopic::TopicGeo.all.each do |topic_geo|
+        topic_geo.hot_till = Date.today + 6.months
+        topic_geo.hot_from = Date.today
+        topic_geo.save!
+
         if topic_geo.topic && topic_geo.topic.locations
           topic_geo.topic.locations.each do |location|
             topic_geo.topic.geo.add_or_update_place location
@@ -128,14 +133,15 @@ module MapTopic
         else
           binding.pry
         end
-        topic_geo.hot_till = Date.today + 6.months
-        topic_geo.hot_from = Date.today
-        topic_geo.save!
+        # if topic_geo.id == 27
+        #   binding.pry
+        # end
       end
     end
 
     # only need to run this once to ensure all geo_topics have geo and geo.places json set ..
     # code updated 3 nov 2014
+    # Below only targets topics which don't have geo set which is why I
     # run below after ensure_topic_geos_have_places
     def self.ensure_topics_have_topic_geo_and_places
       # migrate_topic_geo_values

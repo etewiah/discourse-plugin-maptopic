@@ -334,7 +334,10 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         'topics-map-canvas'),
       this.mapOptions);
 
-
+    // below makes the map available outside this component
+    // this is useful when I need to do google place searches - eg in place_manager modal
+    // perhaps will get rid of this.map and always use geo.map...
+    this.set('geo.map',this.map);
 
     var bounds = new google.maps.LatLngBounds();
     // TODO - ensure I have unique markers where location is same

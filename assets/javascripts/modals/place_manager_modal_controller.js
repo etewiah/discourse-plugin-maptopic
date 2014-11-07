@@ -1,26 +1,28 @@
 Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
   needs: ['topic'],
   actions: {
-    goToPost: function(post) {
-      var topicController = this.get('controllers.topic');
-      var postNumber = post.get('post_number');
-      topicController.set('currentPost', postNumber);
-      // to do - ensure scroll to correct post:
-      Discourse.URL.jumpToPost(postNumber);
-      // this.set('model.activePost', post);
-      this.send('closeModal');
-    },
-    searchForLocation: function(locationObject) {
+
+    correctSearchResultSelected: function(searchResult) {
+      var placeDetails = this.get('content');
       debugger;
-      var topicController = this.get('controllers.topic');
-      topicController.send('replyWithLocationObject', locationObject);
-      this.send('closeModal');
-    }
+      // var topicController = this.get('controllers.topic');
+      // var postNumber = post.get('post_number');
+      // topicController.set('currentPost', postNumber);
+      // // to do - ensure scroll to correct post:
+      // Discourse.URL.jumpToPost(postNumber);
+      // // this.set('model.activePost', post);
+      // this.send('closeModal');
+    },
+    // searchForLocation: function(locationObject) {
+    //   debugger;
+    //   var topicController = this.get('controllers.topic');
+    //   topicController.send('replyWithLocationObject', locationObject);
+    //   this.send('closeModal');
+    // }
 
   },
 
   onShow: function() {
-    debugger;
     var placeDetails = this.get('content');
     this.set('googlePlace', null);
     if (placeDetails.location.gplace_id) {
@@ -43,7 +45,7 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
 
       var request = {
         location: latlng,
-        radius: '50'
+        radius: '100'
           // types: ['store']
       };
 

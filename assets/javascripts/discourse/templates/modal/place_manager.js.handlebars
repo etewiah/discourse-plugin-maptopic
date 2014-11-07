@@ -5,6 +5,7 @@
 
   <div>
     {{#if googlePlaceDetails}}
+    {{#if }}
     <h4 style="text-align: center;">Details from Google Places:</h4>
     <div style="width: 49%;float: left;">
       <div style="padding-bottom: 20px;">{{ model.location.address}}</div>
@@ -28,7 +29,7 @@
         <ul class="nav list-stacked" style="padding: 5px 5px 5px 5px;">
           {{#each place in nearbyPlacesDetails}}
               <li>
-              <a style="padding-left: 5px;" {{action searchResultSelected place}}>
+              <a style="padding-left: 5px;" {{action correctSearchResultSelected place}}>
               <div style="width: 77%;float: left;">
               <span>{{ place.name }},</span>
               <span>{{ place.vicinity }},</span>
@@ -36,7 +37,7 @@
               <button class='btn btn-primary' style="" 
               title="Do you have something to say about this place? Go on then, say it..."
               >
-                {{fa-icon comment-o label="talk label" }} This is it
+                {{fa-icon thumbs-o-up label="talk label" }} This is it
               </button>
               </a> 
               
@@ -46,19 +47,11 @@
 
     </div>
     {{/if}}
-{{!--       <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
-      <div> <ul>
-      {{#each place in nearbyPlacesDetails}}
-        <li>
-          {{ place.name }}, {{ place.vicinity }}
-        </li>
-      {{/each}}
 
-      </ul> </div> --}}
 
-  <button class='btn btn-primary' {{action searchForLocation model.location }}>
+{{!--   <button class='btn btn-primary' {{action searchForLocation model.location }}>
     Search for more info about this place
-  </button>
+  </button> --}}
 
 
      {{/if}}
