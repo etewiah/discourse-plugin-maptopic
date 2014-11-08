@@ -69,8 +69,9 @@ module MapTopic
         self.save!
       end
 
-      unless self.places['sorted_ids'].include? location.id
-        self.places['sorted_ids'].push location.id
+      location_id = location.id.to_s
+      unless self.places['sorted_ids'].include? location_id
+        self.places['sorted_ids'].push location_id
       end
 
       # topic_places = self.places || {}
@@ -78,7 +79,7 @@ module MapTopic
       # TODO - ensure there are no duplicates...
 
       place = {}
-      # place = topic_places.select{ |p| p['location_id'] == location.id }[0]
+      # place = topic_places.select{ |p| p['location_id'] == location_id }[0]
       # unless place
       #   place = {}
       #   topic_places.push place
@@ -88,7 +89,8 @@ module MapTopic
       place['gplace_id'] = location.gplace_id
       place['longitude'] = location.longitude
       place['latitude'] = location.latitude
-      place['location_id'] = location.id
+      place['location_id'] = location_id
+      place['detailsConfirmed'] = false
 
       # self.places[location.id.to_i] = place
       # the key always gets converted to a string on saving, even if I use to_i as above

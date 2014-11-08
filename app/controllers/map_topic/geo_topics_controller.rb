@@ -9,23 +9,38 @@ module MapTopic
         render_error "incorrect params"
         return
       end
-      
+      # TODO rename to set_or_update_geo_places and handle case where no location_id
+      # is passed in - i.e. create location and add that to geo place
+
+
       @topic = Topic.find(params[:topic_id])
       if current_user.guardian.ensure_can_edit!(@topic)
         render status: :forbidden, json: false
         return
       end
+
+      location_id = params[:location_id].to_s
       # below is a workaround check while I still have some places in db
       # that are arrays
       # binding.pry
       if @topic.geo.places.class == Array
+        binding.pry
         @topic.geo.places = {
           'sorted_ids' => []
         }
         @topic.geo.save
       end
+
+      unless @topic.geo.places['sorted_ids'].include? location_id
+        @topic.geo.places['sorted_ids'].push location_id
+      end
+
+      place = params[:place]
+      place['longitude'] = place['longitude'].to_f
+      place['latitude'] = place['latitude'].to_f
+      place['location_id'] = location_id
       # should do some checks to prevent injection attacks
-      @topic.geo.places[params[:location_id].to_i] = params[:place]
+      @topic.geo.places[location_id] = place
       # topic_places = @topic.geo.places || []
 
       # place = topic_places.select{ |p| p['location_id'] == location.id }[0]
@@ -35,7 +50,7 @@ module MapTopic
       # end
 
       @topic.geo.save!
-      return render_json_dump @topic.as_json
+      return render_json_dump @topic.geo.as_json
 
     end
 

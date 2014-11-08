@@ -5,8 +5,8 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
       this.runGooglePlacesSearch();
     },
     confirmPlaceDetails: function(confirmedDetails) {
-      debugger;
       var updatedPlace = Discourse.Location.locationFromPlaceSearch(confirmedDetails)
+      updatedPlace.detailsConfirmed = true
       // TODO - move below to model ovject
 
       var geo_place_update = Discourse.ajax("/geo_topics/update_geo_places", {
