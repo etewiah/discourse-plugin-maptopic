@@ -19,7 +19,7 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
       });
 
       geo_place_update.then(function(result){
-        debugger;
+        // debugger;
       });
     },
     correctSearchResultSelected: function(searchResult) {

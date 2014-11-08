@@ -117,7 +117,7 @@ module MapTopic
       # todo....
     end
 
-    # updated 3 nov 2014
+    # code updated 8 nov 2014
     # this ensures that topics that were created recently and have a geo, also have places set
     # run below before ensure_topics_have_topic_geo_and_places
     def self.ensure_topic_geos_have_places
@@ -140,7 +140,7 @@ module MapTopic
     end
 
     # only need to run this once to ensure all geo_topics have geo and geo.places json set ..
-    # code updated 3 nov 2014
+    # code updated 8 nov 2014
     # Below only targets topics which don't have geo set which is why I
     # run below after ensure_topic_geos_have_places
     def self.ensure_topics_have_topic_geo_and_places
@@ -149,7 +149,7 @@ module MapTopic
       # topic = Topic.find(12)
       Topic.all.each do |topic|
         unless topic.geo
-          if topic.location 
+          if topic.location
 
             topic_geo = create_geo_for_topic topic
             topic.locations.each do |location|
@@ -161,11 +161,26 @@ module MapTopic
           end
         end
       end
-
       # had thought of adding locations to geo but its not really necessary
       # add_locations_to_topic_geo topic
+    end
+
+    # code updated 8 nov 2014
+    def self.add_post_locations_to_geo_places
+      MapTopic::LocationPost.all.each do |location_post|
+        if location_post.post && location_post.post.topic.geo
+          topic_geo = location_post.post.topic.geo
+          unless topic_geo.places['sorted_ids'].include? location_post.location.id
+            # binding.pry
+            topic_geo.add_or_update_place location_post.location, location_post.post.id
+          end
+        else
+          binding.pry
+        end
+      end
 
     end
+
 
     private
 
@@ -180,7 +195,7 @@ module MapTopic
           geo_key = MapTopic::GeoKey.create_from_geo_name  topic.location.city.downcase, "searched"
         end
         topic_geo = MapTopic::TopicGeo.create_from_geo_key geo_key, 'info'
-        binding.pry 
+        binding.pry
         topic_geo.topic_id = topic.id
         # topic.save!
         topic_geo.save!

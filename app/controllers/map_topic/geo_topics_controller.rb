@@ -23,8 +23,8 @@ module MapTopic
       # below is a workaround check while I still have some places in db
       # that are arrays
       # binding.pry
-      if @topic.geo.places.class == Array
-        binding.pry
+      # if @topic.geo.places.class == Array
+      unless (@topic.geo.places.class == Hash) && (@topic.geo.places['sorted_ids'])
         @topic.geo.places = {
           'sorted_ids' => []
         }

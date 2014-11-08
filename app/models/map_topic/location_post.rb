@@ -26,7 +26,7 @@ module MapTopic
 
       if post.topic.geo
         # ensures place json includes post location
-        post.topic.geo.add_or_update_place location
+        post.topic.geo.add_or_update_place location, post.id
       end
 
       return location_post

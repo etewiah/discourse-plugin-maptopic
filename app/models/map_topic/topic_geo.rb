@@ -53,10 +53,11 @@ module MapTopic
       return topic_geo
     end
 
-    def add_or_update_place location
+    # as well as in corrections job, also called from MapTopic::LocationPost.create_from_location
+    def add_or_update_place location, post_id
       # the idea of having the place col is that it saves me having to query deeply for the basic info that I
       # will need to display a nice infowindow when showing index of topics...
- 
+
 
       # below is a workaround check while I still have some places in db
       # that are arrays
@@ -74,9 +75,14 @@ module MapTopic
         self.places['sorted_ids'].push location_id
       end
 
-      # topic_places = self.places || {}
-
-      # TODO - ensure there are no duplicates...
+      if self.places[location.id]
+        post_ids = self.places[location.id]['post_ids'] || []
+      else
+        post_ids = []
+      end
+      if post_id
+        post_ids.push post_id.to_s
+      end
 
       place = {}
       # place = topic_places.select{ |p| p['location_id'] == location_id }[0]
@@ -90,7 +96,8 @@ module MapTopic
       place['longitude'] = location.longitude
       place['latitude'] = location.latitude
       place['location_id'] = location_id
-      place['detailsConfirmed'] = false
+      place['detailsConfirmed'] = "false"
+      place['post_ids'] = post_ids
 
       # self.places[location.id.to_i] = place
       # the key always gets converted to a string on saving, even if I use to_i as above
