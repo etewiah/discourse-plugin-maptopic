@@ -54,6 +54,19 @@ Discourse.Location = Discourse.Model.extend({
 
 });
 Discourse.Location.reopenClass({
+  geoPlaceFromGooglePlace: function(result) {
+    // debugger;
+    var locationObject = {
+      title: result.name,
+      address: result.vicinity,
+      latitude: result.geometry.location.lat(),
+      longitude: result.geometry.location.lng(),
+      gplace_id: result.place_id
+    }
+    debugger;
+    // for geoplaces, I don't care about city or country...
+    return locationObject;
+  },
   locationFromPlaceSearch: function(result, city) {
     // debugger;
     var locationObject = {

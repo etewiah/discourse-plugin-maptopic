@@ -5,7 +5,7 @@ module MapTopic
 
 
     def update_geo_places
-      unless(params[:places] && params[:topic_id] )
+      unless(params[:place] && params[:topic_id] && params[:location_id])
         render_error "incorrect params"
         return
       end
@@ -15,8 +15,26 @@ module MapTopic
         render status: :forbidden, json: false
         return
       end
-      @topic.places = params[:places]
-      @topic.save!
+      # below is a workaround check while I still have some places in db
+      # that are arrays
+      # binding.pry
+      if @topic.geo.places.class == Array
+        @topic.geo.places = {
+          'sorted_ids' => []
+        }
+        @topic.geo.save
+      end
+      # should do some checks to prevent injection attacks
+      @topic.geo.places[params[:location_id].to_i] = params[:place]
+      # topic_places = @topic.geo.places || []
+
+      # place = topic_places.select{ |p| p['location_id'] == location.id }[0]
+      # unless place
+      #   place = {}
+      #   topic_places.push place
+      # end
+
+      @topic.geo.save!
       return render_json_dump @topic.as_json
 
     end

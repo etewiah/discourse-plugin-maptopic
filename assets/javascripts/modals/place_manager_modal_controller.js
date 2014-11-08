@@ -6,6 +6,21 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
     },
     confirmPlaceDetails: function(confirmedDetails) {
       debugger;
+      var updatedPlace = Discourse.Location.locationFromPlaceSearch(confirmedDetails)
+      // TODO - move below to model ovject
+
+      var geo_place_update = Discourse.ajax("/geo_topics/update_geo_places", {
+        data: {
+          place: updatedPlace,
+          location_id: this.get('content.location_id'),
+          topic_id: this.get('content.topic_id')
+        },
+        method: 'POST'
+      });
+
+      geo_place_update.then(function(result){
+        debugger;
+      });
     },
     correctSearchResultSelected: function(searchResult) {
       // var placeDetails = this.get('content');

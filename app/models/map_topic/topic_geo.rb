@@ -56,16 +56,33 @@ module MapTopic
     def add_or_update_place location
       # the idea of having the place col is that it saves me having to query deeply for the basic info that I
       # will need to display a nice infowindow when showing index of topics...
-      topic_places = self.places || []
+ 
+
+      # below is a workaround check while I still have some places in db
+      # that are arrays
+      # binding.pry
+      unless (self.places.class == Hash) && (self.places['sorted_ids'])
+        # should really make this the def value at db level
+        self.places = {
+          'sorted_ids' => []
+        }
+        self.save!
+      end
+
+      unless self.places['sorted_ids'].include? location.id
+        self.places['sorted_ids'].push location.id
+      end
+
+      # topic_places = self.places || {}
 
       # TODO - ensure there are no duplicates...
 
-      # place = {}
-      place = topic_places.select{ |p| p['location_id'] == location.id }[0]
-      unless place
-        place = {}
-        topic_places.push place
-      end
+      place = {}
+      # place = topic_places.select{ |p| p['location_id'] == location.id }[0]
+      # unless place
+      #   place = {}
+      #   topic_places.push place
+      # end
       place['title'] = location.title
       place['address'] = location.address
       place['gplace_id'] = location.gplace_id
@@ -73,14 +90,21 @@ module MapTopic
       place['latitude'] = location.latitude
       place['location_id'] = location.id
 
+      # self.places[location.id.to_i] = place
+      # the key always gets converted to a string on saving, even if I use to_i as above
+      self.places[location.id] = place
+
+
+
       # in future, will stop using LocationTopic and rely on topic.geo.places
       # should be a bit quicker and more efficient.
       # LocationPosts will still be around for any queries etc that might be needed
       #  - will add topic_id to locationposts..
       # topic_places.push place
-      self.places = topic_places
+      # self.places = topic_places
       self.save!
       # end
+      # }
     end
 
     # t.string :display_name

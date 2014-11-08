@@ -21,8 +21,8 @@ describe 'TopicGeo' do
 				topic_geo.add_or_update_place location
 			end
 			it 'will have correct place json' do
-				topic_geo.places[0]['title'].should == location.title
-				topic_geo.places[0]['location_id'].should == location.id
+				topic_geo.places[location.id.to_s]['title'].should == location.title
+				topic_geo.places[location.id.to_s]['location_id'].should == location.id
 			end
 
 			# it_should_behave_like ""
@@ -35,7 +35,7 @@ describe 'TopicGeo' do
 				topic_geo.add_or_update_place location
 			end
 			it 'will only save that place once' do
-        topic_geo.places.count.should == 1
+        topic_geo.places['sorted_ids'].count.should == 1
 			end
 		end
 	end
