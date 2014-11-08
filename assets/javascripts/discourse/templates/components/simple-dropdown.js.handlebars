@@ -11,8 +11,8 @@
             <span class="location-string"  {{ bind-attr data-val=item.value }} >
               {{ item.displayString }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             </span>
-
-            <span class='icon expand' style="" >
+{{!-- hiding for now: --}}
+            <span class='icon expand' style="display:none" >
             &nbsp;
              <i data-action="removeItem" {{ bind-attr data-val=item.value }} class="dd-icon-remove fa fa-trash-o" aria-hidden="true">
              </i>

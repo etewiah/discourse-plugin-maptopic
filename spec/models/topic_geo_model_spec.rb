@@ -18,7 +18,7 @@ describe 'TopicGeo' do
 
 		describe 'when a place is added to it' do
 			before do
-				topic_geo.add_or_update_place location
+				topic_geo.add_or_update_place location, nil
 			end
 			it 'will have correct place json' do
 				topic_geo.places[location.id.to_s]['title'].should == location.title
@@ -30,9 +30,9 @@ describe 'TopicGeo' do
 
 		describe 'when a place is added to it multiple times' do
 			before do
-				topic_geo.add_or_update_place location
-				topic_geo.add_or_update_place location
-				topic_geo.add_or_update_place location
+				topic_geo.add_or_update_place location, nil
+				topic_geo.add_or_update_place location, nil
+				topic_geo.add_or_update_place location, nil
 			end
 			it 'will only save that place once' do
         topic_geo.places['sorted_ids'].count.should == 1

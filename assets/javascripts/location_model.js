@@ -62,7 +62,19 @@ Discourse.Location.reopenClass({
       latitude: result.geometry.location.lat(),
       longitude: result.geometry.location.lng(),
       gplace_id: result.place_id
+    };
+    var placePhotos = [];
+    var photos = result.photos;
+    if (photos && photos.length > 0) {
+      var photoUrl = photos[0].getUrl({
+        'maxWidth': 150,
+        'maxHeight': 150
+      })
+      placePhotos.push({
+        "url": photoUrl
+      });
     }
+    locationObject.photos = placePhotos;
     debugger;
     // for geoplaces, I don't care about city or country...
     return locationObject;

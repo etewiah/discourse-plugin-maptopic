@@ -5,7 +5,7 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
       this.runGooglePlacesSearch();
     },
     confirmPlaceDetails: function(confirmedDetails) {
-      var updatedPlace = Discourse.Location.locationFromPlaceSearch(confirmedDetails)
+      var updatedPlace = Discourse.Location.geoPlaceFromGooglePlace(confirmedDetails)
       updatedPlace.detailsConfirmed = true
       // TODO - move below to model ovject
 

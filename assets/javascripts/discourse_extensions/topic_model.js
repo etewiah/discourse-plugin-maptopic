@@ -67,30 +67,49 @@ Discourse.Topic.reopen({
 
   // below gets fed to topics map component
   markers: function() {
-    var currentMarkerValues = [];
-    var locations = this.get('locations');
+    // var currentMarkerValuesOld = [];
+    // var locations = this.get('locations');
     // debugger;
-    if (locations) {
-      locations.forEach(function(loc) {
+    // if (locations) {
+    //   locations.forEach(function(loc) {
+    //     var markerInfo = {
+    //       context: 'topic_view',
+    //       location: loc,
+    //       location_id: loc.id
+    //     };
+    //     currentMarkerValuesOld.push(markerInfo);
+    //   });
+    // }
+    var can_edit = this.get('details.can_edit');
+    var currentMarkerValues = [];
+    var places = this.get('geo.places');
+    if (places && places.sorted_ids) {
+      places.sorted_ids.forEach(function(id){
         var markerInfo = {
           context: 'topic_view',
-          location: loc,
-          location_id: loc.id
+          location: places[id],
+          location_id: String(id),
+          can_edit: can_edit
         };
-        currentMarkerValues.push(markerInfo);
-      });
-    }
+        // currently have some errors in db where duplicates have been saved
+        // shouldn't need below once that is fixed
+        if(!currentMarkerValues.findBy('location_id', String(id))){
+          currentMarkerValues.push(markerInfo);
+        }
+      })
+    };
+
     if (this.get('postStream.posts')) {
       var posts = this.get('postStream.posts');
       posts.forEach(function(p) {
         if (p.get('location')) {
           // var markerInfo = currentMarkerValues.findBy('location.id', p.get('location.id'));
           // above works but I suspect this is more efficient:
-          var markerInfo = currentMarkerValues.findBy('location_id', p.get('location.id'));
+          var markerInfo = currentMarkerValues.findBy('location_id', p.get('location.id').toString());
           // currently some posts have locations that are not in the topic locations collection
           // so this is a workaround that should not be needed in the future:
           if (!markerInfo) {
-            // debugger;
+            debugger;
             var loc = p.get('location');
             var markerInfo = {
               context: 'topic_view',
