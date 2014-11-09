@@ -9,6 +9,21 @@
       {{ geo-place-control googlePlaceDetails=googlePlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails" }}
 
     {{else}} 
+
+        <div class="row">
+                {{text-field placeholder="search keyword" value=searchKeyword 
+              autofocus="autofocus"}}
+                <button class='btn btn-primary' style="" {{action searchByKeyword}}>
+                  {{fa-icon search label="" }} Search by Keyword
+                </button>
+        </div>
+
+        <div class="row">
+                <button class='btn btn-primary' style="" {{action searchNearby }}>
+                  {{fa-icon search label="" }} Search nearby
+                </button>
+        </div>
+
         {{#if nearbyPlacesDetails}}
             <div>
               <h3 style="margin-bottom: 2%;margin-top: 2%;">Places nearby:</h3>

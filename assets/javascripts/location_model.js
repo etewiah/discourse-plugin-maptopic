@@ -55,13 +55,16 @@ Discourse.Location = Discourse.Model.extend({
 });
 Discourse.Location.reopenClass({
   geoPlaceFromGooglePlace: function(result) {
+// a textsearch result has formatted_address instead of vicinity
+    var address = result.vicinity || result.formatted_address;
     // debugger;
     var locationObject = {
       title: result.name,
-      address: result.vicinity,
+      address: address,
       latitude: result.geometry.location.lat(),
       longitude: result.geometry.location.lng(),
-      gplace_id: result.place_id
+      gplace_id: result.place_id,
+      website: ""
     };
     var placePhotos = [];
     var photos = result.photos;
@@ -71,7 +74,8 @@ Discourse.Location.reopenClass({
         'maxHeight': 150
       })
       placePhotos.push({
-        "url": photoUrl
+        url: photoUrl,
+        preferred: false
       });
     }
     locationObject.photos = placePhotos;

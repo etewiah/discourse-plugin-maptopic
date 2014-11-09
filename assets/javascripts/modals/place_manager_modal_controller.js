@@ -7,7 +7,7 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
     confirmPlaceDetails: function(confirmedDetails) {
       var updatedPlace = Discourse.Location.geoPlaceFromGooglePlace(confirmedDetails)
       updatedPlace.detailsConfirmed = true
-      // TODO - move below to model ovject
+        // TODO - move below to model ovject
 
       var geo_place_update = Discourse.ajax("/geo_topics/update_geo_places", {
         data: {
@@ -18,7 +18,7 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
         method: 'POST'
       });
 
-      geo_place_update.then(function(result){
+      geo_place_update.then(function(result) {
         // debugger;
       });
     },
@@ -26,42 +26,68 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
       // var placeDetails = this.get('content');
       this.set('googlePlace', searchResult);
     },
-    // searchForLocation: function(locationObject) {
-    //   debugger;
-    //   var topicController = this.get('controllers.topic');
-    //   topicController.send('replyWithLocationObject', locationObject);
-    //   this.send('closeModal');
-    // }
+    searchByKeyword: function() {
+      var query = this.get('searchKeyword');
+      debugger;
+      this.runGooglePlacesSearch("text", query);
+    },
+    searchNearby: function(){
+      this.runGooglePlacesSearch();
+    }
 
   },
-  runGooglePlacesSearch: function() {
+  runGooglePlacesSearch: function(searchType, query) {
     var placeDetails = this.get('content');
     var latlng = new google.maps.LatLng(placeDetails.location.latitude, placeDetails.location.longitude);
 
 
     var request = {
       location: latlng,
-      radius: '100'
-        // types: ['store']
+      // radius: '100'
+      rankBy: google.maps.places.RankBy.DISTANCE,
+      types: ['cafe', 'night_club', 'restaurant', 'museum', 'bar', 'food', 'store', 'establishment']
+
+      // types: ['store']
     };
 
     var service = new google.maps.places.PlacesService(placeDetails.map);
     var that = this;
-    service.nearbySearch(request, function(results, status) {
-      if (status == google.maps.places.PlacesServiceStatus.OK) {
-        that.set('nearbyPlaces', results);
-        that.set('placeDetailsConfirmed', false);
-        that.set('googlePlace', null);
-      }
-    });
+    if (searchType && searchType === "text") {
+      request = {
+        location: latlng,
+        radius: '200',
+        query: query
+      };
+      service.textSearch(request, function(results, status) {
+        debugger;
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          that.set('nearbyPlaces', results);
+          that.set('placeDetailsConfirmed', false);
+          that.set('googlePlace', null);
+        }
+      });
+    } else {
+      service.nearbySearch(request, function(results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          that.set('nearbyPlaces', results);
+          that.set('placeDetailsConfirmed', false);
+          that.set('googlePlace', null);
+        }
+      });
+    };
+
   },
   onShow: function() {
+    // make sure any previous search results are cleared out
+    this.set('nearbyPlaces', null);
+
     var placeDetails = this.get('content');
     this.set('googlePlace', null);
     if (placeDetails.location.detailsConfirmed) {
-      this.set('placeDetailsConfirmed', true);
-      debugger;
-      return;
+      // not working correctly at the moment
+      // this.set('placeDetailsConfirmed', true);
+      // debugger;
+      // return;
     };
     if (placeDetails.location.gplace_id) {
       var request = {
@@ -78,7 +104,7 @@ Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.Mo
       });
     } else {
       // search for closeby places
-      this.runGooglePlacesSearch();
+      // this.runGooglePlacesSearch();
       // service.nearbySearch(request, callback);
     }
   },

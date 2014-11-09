@@ -128,7 +128,7 @@ module MapTopic
 
         if topic_geo.topic && topic_geo.topic.locations
           topic_geo.topic.locations.each do |location|
-            topic_geo.topic.geo.add_or_update_place location
+            topic_geo.topic.geo.add_or_update_place location, nil
           end
         else
           binding.pry
@@ -156,7 +156,7 @@ module MapTopic
               binding.pry
               # topic.geo.add_or_update_place location
               # topic here might not have ref to geo even though its been set
-              topic_geo.add_or_update_place location
+              topic_geo.add_or_update_place location, nil
             end
           end
         end

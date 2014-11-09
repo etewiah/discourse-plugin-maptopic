@@ -38,7 +38,7 @@
             <a class="view-place-btn-a" {{action showPlaceDetails marker}}>
                 {{ marker.location.title }}</a>
                 {{#if marker.can_edit}}
-            <i {{action showEditorModalForTopic }} class="fa fa-pencil  view-place-btn-i"></i>
+            <i {{action showEditorModalForTopic marker }} class="fa fa-pencil  view-place-btn-i"></i>
                 {{/if}}
             </button>
           {{/each}}

@@ -96,7 +96,7 @@ module MapTopic
       place['longitude'] = location.longitude
       place['latitude'] = location.latitude
       place['location_id'] = location_id
-      place['detailsConfirmed'] = "false"
+      place['detailsConfirmed'] = false
       place['post_ids'] = post_ids
 
       # self.places[location.id.to_i] = place

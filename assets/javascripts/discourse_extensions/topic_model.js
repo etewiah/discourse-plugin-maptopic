@@ -80,7 +80,8 @@ Discourse.Topic.reopen({
     //     currentMarkerValuesOld.push(markerInfo);
     //   });
     // }
-    var can_edit = this.get('details.can_edit');
+    var can_edit = Discourse.User.current().admin;
+    // this.get('details.can_edit');
     var currentMarkerValues = [];
     var places = this.get('geo.places');
     if (places && places.sorted_ids) {
