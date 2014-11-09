@@ -34,13 +34,13 @@
           </button>
 
           {{#each marker in model.markers }}
-            <button class='btn btn-primary  btn-map-for-topic' style="background-color:gray;padding-right: 2px;">
+            <div class='btn btn-primary  btn-map-for-topic' style="background-color:gray;padding-right: 2px;">
             <a class="view-place-btn-a" {{action showPlaceDetails marker}}>
                 {{ marker.location.title }}</a>
                 {{#if marker.can_edit}}
             <i {{action showEditorModalForTopic marker }} class="fa fa-pencil  view-place-btn-i"></i>
                 {{/if}}
-            </button>
+            </div>
           {{/each}}
 
         </div>
