@@ -153,7 +153,7 @@ module MapTopic
 
             topic_geo = create_geo_for_topic topic
             topic.locations.each do |location|
-              binding.pry
+              # binding.pry
               # topic.geo.add_or_update_place location
               # topic here might not have ref to geo even though its been set
               topic_geo.add_or_update_place location, nil
@@ -175,7 +175,7 @@ module MapTopic
             topic_geo.add_or_update_place location_post.location, location_post.post.id
           end
         else
-          binding.pry
+          # binding.pry
         end
       end
 
@@ -195,7 +195,7 @@ module MapTopic
           geo_key = MapTopic::GeoKey.create_from_geo_name  topic.location.city.downcase, "searched"
         end
         topic_geo = MapTopic::TopicGeo.create_from_geo_key geo_key, 'info'
-        binding.pry
+        # binding.pry
         topic_geo.topic_id = topic.id
         # topic.save!
         topic_geo.save!
