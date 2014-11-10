@@ -54,8 +54,19 @@ Discourse.Location = Discourse.Model.extend({
 
 });
 Discourse.Location.reopenClass({
+  geoLocationsForGeo: function(geo) {
+    if (!geo) {
+      console.log('no geo, will be expensive on server...');
+    };
+    var url = Discourse.getURL("/locations/get_for_geo");
+    return Discourse.ajax(url, {
+      data: {
+        geo: geo
+      }
+    });
+  },
   geoPlaceFromGooglePlace: function(result) {
-// a textsearch result has formatted_address instead of vicinity
+    // a textsearch result has formatted_address instead of vicinity
     var address = result.vicinity || result.formatted_address;
     // debugger;
     var locationObject = {

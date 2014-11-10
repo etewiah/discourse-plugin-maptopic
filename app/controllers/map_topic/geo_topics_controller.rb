@@ -143,56 +143,53 @@ module MapTopic
       # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
     end
 
-    def get_for_geo_old
-      if params[:geo]
-        # when a random geo has been passed in, below ensures a key is created for it
-        geo_key =  ensure_geo_key_exists params[:geo].downcase
-      else
-        # TODO - log how often this is being called - pretty expensive as should be called as little as possible
-        geo_key = get_nearest_location_to_request
-      end
+    # def get_for_geo_old
+    #   if params[:geo]
+    #     # when a random geo has been passed in, below ensures a key is created for it
+    #     geo_key =  ensure_geo_key_exists params[:geo].downcase
+    #   else
+    #     # TODO - log how often this is being called - pretty expensive as should be called as little as possible
+    #     geo_key = get_nearest_location_to_request
+    #   end
 
-      unless geo_key
-        # this is a really ugly attempt to ensure that I always return a geo_key
-        # TODO - have a more sensible way of getting the default
-        geo_key = MapTopic::GeoKey.where(:bounds_value => 'berlin').first
-      end
-      geo = geo_key.bounds_value
-      # TODO - where params[:geo] is passed but is not the geo returned in geo_key (maybe default
-      # geo was returned) , should return a message to client in addition
+    #   unless geo_key
+    #     # this is a really ugly attempt to ensure that I always return a geo_key
+    #     # TODO - have a more sensible way of getting the default
+    #     geo_key = MapTopic::GeoKey.where(:bounds_value => 'berlin').first
+    #   end
+    #   geo = geo_key.bounds_value
+    #   # TODO - where params[:geo] is passed but is not the geo returned in geo_key (maybe default
+    #   # geo was returned) , should return a message to client in addition
 
-      # TODO - make sure this query does not return unlisted or private conversations..
-      @geo_conversations = MapTopic::TopicGeo.where(:bounds_value => geo)
+    #   # TODO - make sure this query does not return unlisted or private conversations..
+    #   @geo_conversations = MapTopic::TopicGeo.where(:bounds_value => geo)
 
 
-      # below rejects conversations without a topic or location - should not be necessary
-      @geo_conversations = @geo_conversations.select do |conv|
-        if conv.topic
-          # && conv.topic.location
-          true
-        else
-          # binding.pry
-          false
-        end
-      end
+    #   # below rejects conversations without a topic or location - should not be necessary
+    #   @geo_conversations = @geo_conversations.select do |conv|
+    #     if conv.topic
+    #       # && conv.topic.location
+    #       true
+    #     else
+    #       # binding.pry
+    #       false
+    #     end
+    #   end
 
-      @other_conversations = MapTopic::TopicGeo.where("bounds_value <> ?", geo).limit(6)
+    #   @other_conversations = MapTopic::TopicGeo.where("bounds_value <> ?", geo).limit(6)
 
-      # return render json: @geo_conversations, each_serializer: MapTopic::GeoTopicSummarySerializer
-      geo_conversations_serialized = serialize_data(@geo_conversations, MapTopic::GeoTopicSummarySerializer)
-      other_conversations_serialized = serialize_data(@other_conversations, MapTopic::GeoTopicSummarySerializer)
+    #   # return render json: @geo_conversations, each_serializer: MapTopic::GeoTopicSummarySerializer
+    #   geo_conversations_serialized = serialize_data(@geo_conversations, MapTopic::GeoTopicSummarySerializer)
+    #   other_conversations_serialized = serialize_data(@other_conversations, MapTopic::GeoTopicSummarySerializer)
 
-      return render_json_dump({
-                                "geo_key" => geo_key,
-                                "other_conversations" => other_conversations_serialized,
-                                "geo_conversations" => geo_conversations_serialized,
-                                "geo" => geo
-      })
+    #   return render_json_dump({
+    #                             "geo_key" => geo_key,
+    #                             "other_conversations" => other_conversations_serialized,
+    #                             "geo_conversations" => geo_conversations_serialized,
+    #                             "geo" => geo
+    #   })
 
-      # 2 calls below are the same:
-      # render_json_dump(serialize_data(@city_conversations, MapTopic::GeoTopicSummarySerializer))
-      # render_serialized(@city_conversations, MapTopic::GeoTopicSummarySerializer)
-    end
+    # end
 
 
     private

@@ -30,6 +30,7 @@ register_asset "javascripts/discourse/templates/components/selectable-map.js.han
 register_asset "javascripts/discourse/templates/components/topics-map.js.handlebars"
 register_asset "javascripts/discourse/templates/components/simple-dropdown.js.handlebars"
 register_asset "javascripts/discourse/templates/components/geo-place-control.js.handlebars"
+
 register_asset "javascripts/discourse/components/geo-place-control.js"
 register_asset "javascripts/discourse/components/simple-dropdown.js"
 register_asset "javascripts/discourse/components/topics-map.js"
@@ -55,6 +56,10 @@ register_asset "javascripts/modals/places_explorer_modal_controller.js"
 register_asset "javascripts/modals/places_explorer_modal_view.js"
 register_asset "javascripts/location_model.js"
 
+register_asset "javascripts/places_controllers.js"
+register_asset "javascripts/places_views.js"
+register_asset "javascripts/places_routes.js"
+register_asset "javascripts/discourse/templates/places/places_landing.js.handlebars"
 register_asset "javascripts/map_controllers.js"
 register_asset "javascripts/map_views.js"
 register_asset "javascripts/map_routes.js"

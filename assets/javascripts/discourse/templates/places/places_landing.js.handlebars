@@ -1,0 +1,53 @@
+<div class="container">
+
+
+<div class="row">  
+  <h1 style="margin-bottom:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
+
+    Popular places in  ...
+
+    <small style="font-size: 55%;margin-left:3%"> 
+    <a {{ action showAddCityModal }}>Click here for more locations.</a>   </small>
+
+  </h1>
+
+
+
+</div>
+
+
+
+
+  <div class='container'>
+    {{custom-html "top"}} {{Discourse.globalNotice}} {{discourse-banner user=currentUser banner=Discourse.banner}}
+
+    <div class="row">
+      <div class="full-width">
+        <div id='header-list-area'>
+
+locations:
+{{#each location in content }}
+  <div>
+      a location
+  {{ location.title }}
+     {{#link-to 'place' location }}
+        loc link
+        {{/link-to}}
+  </div>
+
+{{/each}}
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div>          
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+</div>
