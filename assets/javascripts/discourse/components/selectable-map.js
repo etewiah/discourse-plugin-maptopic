@@ -67,7 +67,6 @@ Discourse.SelectableMapComponent = Ember.Component.extend({
     if (this.get('defaultLocation.bounds_value')) {
       this.set('cityForMap', this.get('defaultLocation.bounds_value'));
     }
-    debugger;
     if (this.get('defaultLocation.latitude')) {
       var defaultLocation = this.get('defaultLocation');
     } else {

@@ -50,7 +50,6 @@ require("discourse/controllers/topic")["default"].reopen({
           // // this ensures location is available for map markers:
           // postInTopic.set('location', locationObject);
         }
-        debugger;
         // var update_location_endpoint = '/location_posts/set_location';
         // because no post is being created yet, only setting location on topic
         var update_location_endpoint = '/location_topics/set_location';
@@ -66,7 +65,6 @@ require("discourse/controllers/topic")["default"].reopen({
         locs.pushObject(topic.locationObject);
         var that = this;
         map_topic.then(function(result) {
-          debugger;
         });
         // TODO - handle errors
 

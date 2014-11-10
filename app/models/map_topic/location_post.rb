@@ -22,12 +22,13 @@ module MapTopic
       location_post.save!
 
       # below ensures that each location for a post has a corresponding location in the topic
-      location_topic = MapTopic::LocationTopic.create_from_location location, post.topic.id
+      location_topic = MapTopic::LocationTopic.create_from_location location, post.topic, post.id
 
-      if post.topic.geo
-        # ensures place json includes post location
-        post.topic.geo.add_or_update_place location, post.id
-      end
+      # - moved below to  create_from_location in LocationTopic
+      # if post.topic.geo
+      #   # ensures place json includes post location
+      #   post.topic.geo.add_or_update_place location, post.id
+      # end
 
       return location_post
     end

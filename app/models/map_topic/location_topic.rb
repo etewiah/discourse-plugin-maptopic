@@ -14,10 +14,10 @@ module MapTopic
 
 
 
-    def self.create_from_location location, topic_id
+    def self.create_from_location location, topic, post_id
 
       location_topic = MapTopic::LocationTopic.new()
-      location_topic.topic_id = topic_id
+      location_topic.topic_id = topic.id
       # do I need to ensuer city and country are downcased?
       location_topic.city = location.city
       location_topic.country = location.country
@@ -27,18 +27,12 @@ module MapTopic
       location_topic.location_id = location.id
       location_topic.save!
 
-      # topic_geo = Topic.find(topic_id).geo
-      # if topic_geo
-      #     topic_places = topic_geo.places || []
-      #     # TODO - ensure there are no duplicates...
-      #     # in future, will stop using LocationTopic and rely on topic.geo.places
-      #     # should be a bit quicker and more efficient.
-      #     # LocationPosts will still be around for any queries etc that might be needed
-      #     #  - will add topic_id to locationposts..
-      #     topic_places.push location_topic.as_json
-      #     topic_geo.places = topic_places
-      #     topic_geo.save!
-      # end
+
+      if topic.geo
+        # ensures place json includes post location
+        topic.geo.add_or_update_place location, post_id
+      end
+
       return location_topic
     end
 

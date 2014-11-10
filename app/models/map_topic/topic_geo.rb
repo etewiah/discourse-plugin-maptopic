@@ -53,7 +53,7 @@ module MapTopic
       return topic_geo
     end
 
-    # as well as in corrections job, also called from MapTopic::LocationPost.create_from_location
+    # as well as in corrections job, also called from MapTopic::LocationTopic.create_from_location
     def add_or_update_place location, post_id
       # the idea of having the place col is that it saves me having to query deeply for the basic info that I
       # will need to display a nice infowindow when showing index of topics...

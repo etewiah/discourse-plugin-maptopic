@@ -1,11 +1,46 @@
+/*
 .topic-body {
     width: 75%;
 }
+*/
+
+
+/*start btns to right of topic map:*/
+
+.view-place-btn-a {
+  display: block;
+  float: left;
+  color:white;
+}
+
+.view-place-btn-i {
+  display: block;
+  float: right;
+  margin-left: 10px;
+  margin-right: -5px !important;
+}
+
+.view-place-btn-a:hover {
+  color: white;
+}
+.view-place-btn-i:hover {
+  color: green;
+}
+
+/*end btns to right of topic map:*/
+
+    .btn-map-for-topic {
+        text-align: left;
+        float: left;
+        margin:6px
+    }
+
 @media all and (min-width: 800px) {
+/*btn to the right of map for topic */
     .btn-map-for-topic {
         text-align: left;
         float: right;
-        width: 100%;
+        width: 89%;
         margin-top:5px
     }
     .btn-map-for-index {

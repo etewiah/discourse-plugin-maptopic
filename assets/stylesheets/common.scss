@@ -6,30 +6,9 @@ padding-right: 50px;
 }
 */
 
-/*start btns to right of topic map:*/
 
-.view-place-btn-a {
-  width: 80%;
-  display: block;
-  float: left;
-  color:white;
-}
 
-.view-place-btn-i {
-  width: 10%;
-  display: block;
-  float: right;
-  margin-right: 0px;
-}
 
-.view-place-btn-a:hover {
-  color: white;
-}
-.view-place-btn-i:hover {
-  color: green;
-}
-
-/*end btns to right of topic map:*/
 
 #clickedlocation-div {
   text-align: center;  
@@ -111,6 +90,14 @@ padding-right: 50px;
     float:left;
   }
 
+}
+
+.btn-gray{
+    background-color: gray;
+}
+.btn-gray:hover {
+  color: #fff;
+  background: #666666;
 }
 
 .btn-klavado{

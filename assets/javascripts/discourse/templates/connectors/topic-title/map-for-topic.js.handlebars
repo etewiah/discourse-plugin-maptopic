@@ -25,22 +25,24 @@
 
           </span>
 
-          <button class='btn btn-primary btn-klavado btn-map-for-topic' style="" {{action showLocationSelector}}><i class="fa fa-map-marker"></i>
-            Add places
-          </button>
-
-          <button class='btn btn-primary btn-klavado btn-map-for-topic' style="" {{action showInvite}}><i class="fa fa-users"></i>
+          <div class='btn btn-primary btn-map-for-topic' style="" {{action showInvite}}><i class="fa fa-users"></i>
               Invite your friends
-          </button>
+          </div>
+
+          <div class='btn btn-primary btn-gray btn-map-for-topic' style="" {{action showLocationSelector}}><i class="fa fa-map-marker"></i>
+            Add places
+          </div>
 
           {{#each marker in model.markers }}
-            <div class='btn btn-primary  btn-map-for-topic' style="background-color:gray;padding-right: 2px;">
+            <div class='btn btn-primary btn-gray btn-map-for-topic' style="">
             <a class="view-place-btn-a" {{action showPlaceDetails marker}}>
                 {{ marker.location.title }}</a>
                 {{#if marker.can_edit}}
             <i {{action showEditorModalForTopic marker }} class="fa fa-pencil  view-place-btn-i"></i>
                 {{/if}}
+                      <div class="clearfix"></div>
             </div>
+
           {{/each}}
 
         </div>

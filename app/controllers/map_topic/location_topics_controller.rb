@@ -88,7 +88,7 @@ module MapTopic
 
       location.save!
 
-      location_topic = MapTopic::LocationTopic.create_from_location location, @topic.id
+      location_topic = MapTopic::LocationTopic.create_from_location location, @topic, nil 
       # location_topic = MapTopic::LocationTopic.new()
       # location_topic.topic_id = @topic.id
       # location_topic.city = location.city.downcase
