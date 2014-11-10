@@ -40,7 +40,9 @@ module MapTopic
       # below needs to run after geo has been created for topic
       if params[:geo][:initial_location]
         # TODO - do something with google place id to enhance location info
-        location = create_location params[:geo][:initial_location]
+        location = MapTopic::Location.create_from_location_hash params[:geo][:initial_location]
+
+        # location = create_location params[:geo][:initial_location]
               # below ensures that location is set for topic too:
         location_post = MapTopic::LocationPost.create_from_location location, @post
       end
@@ -79,20 +81,22 @@ module MapTopic
         render status: :forbidden, json: false
         return
       end
-      # TODO - use create_location private method...
-      # TODO - find location which is close enough to be considered the same..
-      location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
-      location.title = params[:location][:title] || ""
-      location.city = params[:location][:city] || ""
-      location.country = params[:location][:country] || ""
-      location.address = params[:location][:address] || ""
-      location.gplace_id = params[:location][:gplace_id] || ""
+
+      location = MapTopic::Location.create_from_location_hash params[:location]
+
+      # # TODO - find location which is close enough to be considered the same..
+      # location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
+      # location.title = params[:location][:title] || ""
+      # location.city = params[:location][:city] || ""
+      # location.country = params[:location][:country] || ""
+      # location.address = params[:location][:address] || ""
+      # location.gplace_id = params[:location][:gplace_id] || ""
 
       # below will not update if already exists:
       # do |loc|
       #   loc.title = params[:location_title] || "ll"
       # end
-      location.save!
+      # location.save!
 
       # below ensures that location is set for topic too:
       location_post = MapTopic::LocationPost.create_from_location location, @post
@@ -109,21 +113,21 @@ module MapTopic
     private
 
     # poorly named...
-    def create_location location
-      # TODO - find location which is close enough to be considered the same..
-      location_object = MapTopic::Location.where(:longitude => location[:longitude], :latitude => location[:latitude]).first_or_initialize
-      location_object.title = location[:title] || ""
-      location_object.city = location[:city] || ""
-      location_object.country = location[:country] || ""
-      location_object.address = location[:address] || ""
-      location_object.gplace_id = location[:gplace_id] || ""
-      # below will not update if already exists:
-      # do |loc|
-      #   loc.title = params[:location_title] || "ll"
-      # end
-      location_object.save!
-      return location_object
-    end
+    # def create_location location
+    #   # TODO - find location which is close enough to be considered the same..
+    #   location_object = MapTopic::Location.where(:longitude => location[:longitude], :latitude => location[:latitude]).first_or_initialize
+    #   location_object.title = location[:title] || ""
+    #   location_object.city = location[:city] || ""
+    #   location_object.country = location[:country] || ""
+    #   location_object.address = location[:address] || ""
+    #   location_object.gplace_id = location[:gplace_id] || ""
+    #   # below will not update if already exists:
+    #   # do |loc|
+    #   #   loc.title = params[:location_title] || "ll"
+    #   # end
+    #   location_object.save!
+    #   return location_object
+    # end
 
 
     # TODO - reopen topic model and add this there:

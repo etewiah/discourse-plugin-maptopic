@@ -13,26 +13,7 @@ Discourse.Topic.reopen({
     //   data: { title: this.get('title'), category_id: this.get('category.id') }
     // });
   },
-  // activePost: {},
-  // locationMeta: function() {
-  //   // TODO - set a locationMeta property for each topic
-  //   // eventually all locationTopics will have to have this
-  //   // as this object will come from db, probably should use snake case names - hot_from etc
-  //   // debugger;
-  //   if (this.get('geo')) {
-  //     return this.get('geo');
-  //   } 
-  //   // else {
-  //   //   return {
-  //   //     displayString: 'Berlin',
-  //   //     value: 'berlin',
-  //   //     longitude: "13.4060912",
-  //   //     latitude: "52.519171",
-  //   //     hot_from: "",
-  //   //     scope_type: "city"
-  //   //   };
-  //   // }
-  // }.property('geo'),
+
   isLocationTopic: function() {
     if (this.get('location') || this.get('geo')) {
       return true;
@@ -80,7 +61,7 @@ Discourse.Topic.reopen({
     //     currentMarkerValuesOld.push(markerInfo);
     //   });
     // }
-    debugger;
+    // debugger;
     var can_edit = Discourse.User.current() && Discourse.User.current().admin;
     // this.get('details.can_edit');
     var currentMarkerValues = [];

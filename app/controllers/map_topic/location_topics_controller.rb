@@ -77,15 +77,16 @@ module MapTopic
         return
       end
 
+      location = MapTopic::Location.create_from_location_hash params[:location]
 
       # TODO - find location which is close enough to be considered the same..
-      location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
-      location.title = params[:location][:title] || ""
-      location.city = params[:location][:city] || ""
-      location.country = params[:location][:country] || ""
-      location.address = params[:location][:formattedAddress] || ""
+      # location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
+      # location.title = params[:location][:title] || ""
+      # location.city = params[:location][:city] || ""
+      # location.country = params[:location][:country] || ""
+      # location.address = params[:location][:formattedAddress] || ""
 
-      location.save!
+      # location.save!
       location_topic = MapTopic::LocationTopic.create_from_location location, @topic, nil 
 
       # updated places used to refresh markers on topic map client side

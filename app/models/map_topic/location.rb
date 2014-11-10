@@ -53,15 +53,19 @@ module MapTopic
       self.save
     end
 
-    # def update_location_topic
-    #     location_topic = self.location_topics.last
-    #     if location_topic
-    #         location_topic.city = self.city
-    #         location_topic.country = self.country
-    #         location_topic.save
-    #     end
-    # end
-
+    def self.create_from_location_hash location_hash
+      longitude = location_hash[:longitude]
+      latitude = location_hash[:latitude]
+            # TODO - find location which is close enough to be considered the same..
+      location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
+      location.title = location_hash[:title] || ""
+      location.city = location_hash[:city] || ""
+      location.country = location_hash[:country] || ""
+      location.address = location_hash[:address] || ""
+      location.gplace_id = location_hash[:gplace_id] || ""
+      location.save!
+      return location
+    end
     #     t.string :title
     # t.text :description
     # t.text :address

@@ -113,6 +113,12 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
       }).then(function(post_result) {
         var geo = self.get('model');
 
+// map gets added to geo in topic_map component as it allows me to run google place
+// queries outside the component - will cause errors if serialized though:
+        if (geo.map) {
+          geo.map = null;
+        };
+
         var set_geo_endpoint = '/location_posts/set_geo';
         var map_topic = Discourse.ajax(set_geo_endpoint, {
           data: {
