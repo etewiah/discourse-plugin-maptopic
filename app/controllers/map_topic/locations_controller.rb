@@ -3,6 +3,10 @@ module MapTopic
     include CurrentUser
     before_action :check_user, only: [:update_geo_places]
 
+    def get_details
+      location = MapTopic::Location.find(params[:id])
+      return render_json_dump serialize_data(location, MapTopic::LocationDetailedSerializer, root: false)
+    end
 
     def get_for_geo
       # if params[:geo]

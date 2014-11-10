@@ -1,7 +1,7 @@
-// Discourse.PlacesView = Discourse.View.extend({
-//   templateName: "places/places_landing",
-//   // contentBinding: 'controller.content',
-// });
+Discourse.PlaceView = Discourse.View.extend({
+  templateName: "places/place_details",
+  // contentBinding: 'controller.content',
+});
 
 Discourse.PlacesFromGeoView = Discourse.View.extend({
   templateName: "places/places_landing",

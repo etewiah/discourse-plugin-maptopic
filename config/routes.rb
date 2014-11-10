@@ -16,6 +16,7 @@ MapTopic::Engine.routes.draw do
   get "/geo_topics/get_for_geo" => "geo_topics#get_for_geo"
 
   get "/locations/get_for_geo" => "locations#get_for_geo"
+  get "/locations/get_details" => "locations#get_details"
 
   # TODO - remove all of below below:
   get "/location_topics/get_geocoder_location" => "location_topics#get_geocoder_location"
@@ -31,8 +32,8 @@ MapTopic::Engine.routes.draw do
   get "/map/*path" => "location_topics#landing"
   get "/manage/user_geo_keys" => "location_topics#landing"
   get "/manage" => "location_topics#landing"
-  get "/p" => "location_topics#landing"
-  get "/p/*path" => "location_topics#landing"
+  get "/pl" => "location_topics#landing"
+  get "/pl/*path" => "location_topics#landing"
   get "/places" => "location_topics#landing"
   get "/places/*path" => "location_topics#landing"
 

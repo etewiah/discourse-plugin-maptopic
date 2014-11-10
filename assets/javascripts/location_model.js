@@ -54,6 +54,15 @@ Discourse.Location = Discourse.Model.extend({
 
 });
 Discourse.Location.reopenClass({
+  getDetails: function(slug){
+    var url = Discourse.getURL("/locations/get_details");
+    return Discourse.ajax(url, {
+      data: {
+        id: slug
+      }
+    });
+
+  },
   geoLocationsForGeo: function(geo) {
     if (!geo) {
       console.log('no geo, will be expensive on server...');

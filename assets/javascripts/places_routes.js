@@ -1,13 +1,27 @@
+Discourse.PlaceRootRoute = Discourse.Route.extend({
+
+});
+
+Discourse.PlaceRoute = Discourse.Route.extend({
+
+  model: function(params) {
+    return Discourse.Location.getDetails(params.slug);
+  },
+  // serialize: function(model) {
+  //   return { val: 'recent' };
+  // },
+  setupController: function(controller, model) {
+    controller.set('content', model);
+  }
+
+
+});
+
 Discourse.PlacesRootRoute = Discourse.Route.extend({
 
   beforeModel: function(transition) {
     var controller = this.controllerFor('map');
-    // defaultCity now gets calculated server side
 
-    // where user is arriving for the 1st time, will be calculated server side:
-    // unless there is a preferred_city set for this user
-    // else if (Discourse.currentuser....) {};
-    // var topicsModel = Discourse.TopicList.findWhereLocationPresent("", params);
     var topiclist = Discourse.GeoTopic.geoTopicsForCity(controller.currentCity);
     debugger;
     this.transitionTo('places.fromGeo', topiclist);
@@ -19,13 +33,6 @@ Discourse.PlacesFromGeoRoute = Discourse.Route.extend({
 
   model: function(params) {
     return Discourse.Location.geoLocationsForGeo(params.geo);
-    // .then(function(result) {
-    //   console.log(params);
-    //   debugger;
-    //   return result;
-    //   // return Discourse.TopicList.fromWhereLocationPresent(result, filter_url, params);
-    // });
-
   },
   // serialize: function(model) {
   //   return { val: 'recent' };
@@ -69,7 +76,7 @@ Discourse.PlacesFromGeoRoute = Discourse.Route.extend({
 
 Discourse.Route.buildRoutes(function() {
   this.resource('place', {
-    path: '/p/:slug'
+    path: '/pl/:slug'
   }, function() {
     this.route('root', {
       path: '/'

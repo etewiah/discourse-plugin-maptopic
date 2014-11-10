@@ -47,7 +47,7 @@ module ExtendPostSerializerForLocationTopic
   end
   #
   def location
-    ::MapTopic::LocationDetailedSerializer.new( object.location, root: false )
+    ::MapTopic::LocationSummarySerializer.new( object.location, root: false )
   end
 
 # for now keeping posts to 1 location but that might change
@@ -56,7 +56,7 @@ module ExtendPostSerializerForLocationTopic
   #   @locations = []
   #   if object.locations
   #     object.locations.each_with_index do |l, idx|
-  #       location = ::MapTopic::LocationDetailedSerializer.new(l, root: false)
+  #       location = ::MapTopic::LocationSummarySerializer.new(l, root: false)
   #       @locations << location.as_json
   #     end
   #   end
@@ -85,7 +85,7 @@ module ExtendTopicViewSerializerForLocationTopic
   # end
   #
   def location
-    ::MapTopic::LocationDetailedSerializer.new( object.topic.location, root: false )
+    ::MapTopic::LocationSummarySerializer.new( object.topic.location, root: false )
   end
   def geo
     # geo =  {
@@ -97,7 +97,7 @@ module ExtendTopicViewSerializerForLocationTopic
     object.topic.geo.as_json
   end
   # def locations
-  #   ::MapTopic::LocationDetailedSerializer.new( object.topic.locations, root: false )
+  #   ::MapTopic::LocationSummarySerializer.new( object.topic.locations, root: false )
   # end
 
   # TODO - get locations from 
@@ -106,7 +106,7 @@ module ExtendTopicViewSerializerForLocationTopic
     @locations = []
     if object.topic.locations
       object.topic.locations.each_with_index do |l, idx|
-        location = ::MapTopic::LocationDetailedSerializer.new(l, root: false)
+        location = ::MapTopic::LocationSummarySerializer.new(l, root: false)
         @locations << location.as_json
       end
     end
