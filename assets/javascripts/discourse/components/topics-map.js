@@ -173,7 +173,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   displaySearchBox: function() {
     if (this.get('showSearchBox')) {
       if (!$('#tmap-pac-input')[0]) {
-        $('body').append('<input id="tmap-pac-input" class="controls" type="text" placeholder="Type the place you wish to talk about here" >');
+        var searchBoxTagString = '<input id="tmap-pac-input" class="controls" type="text" ' +
+          'placeholder="Double-click map or type place name here" >';
+        $('body').append(searchBoxTagString);
       };
       var input = /** @type {HTMLInputElement} */ (
         document.getElementById('tmap-pac-input'));
@@ -213,6 +215,12 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         // that.searchResultMarkers = [];
         // that.searchResultMarkers.pushObject(marker);
 
+        // var displayContext = this.get('displayContext');
+        // if (displayContext === 'topicView') {
+        //   var promptText = 'Select';
+        // } else {
+        //   var promptText = 'Start conversation';
+        // }
 
         var contentString = '<div id="tmap-infowindow-content" style="padding: 5px;" >' +
           '<h4 id="firstHeading" class="firstHeading">' + place.name +
@@ -222,7 +230,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           '<small>' + place.vicinity + '</small>' +
           '</div>' +
           '<button class="btn btn-primary btn-small" style="margin-bottom:5px" type="submit">' +
-          'Start conversation</button>' +
+          'Select</button>' +
           '</form>' +
           '</div>';
 
@@ -243,6 +251,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
           document.getElementById("tmap-search-result-form").addEventListener("submit", function(e) {
             e.preventDefault();
             // startLocationTopic method in map_controller:
+            // addPlaceFromSearchResult in topic_controller
             that.sendAction('searchClickedAction', infowindowInstance.searchResult, that.get('geoDetails'));
           });
         });
@@ -337,7 +346,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     // below makes the map available outside this component
     // this is useful when I need to do google place searches - eg in place_manager modal
     // perhaps will get rid of this.map and always use geo.map...
-    this.set('geo.map',this.map);
+    this.set('geo.map', this.map);
 
     var bounds = new google.maps.LatLngBounds();
     // TODO - ensure I have unique markers where location is same
@@ -363,8 +372,8 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
         addressString = detailsForMarker.location.title +
           '<button class="btn btn-infowindow btn-primary btn-small" style="margin-bottom:5px" >' +
           '<i class="fa fa-comment-o" aria-hidden="true"></i>' +
-         'Go to conversation</button></div>';
-          // '<br><small>click for more...</small>';
+          'Go to conversation</button></div>';
+        // '<br><small>click for more...</small>';
         var dataObject = detailsForMarker.topic;
         var dataObjectType = 'topic';
       } else {

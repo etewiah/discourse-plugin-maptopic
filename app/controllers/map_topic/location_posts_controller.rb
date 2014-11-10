@@ -97,26 +97,9 @@ module MapTopic
       # below ensures that location is set for topic too:
       location_post = MapTopic::LocationPost.create_from_location location, @post
 
-      if @post.post_number == 1
-        # should not get here - now using set_geo for new topics...
-        # binding.pry
-        # # this is the post associated with the topic so its location should also
-        # # be associated with the topic
-        # location_topic = MapTopic::LocationTopic.where(:topic_id => @post.topic_id).first_or_initialize
-        # location_topic.city = location.city.downcase
-        # location_topic.country = location.country.downcase
-
-        # location_topic.location_title = location.title
-        # location_topic.longitude = location.longitude
-        # location_topic.latitude = location.latitude
-        # location_topic.location_id = location.id
-
-        # location_topic.save!
-
-        # topic = @post.topic
-        # ensure_category location.country, location.city, topic, ""
-
-      end
+      # if @post.post_number == 1
+      #   # should not get here - now using set_geo for new topics...
+      # end
 
       return render json: location.to_json
 

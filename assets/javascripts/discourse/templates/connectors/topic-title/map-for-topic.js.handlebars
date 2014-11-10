@@ -6,7 +6,9 @@
 
       <div class="map-for-topic" style="">
       {{ topics-map displayContext="topicView" markerSelectedAction="showPlaceDetails" 
-      mapClickedAction="showExplorerModalForTopic" markerValues=model.markers activePostBinding="controller.activePost" mapsClass="short-maps" geo=model.geo showSearchBox=false  }} 
+      mapClickedAction="showExplorerModalForTopic" markerValues=model.markers 
+      activePostBinding="controller.activePost" mapsClass="short-maps" geo=model.geo 
+      showSearchBox=true searchClickedAction="addPlaceFromSearchResult"  }} 
       </div>
 
     {{else}}

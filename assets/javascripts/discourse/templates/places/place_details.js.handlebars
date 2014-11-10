@@ -17,6 +17,26 @@
   <div>{{ model.country }}</div>
   <div>{{ model.gplace_id }}</div>
 
+  <h5>Topics:</h5>
+  <ul>
+	  {{#each topic in model.topics }}
+  	<li>
+  		  	{{ topic.title }}
+  	</li>
+	  {{/each}}
+  </ul>
+
+  <h5>Posts:</h5>
+  <ul>
+	  {{#each post in model.posts }}
+  	<li>
+  		  	{{{ post.raw }}}
+  	</li>
+	  {{/each}}
+  </ul>
+
+
+
 </div>
 
 

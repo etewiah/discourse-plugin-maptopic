@@ -42,7 +42,7 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
         targetController.send('showNewTopicModal', 'info', locationObject);
       } else {
         var topicController = this.get('controllers.topic');
-        topicController.send('replyWithLocationObject', locationObject);
+        topicController.send('addPlaceAction', locationObject);
         this.send('closeModal');
       };
 
@@ -95,17 +95,22 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
       if (status == google.maps.places.PlacesServiceStatus.OK) {
         // debugger;
         that.set('nearbyPlaces', results.slice(0, 10));
-      }
-      else{
+      } else {
         // clear out any previous results I may have
         that.set('nearbyPlaces', null);
       }
     });
     // service.nearbySearch(request, callback);
   },
-  // googlePlaceDetails: function() {
-  //   return this.get('googlePlace');
-  // }.property('googlePlace'),
+
+  withinTopic: function() {
+    var context = this.get('content.context');
+    if (context === "topic_map") {
+      return true;
+    } else {
+      return false;
+    }
+  }.property('content'),
 
   nearbyPlacesDetails: function() {
     return this.get('nearbyPlaces');

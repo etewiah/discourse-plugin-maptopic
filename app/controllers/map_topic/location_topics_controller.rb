@@ -85,25 +85,12 @@ module MapTopic
       location.country = params[:location][:country] || ""
       location.address = params[:location][:formattedAddress] || ""
 
-
       location.save!
-
       location_topic = MapTopic::LocationTopic.create_from_location location, @topic, nil 
-      # location_topic = MapTopic::LocationTopic.new()
-      # location_topic.topic_id = @topic.id
-      # location_topic.city = location.city.downcase
-      # location_topic.country = location.country.downcase
 
-      # location_topic.location_title = location.title
-      # location_topic.longitude = location.longitude
-      # location_topic.latitude = location.latitude
-      # location_topic.location_id = location.id
-
-      # location_topic.save!
-
-      return render json: location.to_json
-
-      # render json: @topic
+      # updated places used to refresh markers on topic map client side
+      places = @topic.geo.places
+      return render json: places.as_json
     end
 
     private

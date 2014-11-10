@@ -4,7 +4,7 @@ Discourse.PlacesExplorerModalView = Discourse.ModalBodyView.extend({
   title: function() {
     var context = this.get('controller.content.context');
     if (context === "topic_map") {
-      return "Add to this conversation";
+      return "Add a place";
     } else {
       return "Start a new conversation";
     };

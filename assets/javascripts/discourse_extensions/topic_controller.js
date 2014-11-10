@@ -19,6 +19,45 @@ require("discourse/controllers/topic")["default"].reopen({
     }, this).compact();
   }.property('url'),
 
+  addPlace: function(locationObject) {
+    if (Discourse.User.current()) {
+
+      var topic = this.get('model');
+      if (topic) {
+        var topicLocationCount = topic.get('locationCount') || 0;
+        // below triggers recalculation of markers on a topic
+        topic.set('locationCount', topicLocationCount + 1);
+      }
+      // because no post is being created yet, only setting location on topic
+      var update_location_endpoint = '/location_topics/set_location';
+      var map_topic = Discourse.ajax(update_location_endpoint, {
+        data: {
+          location: locationObject,
+          // post_id: post.id,
+          topic_id: topic.id
+        },
+        method: 'POST'
+      });
+
+      // var locs = this.get('model.locations');
+      // debugger;
+      // locs.pushObject(locationObject);
+
+      var that = this;
+      map_topic.then(function(result) {
+      // topicLocationCount will trigger recalculation of markers
+      // below ensures the new place is available for recalculation right away
+        // var places = that.get('model.geo.places');
+        // debugger;
+        that.set('model.geo.places',result);
+      });
+      // TODO - handle errors
+
+    } else {
+      this.send('showLogin');
+    }
+  },
+
   setUserPreferredCity: function() {
     var geo = this.get('model.geo');
     if (geo) {
@@ -38,56 +77,8 @@ require("discourse/controllers/topic")["default"].reopen({
   // name is misleading as there isn't a post  being created:
   startLocationPost: function() {
     if (this.get('model.locationObject')) {
-      if (Discourse.User.current()) {
-
-        var topic = this.get('model');
-        if (topic) {
-          var topicLocationCount = topic.get('locationCount') || 0;
-          // below triggers recalculation of markers on a topic
-          topic.set('locationCount', topicLocationCount + 1);
-          // var pstrPosts = topic.get('postStream.posts');
-          // var postInTopic = pstrPosts.findBy('id', post.id);
-          // // this ensures location is available for map markers:
-          // postInTopic.set('location', locationObject);
-        }
-        // var update_location_endpoint = '/location_posts/set_location';
-        // because no post is being created yet, only setting location on topic
-        var update_location_endpoint = '/location_topics/set_location';
-        var map_topic = Discourse.ajax(update_location_endpoint, {
-          data: {
-            location: topic.locationObject,
-            // post_id: post.id,
-            topic_id: topic.id
-          },
-          method: 'POST'
-        });
-        var locs = this.get('model.locations');
-        locs.pushObject(topic.locationObject);
-        var that = this;
-        map_topic.then(function(result) {
-        });
-        // TODO - handle errors
-
-
-
-        // var composerController = this.get('controllers.composer');
-        // var locationObject = this.get('model.locationObject');
-        // var topic = this.get('model');
-        // // var self = this;
-
-        // var opts = {
-        //   action: Discourse.Composer.REPLY,
-        //   draftKey: topic.get('draft_key'),
-        //   draftSequence: topic.get('draft_sequence'),
-        //   topic: topic
-        // };
-        // composerController.open(opts).then(function() {
-        //   composerController.content.set('locationObject', locationObject);
-        // });
-      } else {
-        this.send('showLogin');
-      }
-
+      debugger;
+      this.send('addPlace', this.get('model.locationObject'));
     }
   }.observes('model.locationObject'),
 
@@ -132,8 +123,27 @@ require("discourse/controllers/topic")["default"].reopen({
       //return true to bubble up to route...
       return false;
     },
-    replyWithLocationObject: function(locationObject) {
+    // triggered by places explorer
+    addPlaceAction: function(locationObject){
+      this.send('addPlace', locationObject);
+    },
+    // triggered by clicking on search result infowindow 
+    addPlaceFromSearchResult: function(searchResult, geo) {
+      debugger;
+      var locationObject = Discourse.Location.locationFromPlaceSearch(searchResult, "");
 
+      // var currentGeoKey = this.get('controllers.map.currentGeoKey');
+      // // could have used the geo object thats passed in - same same
+
+      // currentGeoKey.initial_location = locationObject;
+      // currentGeoKey.capability = "info";
+      this.send('addPlace', locationObject);
+
+      //return true to bubble up to route...
+      return false;
+    },
+    replyWithLocationObject: function(locationObject) {
+      debugger;
       // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');

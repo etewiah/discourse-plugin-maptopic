@@ -10,11 +10,19 @@
                 {{text-field placeholder="Place Name" value=placeName 
                 id="place-name" autofocus="autofocus"}}
 
-              <button class='btn btn-primary' style="width:22%;" 
-                  title="Do you have something to say about this place? Go on then, say it..."
-                  {{action namedCitySelected }}>
-                  {{fa-icon comment-o label="talk label" }} Talk about this
-              </button>
+      {{#if withinTopic}}
+        <button class='btn btn-primary' style="width:22%;" 
+            title="Add this place to the current conversation"
+            {{action namedCitySelected }}>
+            {{fa-icon plus label="talk label" }} Add this place
+        </button>
+      {{else}}
+        <button class='btn btn-primary' style="width:22%;" 
+            title="Do you have something to say about this place? Go on then, say it..."
+            {{action namedCitySelected }}>
+            {{fa-icon comment-o label="talk label" }} Talk about this
+        </button>
+      {{/if}} 
       <br>
          {{input-tip validation=placeNameValidation}}  
       </form>    
@@ -33,11 +41,19 @@
               <span>{{ place.name }},</span>
               <span>{{ place.vicinity }},</span>
               </div>
-              <button class='btn btn-primary' style="" 
-              title="Do you have something to say about this place? Go on then, say it..."
-              >
-                {{fa-icon comment-o label="talk label" }} Talk about this
+
+            {{#if withinTopic}}
+              <button class='btn btn-primary'  
+                  title="Add this place to the current conversation" >
+                  {{fa-icon plus label="talk label" }} Add this place
               </button>
+            {{else}}
+              <button class='btn btn-primary'  
+                  title="Do you have something to say about this place? Go on then, say it..." >
+                  {{fa-icon comment-o label="talk label" }} Talk about this
+              </button>
+            {{/if}} 
+
               </a> 
               
               </li>

@@ -80,6 +80,7 @@ Discourse.Topic.reopen({
     //     currentMarkerValuesOld.push(markerInfo);
     //   });
     // }
+    debugger;
     var can_edit = Discourse.User.current() && Discourse.User.current().admin;
     // this.get('details.can_edit');
     var currentMarkerValues = [];
@@ -144,6 +145,6 @@ Discourse.Topic.reopen({
     return currentMarkerValues;
     // locationCount below is not accurate, just a value that increments each time
     // a new reply with a location is added (done in extension to composer model)
-  }.property('locations', 'location', 'locationCount')
+  }.property('locations', 'geo.places', 'locationCount')
 
 })
