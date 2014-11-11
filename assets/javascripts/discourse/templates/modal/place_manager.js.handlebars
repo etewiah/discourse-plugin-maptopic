@@ -13,13 +13,13 @@
         <div class="row">
                 {{text-field placeholder="search keyword" value=searchKeyword 
               autofocus="autofocus"}}
-                <button class='btn btn-primary' style="" {{action searchByKeyword}}>
+                <button class='btn btn-primary' style="" {{action 'searchByKeyword'}}>
                   {{fa-icon search label="" }} Search by Keyword
                 </button>
         </div>
 
         <div class="row">
-                <button class='btn btn-primary' style="" {{action searchNearby }}>
+                <button class='btn btn-primary' style="" {{action 'searchNearby' }}>
                   {{fa-icon search label="" }} Search nearby
                 </button>
         </div>
@@ -32,7 +32,7 @@
               <ul class="nav list-stacked" style="padding: 5px 5px 5px 5px;">
                 {{#each place in nearbyPlacesDetails}}
                 <li>
-                  <a style="padding-left: 5px;" {{action correctSearchResultSelected place}}>
+                  <a style="padding-left: 5px;" {{action 'correctSearchResultSelected' place}}>
                     <div style="width: 77%;float: left;">
                       <span>{{ place.name }},</span>
                       <span>{{ place.vicinity }},</span>
@@ -62,5 +62,5 @@
     Say something about this place
   </button>
   --}}
-  <a {{action closeModal}}>{{i18n cancel}}</a>
+  <a {{action 'closeModal'}}>{{i18n cancel}}</a>
 </div>

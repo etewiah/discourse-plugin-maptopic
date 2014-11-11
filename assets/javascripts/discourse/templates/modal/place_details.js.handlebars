@@ -1,4 +1,38 @@
 <div class="modal-body">
+
+
+  <div>
+    {{#if googlePlaceDetails}}
+        <div style="width: 49%;float: left;">
+          <div style="padding-bottom: 20px;">{{ model.location.address}}</div>
+          
+          {{#if googlePlaceDetails.website }}
+            website: <a {{ bind-attr href=googlePlaceDetails.website }}  target="_blank" > {{ googlePlaceDetails.website }} </a>
+          {{/if}}
+          
+        </div>
+        <div style="width: 49%;float: left;">
+          <img {{ bind-attr src=primaryImageUrl }}>
+        </div>
+    {{else}}
+        <div style="width: 49%;float: left;">
+          <div style="padding-bottom: 20px;">{{ model.location.address}}</div>
+          
+          {{#if model.location.website }}
+            website: <a {{ bind-attr href=model.location.website }}  target="_blank" > {{ model.location.website }} </a>
+          {{/if}}
+          
+        </div>
+        <div style="width: 49%;float: left;">
+          <img {{ bind-attr src=primaryImageUrl }}>
+        </div>
+
+     {{/if}}
+  </div>
+</div>
+
+<div class="modal-footer">
+
   <div>
 
     {{#if model.posts}}
@@ -28,35 +62,6 @@
 
   </div>
 
-  <div>
-    {{#if googlePlaceDetails}}
-    <h4 style="text-align: center;">Details from Google Places:</h4>
-    <div style="width: 49%;float: left;">
-      <div style="padding-bottom: 20px;">{{ model.location.address}}</div>
-      
-      {{#if googlePlaceDetails.website }}
-        website: <a {{ bind-attr href=googlePlaceDetails.website }} > {{ googlePlaceDetails.website }} </a>
-      {{/if}}
-      
-    </div>
-    <div style="width: 49%;float: left;">
-      <img {{ bind-attr src=primaryImageUrl }}>
-    </div>
-    {{else}}
-{{!--       <h5 style="padding-bottom: 20px;">{{ model.location.address}}</h5>
-      <div> <ul>
-      {{#each place in nearbyPlacesDetails}}
-        <li>
-          {{ place.name }}, {{ place.vicinity }}
-        </li>
-      {{/each}}
-
-      </ul> </div> --}}
-     {{/if}}
-  </div>
-</div>
-
-<div class="modal-footer">
   <button class='btn btn-primary' {{action replyWithLocation model.location }}>
     Say something about this place
   </button>

@@ -95,6 +95,7 @@ require("discourse/controllers/topic")["default"].reopen({
     },
     // called when marker on topics map is clicked:
     showPlaceDetails: function(placeDetails) {
+      placeDetails.map = placeDetails.map || this.get('model.geo.map');
       // this.send('showLocationSelectorModal',placeDetails);
       this.send('showDiscourseModal', 'placeDetailsModal', placeDetails);
     },

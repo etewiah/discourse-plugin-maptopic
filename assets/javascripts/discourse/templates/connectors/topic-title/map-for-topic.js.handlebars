@@ -27,20 +27,20 @@
 
           </span>
 
-          <div class='btn btn-primary btn-map-for-topic' style="" {{action showInvite}}><i class="fa fa-users"></i>
+          <div class='btn btn-primary btn-map-for-topic' style="" {{action 'showInvite'}}><i class="fa fa-users"></i>
               Invite your friends
           </div>
 
-          <div class='btn btn-primary btn-gray btn-map-for-topic' style="" {{action showLocationSelector}}><i class="fa fa-map-marker"></i>
+          <div class='btn btn-primary btn-gray btn-map-for-topic' style="" {{action 'showLocationSelector'}}><i class="fa fa-map-marker"></i>
             Add places
           </div>
 
           {{#each marker in model.markers }}
             <div class='btn btn-primary btn-gray btn-map-for-topic' style="">
-            <a class="view-place-btn-a" {{action showPlaceDetails marker}}>
+            <a class="view-place-btn-a" {{action 'showPlaceDetails' marker}}>
                 {{ marker.location.title }}</a>
                 {{#if marker.can_edit}}
-            <i {{action showEditorModalForTopic marker }} class="fa fa-pencil  view-place-btn-i"></i>
+            <i {{action 'showEditorModalForTopic' marker }} class="fa fa-pencil  view-place-btn-i"></i>
                 {{/if}}
                       <div class="clearfix"></div>
             </div>

@@ -84,6 +84,9 @@ Discourse.NewTopicModalController = Discourse.Controller.extend(Discourse.ModalF
   }.property('validate', 'topicTitle'),
 
   actions: {
+    closeModal: function(){
+      debugger;
+    },
     createNewTopic: function() {
 
       if (this.get('topicTitle').length < 5 || this.get('topicDetails').length < 10) {

@@ -26,7 +26,7 @@ Discourse.PlaceDetailsModalController = Discourse.Controller.extend(Discourse.Mo
         placeId: placeDetails.location.gplace_id
       };
 
-      var infowindow = new google.maps.InfoWindow();
+      // var infowindow = new google.maps.InfoWindow();
       var service = new google.maps.places.PlacesService(placeDetails.map);
       var that = this;
       service.getDetails(request, function(place, status) {
@@ -36,27 +36,27 @@ Discourse.PlaceDetailsModalController = Discourse.Controller.extend(Discourse.Mo
       });
     } else {
       // search for closeby places
-      var latlng = new google.maps.LatLng(placeDetails.location.latitude, placeDetails.location.longitude);
+      // var latlng = new google.maps.LatLng(placeDetails.location.latitude, placeDetails.location.longitude);
 
 
-      var request = {
-        location: latlng,
-        radius: '50'
-          // types: ['store']
-      };
+      // var request = {
+      //   location: latlng,
+      //   radius: '50'
+      //     // types: ['store']
+      // };
 
-      var service = new google.maps.places.PlacesService(placeDetails.map);
-      var that = this;
-      service.nearbySearch(request, function(results, status) {
-        if (status == google.maps.places.PlacesServiceStatus.OK) {
-          // debugger;
-          that.set('nearbyPlaces', results);
-          // for (var i = 0; i < results.length; i++) {
-          //   var place = results[i];
-          //   createMarker(results[i]);
-          // }
-        }
-      });
+      // var service = new google.maps.places.PlacesService(placeDetails.map);
+      // var that = this;
+      // service.nearbySearch(request, function(results, status) {
+      //   if (status == google.maps.places.PlacesServiceStatus.OK) {
+      //     // debugger;
+      //     that.set('nearbyPlaces', results);
+      //     // for (var i = 0; i < results.length; i++) {
+      //     //   var place = results[i];
+      //     //   createMarker(results[i]);
+      //     // }
+      //   }
+      // });
       // service.nearbySearch(request, callback);
     }
   },
