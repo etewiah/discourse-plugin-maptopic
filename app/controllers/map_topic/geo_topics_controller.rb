@@ -4,14 +4,39 @@ module MapTopic
     before_action :check_user, only: [:update_geo_places]
 
 
+    def remove_geo_place
+      unless(params[:topic_id] && params[:location_id])
+        render_error "incorrect params"
+        return
+      end
+      # TODO  should have a field on location which I update 
+
+
+      @topic = Topic.find(params[:topic_id])
+      if current_user.guardian.ensure_can_edit!(@topic)
+        render status: :forbidden, json: false
+        return
+      end
+
+      location_id = params[:location_id].to_s
+
+      @topic.geo.places.delete location_id
+      @topic.geo.places['sorted_ids'].delete location_id
+
+
+      @topic.geo.save!
+      return render_json_dump @topic.geo.as_json
+
+    end
+
+# below is only used for updating geo_place - which is independent of the location record to which it is tied
+# When I get round to creating a service object for geo_place I will do checks with location record each time
+# - geo_places are created when a new location is created in a topic
     def update_geo_places
       unless(params[:place] && params[:topic_id] && params[:location_id])
         render_error "incorrect params"
         return
       end
-      # TODO rename to set_or_update_geo_places and handle case where no location_id
-      # is passed in - i.e. create location and add that to geo place
-
 
       @topic = Topic.find(params[:topic_id])
       if current_user.guardian.ensure_can_edit!(@topic)
@@ -42,12 +67,6 @@ module MapTopic
       # should do some checks to prevent injection attacks
       @topic.geo.places[location_id] = place
       # topic_places = @topic.geo.places || []
-
-      # place = topic_places.select{ |p| p['location_id'] == location.id }[0]
-      # unless place
-      #   place = {}
-      #   topic_places.push place
-      # end
 
       @topic.geo.save!
       return render_json_dump @topic.geo.as_json

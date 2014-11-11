@@ -87,6 +87,10 @@ module MapTopic
       # location.address = params[:location][:formattedAddress] || ""
 
       # location.save!
+
+      # create_from_location below will also call
+      # topic.geo.add_or_update_place location, post_id
+      # which ensures 
       location_topic = MapTopic::LocationTopic.create_from_location location, @topic, nil 
 
       # updated places used to refresh markers on topic map client side

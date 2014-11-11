@@ -11,6 +11,8 @@
   display: block;
   float: left;
   color:white;
+  /* need below to ensure that a short name is still clickable */
+  min-width: 85%;
 }
 
 .view-place-btn-i {

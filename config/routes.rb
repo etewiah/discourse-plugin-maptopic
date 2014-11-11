@@ -1,6 +1,7 @@
 MapTopic::Engine.routes.draw do
   # get "/location_topics" => "location_topics#index"
 
+  post "/geo_topics/remove_geo_place" => "geo_topics#remove_geo_place"
   post "/geo_topics/update_geo_places" => "geo_topics#update_geo_places"
   # might be more accurate for set_geo to be a method in geo_topics controller
   post "/location_posts/set_geo" => "location_posts#set_geo"

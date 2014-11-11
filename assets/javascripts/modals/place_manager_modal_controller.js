@@ -1,12 +1,18 @@
 Discourse.PlaceManagerModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
   needs: ['topic'],
   actions: {
+    removePlace: function(){
+      var topicController = this.get('controllers.topic');
+      topicController.send('removePlace', this.get('content'));
+      this.send('closeModal');
+    },
     searchForPlace: function() {
       this.runGooglePlacesSearch();
     },
     confirmPlaceDetails: function(confirmedDetails) {
       var updatedPlace = Discourse.Location.geoPlaceFromGooglePlace(confirmedDetails)
-      updatedPlace.detailsConfirmed = true
+      // updatedPlace.detailsConfirmed = true;
+      updatedPlace.source = "detailedGpSearch";
         // TODO - move below to model ovject
 
       var geo_place_update = Discourse.ajax("/geo_topics/update_geo_places", {

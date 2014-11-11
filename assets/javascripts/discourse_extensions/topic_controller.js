@@ -167,8 +167,24 @@ require("discourse/controllers/topic")["default"].reopen({
       //return true to bubble up to route...
       return false;
     },
-    // updateTopicPlace: function(googlePlaceResult){
-    //   debugger;
-    // }
+
+    removePlace: function(placeToRemove){
+      debugger;
+      var geo_place_update = Discourse.ajax("/geo_topics/remove_geo_place", {
+        data: {
+          location_id: this.get('placeToRemove.location_id'),
+          topic_id: this.get('placeToRemove.topic_id')
+        },
+        method: 'POST'
+      });
+
+      geo_place_update.then(function(result) {
+        debugger;
+        that.set('model.geo.places',result.places);
+
+      });
+
+    }
+
   }
 });

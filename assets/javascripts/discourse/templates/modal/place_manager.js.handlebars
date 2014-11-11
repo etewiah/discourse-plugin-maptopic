@@ -1,15 +1,20 @@
 <div class="modal-body">
-  <div>
 
+  <div>
+    <h2>Edit details:</h2>
+    {{#if googlePlaceDetails}} 
+      {{ geo-place-control googlePlaceDetails=googlePlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails"
+      removePlaceAction="removePlace" }}
+
+    {{else}} 
+      {{ geo-place-control googlePlaceDetails=googlePlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails"
+      removePlaceAction="removePlace" }}
+      
+    {{/if}}
   </div>
 
   <div>
-
-    {{#if googlePlaceDetails}} 
-      {{ geo-place-control googlePlaceDetails=googlePlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails" }}
-
-    {{else}} 
-
+    <h2>Or search for other places:</h2>
         <div class="row">
                 {{text-field placeholder="search keyword" value=searchKeyword 
               autofocus="autofocus"}}
@@ -47,12 +52,8 @@
               </ul>
             </div>
         {{/if}} 
-    {{!--
-    <button class='btn btn-primary' {{action searchForLocation model.location }}>
-      Search for more info about this place
-    </button>--}} 
-    {{/if}}
   </div>
+
 </div>
 
 <div class="modal-footer">
