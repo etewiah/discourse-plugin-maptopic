@@ -40,7 +40,6 @@ require("discourse/controllers/topic")["default"].reopen({
       });
 
       // var locs = this.get('model.locations');
-      // debugger;
       // locs.pushObject(locationObject);
 
       var that = this;
@@ -48,7 +47,6 @@ require("discourse/controllers/topic")["default"].reopen({
       // topicLocationCount will trigger recalculation of markers
       // below ensures the new place is available for recalculation right away
         // var places = that.get('model.geo.places');
-        // debugger;
         that.set('model.geo.places',result);
       });
       // TODO - handle errors
@@ -77,13 +75,11 @@ require("discourse/controllers/topic")["default"].reopen({
   // name is misleading as there isn't a post  being created:
   startLocationPost: function() {
     if (this.get('model.locationObject')) {
-      debugger;
       this.send('addPlace', this.get('model.locationObject'));
     }
   }.observes('model.locationObject'),
 
   // contextChanged2: function() {
-  //   debugger;
   //   // this.set('controllers.search.searchContext', this.get('model.searchContext'));
   // }.observes('topic'),
 
@@ -130,7 +126,6 @@ require("discourse/controllers/topic")["default"].reopen({
     },
     // triggered by clicking on search result infowindow 
     addPlaceFromSearchResult: function(searchResult, geo) {
-      debugger;
       var locationObject = Discourse.Location.locationFromPlaceSearch(searchResult, "");
 
       // var currentGeoKey = this.get('controllers.map.currentGeoKey');
@@ -144,7 +139,6 @@ require("discourse/controllers/topic")["default"].reopen({
       return false;
     },
     replyWithLocationObject: function(locationObject) {
-      debugger;
       // this.set('locationObject', locationObject);
       if (Discourse.User.current()) {
         var composerController = this.get('controllers.composer');
@@ -169,21 +163,39 @@ require("discourse/controllers/topic")["default"].reopen({
     },
 
     removePlace: function(placeToRemove){
-      debugger;
       var geo_place_update = Discourse.ajax("/geo_topics/remove_geo_place", {
         data: {
-          location_id: this.get('placeToRemove.location_id'),
-          topic_id: this.get('placeToRemove.topic_id')
+          location_id: placeToRemove.location_id,
+          topic_id: placeToRemove.topic_id
         },
         method: 'POST'
       });
-
+      var that = this;
       geo_place_update.then(function(result) {
-        debugger;
         that.set('model.geo.places',result.places);
-
       });
+    },
 
+    confirmPlaceDetails: function(confirmedDetails) {
+      // var updatedPlace = Discourse.Location.geoPlaceFromGooglePlace(confirmedDetails)
+      // updatedPlace.detailsConfirmed = true;
+      confirmedDetails.status_flag = "details_confirmed";
+      // http://stackoverflow.com/questions/25856959/parsing-json-with-jquery-turns-array-into-hash
+      var confirmedDetailsJSON = JSON.stringify(confirmedDetails);
+        // TODO - move below to model ovject
+
+      var geo_place_update = Discourse.ajax("/geo_topics/update_geo_places", {
+        data: {
+          place: confirmedDetailsJSON,
+          location_id: confirmedDetails.location_id,
+          topic_id: this.get('model.id')
+        },
+        method: 'POST'
+      });
+      var that = this;
+      geo_place_update.then(function(result) {
+        that.set('model.geo.places',result.places);
+      });
     }
 
   }

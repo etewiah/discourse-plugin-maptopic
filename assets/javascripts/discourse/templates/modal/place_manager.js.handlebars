@@ -2,19 +2,18 @@
 
   <div>
     <h2>Edit details:</h2>
-    {{#if googlePlaceDetails}} 
-      {{ geo-place-control googlePlaceDetails=googlePlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails"
+    {{#if geoPlaceDetails}} 
+      {{ geo-place-control geoPlaceDetails=geoPlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails"
       removePlaceAction="removePlace" }}
 
     {{else}} 
-      {{ geo-place-control googlePlaceDetails=googlePlaceDetails googlePlaceBinding="controller.googlePlace"  searchForPlaceAction="searchForPlace" confirmPlaceDetailsAction="confirmPlaceDetails"
-      removePlaceAction="removePlace" }}
-      
+
+
     {{/if}}
   </div>
 
   <div>
-    <h2>Or search for other places:</h2>
+    <h2 style="margin-top:15px;margin-bottom:15px;">Or search for other places:</h2>
         <div class="row">
                 {{text-field placeholder="search keyword" value=searchKeyword 
               autofocus="autofocus"}}

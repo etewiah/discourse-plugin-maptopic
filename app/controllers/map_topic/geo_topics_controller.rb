@@ -44,6 +44,7 @@ module MapTopic
         return
       end
 
+# passing in location_id might be redundant as with updates, place should already have location_id
       location_id = params[:location_id].to_s
       # below is a workaround check while I still have some places in db
       # that are arrays
@@ -60,10 +61,15 @@ module MapTopic
         @topic.geo.places['sorted_ids'].push location_id
       end
 
-      place = params[:place]
+      place = JSON.parse params[:place]
+# place param is now passed as a string ( json.stringyfy client side)
+# - allowing jquery to process the payload resulted in nested arrays getting converted to hashes
+# http://stackoverflow.com/questions/25856959/parsing-json-with-jquery-turns-array-into-hash
+# with json parse above, probably don't need below check anymore
       place['longitude'] = place['longitude'].to_f
       place['latitude'] = place['latitude'].to_f
       place['location_id'] = location_id
+
       # should do some checks to prevent injection attacks
       @topic.geo.places[location_id] = place
       # topic_places = @topic.geo.places || []

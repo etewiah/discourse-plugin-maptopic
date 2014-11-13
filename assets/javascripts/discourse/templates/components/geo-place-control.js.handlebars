@@ -1,31 +1,59 @@
 {{!-- this control should be renamed place-editor-control --}}
-        <h4 style="text-align: center;">Please confirm these details:</h4>
-          <div style="">
-            <div style="padding-bottom: 20px;">{{ googlePlaceDetails.name }}</div>
-
-            <div style="padding-bottom: 20px;">{{ googlePlaceDetails.vicinity }}</div>
-
-            Website:
-            {{#if googlePlaceDetails.website }}<a {{ bind-attr href=googlePlaceDetails.website }}> {{ googlePlaceDetails.website }} </a>
-            {{/if}}
-
-          </div>
-          {{#each photo in placePhotos}}
-          <div style="">
-            <img {{ bind-attr src=photo.url }}>
-          </div>
-          {{/each}}
-
-          <div class="row">
-            <button class='btn btn-primary' style="margin-top: 6px;margin-right: 6px;" {{action 'confirmPlaceDetails' }} title="">
-              {{fa-icon thumbs-o-up label="" }}Confirm place details
-            </button>
-            <button class='btn btn-danger' {{action 'removePlace' }} style="float:right">
-              {{fa-icon trash label="" }}Remove this place
-            </button>
-          </div>
 
 
 <div class="row">
+  <form {{action "confirmPlaceDetails" on="submit"}}>
+    <div style="width: 100%;">
+      <div>
+        <div style="" class="label">
+          <label for='geo-place-title'>
+          Title
+          </label>
+        </div>
+      </div>
+      <div class="input">
+        <div style="">
+          {{text-field value=geoPlaceDetails.title id="geo-place-title" autofocus="autofocus"}}
 
+           {{input-tip validation=titleValidation}}
+
+        </div>
+      </div>
+
+      <div class="instructions">
+        <div>
+          <label>
+            Address
+          </label>
+        </div>
+      </div>
+
+      <div class="input">
+        <div style="">
+          {{textarea value=geoPlaceDetails.address id="geo-place-address" }}
+           {{input-tip validation=addressValidation}}
+
+        </div>
+      </div>
+
+    </div>
+  </form>
+</div>
+
+
+<div class="row">
+  <button class='btn btn-primary' style="margin-top: 6px;margin-right: 6px;" {{action 'confirmPlaceDetails' }} title="">
+    {{fa-icon thumbs-o-up label="" }}Confirm place details
+  </button>
+  <button class='btn btn-danger' {{action 'removePlace' }} style="float:right">
+    {{fa-icon trash label="" }}Remove this place
+  </button>
+</div>
+
+<div class="row">
+{{!--           {{#each photo in geoPlaceDetails.photos }}
+          <div style="float: left;margin: 5px;">
+            <img {{ bind-attr src=photo.url }}>
+          </div>
+          {{/each}} --}}
 </div>

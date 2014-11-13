@@ -54,7 +54,7 @@ Discourse.Location = Discourse.Model.extend({
 
 });
 Discourse.Location.reopenClass({
-  getDetails: function(slug){
+  getDetails: function(slug) {
     var url = Discourse.getURL("/locations/get_details");
     return Discourse.ajax(url, {
       data: {
@@ -75,32 +75,48 @@ Discourse.Location.reopenClass({
     });
   },
   geoPlaceFromGooglePlace: function(result) {
-    // a textsearch result has formatted_address instead of vicinity
-    var address = result.vicinity || result.formatted_address;
-    // debugger;
+    // a textsearch result has formatted_address (which is preferred) instead of vicinity
+    var address = result.formatted_address || result.vicinity;
+    var phone_no = result.international_phone_number || "";
     var locationObject = {
       title: result.name,
       address: address,
+      phone_no: phone_no,
       latitude: result.geometry.location.lat(),
       longitude: result.geometry.location.lng(),
       gplace_id: result.place_id,
       website: ""
     };
-    var placePhotos = [];
-    var photos = result.photos;
-    if (photos && photos.length > 0) {
-      var photoUrl = photos[0].getUrl({
-        'maxWidth': 150,
-        'maxHeight': 150
+    var urls = [];
+    if (result.url) {
+      urls.push({
+        title: 'Google Place site',
+        url: result.url
       })
-      placePhotos.push({
-        url: photoUrl,
-        preferred: false
-      });
+    };
+    if (result.website) {
+      urls.push({
+        title: 'Website',
+        url: result.website
+      })
+    };
+    locationObject.urls = urls;
+    var placePhotos = [];
+    if (result.photos && result.photos.length > 0) {
+      var photos = result.photos.slice(0, 5);
+      photos.forEach(function(photo) {
+        var photoUrl = photo.getUrl({
+          'maxWidth': 150,
+          'maxHeight': 150
+        })
+        placePhotos.push({
+          url: photoUrl,
+          preferred: false
+        });
+      })
     }
     locationObject.photos = placePhotos;
-    debugger;
-    // for geoplaces, I don't care about city or country...
+    //TODO -  city and country...
     return locationObject;
   },
   locationFromPlaceSearch: function(result, city) {
