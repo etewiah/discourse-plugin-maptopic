@@ -4,16 +4,21 @@
 
 Discourse.MapRootRoute = Discourse.Route.extend({
 
+// TODO - investigate why this sometimes gets called twice resulting in 2 calls to geoTopicsForCity
   beforeModel: function(transition) {
-    var controller = this.controllerFor('map');
-    debugger;
-    // defaultCity now gets calculated server side
-
     // where user is arriving for the 1st time, will be calculated server side:
     // unless there is a preferred_city set for this user
-    // else if (Discourse.currentuser....) {};
-    // var topicsModel = Discourse.TopicList.findWhereLocationPresent("", params);
-    var topiclist = Discourse.GeoTopic.geoTopicsForCity(controller.currentCity);
+    var controller = this.controllerFor('map');
+    if (controller.get('currentGeoKey.value')) {
+      var currentGeoKeyValue = controller.get('currentGeoKey.value');
+    }
+    else{
+      // below checks localstorage just in case user has visited site previously
+      var currentGeoKeyValue = Discourse.GeoTopic.getUserDefaultGeoKeyValue();
+    } 
+    debugger;
+
+    var topiclist = Discourse.GeoTopic.geoTopicsForCity(currentGeoKeyValue);
     this.transitionTo('map.fromOneParam', topiclist);
   }
 
@@ -23,13 +28,6 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
   model: function(params) {
     return Discourse.GeoTopic.geoTopicsForCity(params.geo);
-    // .then(function(result) {
-    //   console.log(params);
-    //   debugger;
-    //   return result;
-    //   // return Discourse.TopicList.fromWhereLocationPresent(result, filter_url, params);
-    // });
-
   },
   // serialize: function(model) {
   //   return { val: 'recent' };
@@ -42,7 +40,7 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
 
     // city may have been calculated server side so lets save that to avoid making calculation again
     // TODO - save in localStorage?
-    var currentCity = model.geo_key.bounds_value;
+    // var currentCity = model.geo_key.bounds_value;
 
     var currentGeoKey = model.geo_key;
     
@@ -61,14 +59,8 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
     //   };
     // mapController.set('currentCitySelection', currentCitySelection);
 
-
-// TODO - remove this:
-    // var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
-
-
-
     // mapController.get('currentCity') || this.paramsFor(this.routeName).currentCity;
-    mapController.set('currentCity', currentCity);
+    // mapController.set('currentCity', currentCity);
     Discourse.set('title', model.geo_key.display_name + ' - recent conversations');
   }
 

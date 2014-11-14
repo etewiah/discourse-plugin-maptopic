@@ -44,10 +44,10 @@ require("discourse/controllers/topic")["default"].reopen({
 
       var that = this;
       map_topic.then(function(result) {
-      // topicLocationCount will trigger recalculation of markers
-      // below ensures the new place is available for recalculation right away
+        // topicLocationCount will trigger recalculation of markers
+        // below ensures the new place is available for recalculation right away
         // var places = that.get('model.geo.places');
-        that.set('model.geo.places',result);
+        that.set('model.geo.places', result);
       });
       // TODO - handle errors
 
@@ -57,15 +57,26 @@ require("discourse/controllers/topic")["default"].reopen({
   },
 
   setUserPreferredCity: function() {
-    var geo = this.get('model.geo');
-    if (geo) {
+    var currentGeoKey = this.get('model.geo');
+    if (currentGeoKey) {
+
+      // TODO - have displayString and value cols on geo_key correct to start with:
+      currentGeoKey.displayString = currentGeoKey.display_name.capitalize();
+      currentGeoKey.value = currentGeoKey.bounds_value.toLowerCase();
+      var mapController = this.get('controllers.map');
+
+      debugger;
+
+// could check to see if mapctrl already has correct value set:
+      mapController.set('currentGeoKey', currentGeoKey);
+
       // below should really be geo.bounds_value but in the case of belfast
       // its wrong - should investigate
-      var boundsValue = geo.city_lower;
+      // var boundsValue = geo.city_lower;
 
-      var mapController = this.get('controllers.map');
+      // var mapController = this.get('controllers.map');
       // setting below should ensure that map.route uses this as default city..
-      mapController.set('currentCity', boundsValue);
+      // mapController.set('currentCity', boundsValue);
     }
     // this._super();
   }.observes('model.geo'),
@@ -121,7 +132,7 @@ require("discourse/controllers/topic")["default"].reopen({
       return false;
     },
     // triggered by places explorer
-    addPlaceAction: function(locationObject){
+    addPlaceAction: function(locationObject) {
       this.send('addPlace', locationObject);
     },
     // triggered by clicking on search result infowindow 
@@ -157,7 +168,7 @@ require("discourse/controllers/topic")["default"].reopen({
       return false;
     },
 
-    removePlace: function(placeToRemove){
+    removePlace: function(placeToRemove) {
       var geo_place_update = Discourse.ajax("/geo_topics/remove_geo_place", {
         data: {
           location_id: placeToRemove.location_id,
@@ -167,7 +178,7 @@ require("discourse/controllers/topic")["default"].reopen({
       });
       var that = this;
       geo_place_update.then(function(result) {
-        that.set('model.geo.places',result.places);
+        that.set('model.geo.places', result.places);
       });
     },
 
@@ -177,7 +188,7 @@ require("discourse/controllers/topic")["default"].reopen({
       confirmedDetails.status_flag = "details_confirmed";
       // http://stackoverflow.com/questions/25856959/parsing-json-with-jquery-turns-array-into-hash
       var confirmedDetailsJSON = JSON.stringify(confirmedDetails);
-        // TODO - move below to model ovject
+      // TODO - move below to model ovject
 
       var geo_place_update = Discourse.ajax("/geo_topics/update_geo_places", {
         data: {
@@ -189,7 +200,7 @@ require("discourse/controllers/topic")["default"].reopen({
       });
       var that = this;
       geo_place_update.then(function(result) {
-        that.set('model.geo.places',result.places);
+        that.set('model.geo.places', result.places);
       });
     }
 

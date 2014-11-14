@@ -3,10 +3,14 @@ Discourse.GeoTopic = Discourse.Model.extend({
 
 });
 Discourse.GeoTopic.reopenClass({
-  getUserDefaultGeoKey: function() {
+  getUserDefaultGeoKeyValue: function() {
     var userDefaultGeoKey = Discourse.KeyValueStore.get('lsUserDefaultGeoKey');
     debugger;
-    return JSON.parse(userDefaultGeoKey);
+    if (userDefaultGeoKey) {
+      return JSON.parse(userDefaultGeoKey).value;
+    } else {
+      return null;
+    };
   },
   setUserDefaultGeoKey: function(geoKey) {
     Discourse.KeyValueStore.set({

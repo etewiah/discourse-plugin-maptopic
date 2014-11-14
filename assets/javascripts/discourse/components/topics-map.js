@@ -100,7 +100,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   markerValuesChanged: function() {
     // for re-rendering as I browse
     this.triggerMapAsNeeded();
-  }.observes('markerValues', 'currentCity'),
+  }.observes('markerValues', 'geo'),
   // TODO - check if below is redundant
   markerAdded: function() {
     // for re-rendering as I browse
@@ -143,9 +143,9 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
     } else {
       // should not get here
       debugger;
-      var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
-      var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
-      return cityObject;
+      // var currentCity = this.currentCity || Discourse.SiteSettings.maptopic.defaultCityName;
+      // var cityObject = Discourse.SiteSettings.maptopic.citySelectionItems.findBy('value', currentCity);
+      // return cityObject;
     }
   }.property('currentCity', 'geo'),
 
@@ -446,7 +446,7 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
             that.placeSelected(event, detailsForMarker);
           });
         } else {
-          debugger;
+          // debugger;
         };
 
       });
