@@ -5,29 +5,13 @@
   <h1 style="margin-bottom:10px;font-size: x-large;font-weight:normal;line-height: 40px;">
 
     Recent conversations about {{ simple-dropdown selectionItemsBinding='citySelectionItemsWithUrls' 
-    action='cityChanged' newLocationAction='showAddCityModal' removeItemAction='removeLocation' currentSelectionItem=currentCitySelection }}
+    action='cityChanged' newLocationAction='showAddCityModal' removeItemAction='removeLocation' currentSelectionItem=currentGeoKey }}
 
 
     <small style="font-size: 55%;margin-left:3%"> 
     <a {{ action showAddCityModal }}>Click here for more locations.</a>   </small>
-{{!-- {{#if isAdmin}}
-{{/if}}
- --}}
-{{!-- <span style="float:right">
-            <button class='btn btn-large btn-primary' style="background: #090;" {{action showNewTopicModal currentCitySelection 'info'}}>
-            <i class="fa fa-comments"></i>
-            Start city conversation
-          </button>
-          <button class='btn btn-large btn-primary' style="background: #090;" {{action showNewTopicModal currentCitySelection 'question'}}>
-          <i class="fa fa-info"></i>
-            Ask for city info
-          </button>
-</span> --}}
 
   </h1>
-
-
-
 </div>
 
 

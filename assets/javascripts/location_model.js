@@ -3,6 +3,17 @@ Discourse.GeoTopic = Discourse.Model.extend({
 
 });
 Discourse.GeoTopic.reopenClass({
+  getUserDefaultGeoKey: function() {
+    var userDefaultGeoKey = Discourse.KeyValueStore.get('lsUserDefaultGeoKey');
+    debugger;
+    return JSON.parse(userDefaultGeoKey);
+  },
+  setUserDefaultGeoKey: function(geoKey) {
+    Discourse.KeyValueStore.set({
+      key: 'lsGeoIndexList',
+      value: JSON.stringify(geoKey)
+    });
+  },
   removeFromLlsGeoIndexList: function(geoKey) {
     var lsGeoIndexList = Discourse.KeyValueStore.get('lsGeoIndexList');
     if (lsGeoIndexList) {

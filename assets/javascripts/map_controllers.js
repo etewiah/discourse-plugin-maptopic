@@ -15,7 +15,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
       currentGeoKey.capability = topicType;
 
       // in future might allow country bounds etc..
-      var currentCitySelection = this.get('controllers.map.currentCitySelection');
+      // var currentCitySelection = this.get('controllers.map.currentCitySelection');
       if (locationObject) {
         currentGeoKey.initial_location = locationObject;
       };
@@ -214,23 +214,17 @@ Discourse.MapController = Discourse.Controller.extend({
   },
 
 
-
-  // currentCitySelection: function() {
-  //   var currentCity = this.get('currentCity') || Discourse.SiteSettings.maptopic.defaultCityName;
-  //   return this.get('citySelectionItemsWithUrls').findBy('value', currentCity);
-  // }.property('currentCity', 'citySelectionItemsWithUrls'),
-
-
   // below updates the citySelectionItems
+// TODO *** fix urls - currently not being calculated..
   citySelectionItemsWithUrls: function() {
     var router = this.get('target');
+    // below gets index list from local storage
     var selectionItems = Discourse.GeoTopic.getGeoIndexList(router);
+    var currentGeoKey = this.get('currentGeoKey');
 
-
-    var currentCitySelection = this.get('currentCitySelection');
-    var currentCityInSelectionItems = selectionItems.findBy('value', currentCitySelection.value);
+    var currentCityInSelectionItems = selectionItems.findBy('value', currentGeoKey.bounds_value);
     if (!currentCityInSelectionItems) {
-      selectionItems.pushObject(currentCitySelection);
+      selectionItems.pushObject(currentGeoKey);
       // lsGeoIndexListUpToDate = false;
     };
     // if (!lsGeoIndexListUpToDate) {
@@ -238,9 +232,10 @@ Discourse.MapController = Discourse.Controller.extend({
       key: 'lsGeoIndexList',
       value: JSON.stringify(selectionItems)
     });
-    // };
+
+
     return selectionItems;
-  }.property('currentCitySelection'),
+  }.property('currentGeoKey'),
 
 
 });

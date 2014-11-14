@@ -6,7 +6,7 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 
   beforeModel: function(transition) {
     var controller = this.controllerFor('map');
-    // debugger;
+    debugger;
     // defaultCity now gets calculated server side
 
     // where user is arriving for the 1st time, will be calculated server side:
@@ -45,20 +45,25 @@ Discourse.MapFromOneParamRoute = Discourse.Route.extend({
     var currentCity = model.geo_key.bounds_value;
 
     var currentGeoKey = model.geo_key;
+    
+    // TODO - have displayString and value cols on geo_key correct to start with:
+    currentGeoKey.displayString = currentGeoKey.display_name.capitalize();
+    currentGeoKey.value = currentGeoKey.bounds_value.toLowerCase();
+
     mapController.set('currentGeoKey', currentGeoKey);
 
 // TODO - investigate using above instead of below:
-    var       currentCitySelection = {
-        displayString: model.geo_key.display_name.capitalize(),
-        value: model.geo_key.bounds_value.toLowerCase(),
-        longitude: model.geo_key.longitude,
-        latitude: model.geo_key.latitude
-      };
-    mapController.set('currentCitySelection', currentCitySelection);
+    // var       currentCitySelection = {
+    //     displayString: model.geo_key.display_name.capitalize(),
+    //     value: model.geo_key.bounds_value.toLowerCase(),
+    //     longitude: model.geo_key.longitude,
+    //     latitude: model.geo_key.latitude
+    //   };
+    // mapController.set('currentCitySelection', currentCitySelection);
 
 
 // TODO - remove this:
-    var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
+    // var selectionItems = Discourse.SiteSettings.maptopic.citySelectionItems;
 
 
 

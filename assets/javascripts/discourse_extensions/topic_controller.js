@@ -128,11 +128,6 @@ require("discourse/controllers/topic")["default"].reopen({
     addPlaceFromSearchResult: function(searchResult, geo) {
       var locationObject = Discourse.Location.locationFromPlaceSearch(searchResult, "");
 
-      // var currentGeoKey = this.get('controllers.map.currentGeoKey');
-      // // could have used the geo object thats passed in - same same
-
-      // currentGeoKey.initial_location = locationObject;
-      // currentGeoKey.capability = "info";
       this.send('addPlace', locationObject);
 
       //return true to bubble up to route...
