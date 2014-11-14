@@ -439,10 +439,15 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
 
       google.maps.event.addListener(infowindowInstance, 'domready', function() {
         // ensure document.getElementById("tmap-infowindow-content") exists....
-        document.getElementById("tmap-infowindow-content").addEventListener("click", function(event) {
-          event.stopPropagation();
-          that.placeSelected(event, detailsForMarker);
-        });
+        var infWin = document.getElementById("tmap-infowindow-content");
+        if (infWin) {
+          infWin.addEventListener("click", function(event) {
+            event.stopPropagation();
+            that.placeSelected(event, detailsForMarker);
+          });
+        } else {
+          debugger;
+        };
 
       });
 

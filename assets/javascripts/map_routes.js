@@ -6,6 +6,7 @@ Discourse.MapRootRoute = Discourse.Route.extend({
 
   beforeModel: function(transition) {
     var controller = this.controllerFor('map');
+    // debugger;
     // defaultCity now gets calculated server side
 
     // where user is arriving for the 1st time, will be calculated server side:
