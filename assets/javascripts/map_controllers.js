@@ -204,35 +204,45 @@ Discourse.MapController = Discourse.Controller.extend({
     },
     // triggered by locations dropdown
     removeLocation: function(geoKey) {
-      debugger;
-      Discourse.GeoTopic.removeFromLlsGeoIndexList(geoKey);
-    }
-    // initiateAddLocation: function(newLocation) {
-    //   this.send('showAddCityModal');
-    // }
+        debugger;
+        Discourse.GeoTopic.removeFromLlsGeoIndexList(geoKey);
+      }
+      // initiateAddLocation: function(newLocation) {
+      //   this.send('showAddCityModal');
+      // }
 
   },
 
 
+  updateGeoKey: function() {
+    var currentGeoKey = this.get('currentGeoKey');
+    if (currentGeoKey ) {
+      // and save currentGeoKey (currently local storage for is user closes and reopens page)
+      Discourse.GeoTopic.setUserDefaultGeoKey(currentGeoKey);
+    };
+  }.observes('currentGeoKey'),
+
   // below updates the citySelectionItems
-// TODO *** fix urls - currently not being calculated..
+  // TODO *** fix urls - currently not being calculated..
   citySelectionItemsWithUrls: function() {
     var router = this.get('target');
     // below gets index list from local storage
     var selectionItems = Discourse.GeoTopic.getGeoIndexList(router);
     var currentGeoKey = this.get('currentGeoKey');
+// checking selectionsItems length just in case a bad non-array object is passed
+    if (currentGeoKey && selectionItems.length) {
+      var currentCityInSelectionItems = selectionItems.findBy('value', currentGeoKey.bounds_value);
+      if (!currentCityInSelectionItems) {
+        selectionItems.pushObject(currentGeoKey);
+        // lsGeoIndexListUpToDate = false;
+      };
+      // if (!lsGeoIndexListUpToDate) {
+      Discourse.KeyValueStore.set({
+        key: 'lsGeoIndexList',
+        value: JSON.stringify(selectionItems)
+      });
 
-    var currentCityInSelectionItems = selectionItems.findBy('value', currentGeoKey.bounds_value);
-    if (!currentCityInSelectionItems) {
-      selectionItems.pushObject(currentGeoKey);
-      // lsGeoIndexListUpToDate = false;
     };
-    // if (!lsGeoIndexListUpToDate) {
-    Discourse.KeyValueStore.set({
-      key: 'lsGeoIndexList',
-      value: JSON.stringify(selectionItems)
-    });
-
 
     return selectionItems;
   }.property('currentGeoKey'),

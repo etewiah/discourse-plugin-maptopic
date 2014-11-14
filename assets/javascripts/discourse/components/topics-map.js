@@ -150,20 +150,21 @@ Discourse.TopicsMapComponent = Ember.Component.extend({
   }.property('currentCity', 'geo'),
 
   renderMap: function() {
-    var currentMarkerValues = this.get('markerValues');
-    var markersFound = currentMarkerValues && currentMarkerValues.length > 0;
-    // if (markersFound && !_mobile_device_) {
-    // might need to reintroduce logic of detecting _mobile_device_
-    // this.renderMap(currentMarkerValues);
+    if (this.get('geo')) {
+      var currentMarkerValues = this.get('markerValues');
+      var markersFound = currentMarkerValues && currentMarkerValues.length > 0;
+      // if (markersFound && !_mobile_device_) {
+      // might need to reintroduce logic of detecting _mobile_device_
+      // this.renderMap(currentMarkerValues);
 
-    if (markersFound) {
-      this.renderMapWithMarkers();
-    } else {
-      this.renderMapWithoutMarkers();
-      // "40.4167754", "-3.7037902");
-      // longitude: "-3.7037902",
-      // # latitude: "40.4167754)
+      if (markersFound) {
+        this.renderMapWithMarkers();
+      } else {
+        // don't 
+        this.renderMapWithoutMarkers();
+      }
     }
+
   },
 
   // highlighted_icon: "http://maps.google.com/mapfiles/ms/icons/red-dot.png",

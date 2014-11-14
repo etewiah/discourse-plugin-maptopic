@@ -56,7 +56,7 @@ require("discourse/controllers/topic")["default"].reopen({
     }
   },
 
-  setUserPreferredCity: function() {
+  setUserPreferredGeoKey: function() {
     var currentGeoKey = this.get('model.geo');
     if (currentGeoKey) {
 
@@ -65,7 +65,6 @@ require("discourse/controllers/topic")["default"].reopen({
       currentGeoKey.value = currentGeoKey.bounds_value.toLowerCase();
       var mapController = this.get('controllers.map');
 
-      debugger;
 
 // could check to see if mapctrl already has correct value set:
       mapController.set('currentGeoKey', currentGeoKey);

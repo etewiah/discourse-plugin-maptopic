@@ -17,13 +17,26 @@ Discourse.PlaceRoute = Discourse.Route.extend({
 
 });
 
+
 Discourse.PlacesRootRoute = Discourse.Route.extend({
 
-  beforeModel: function(transition) {
-    var controller = this.controllerFor('map');
 
-    var topiclist = Discourse.GeoTopic.geoTopicsForCity(controller.currentCity);
+// TODO - investigate why this sometimes gets called twice resulting in 2 calls to geoTopicsForCity
+  beforeModel: function(transition) {
+    // where user is arriving for the 1st time, will be calculated server side:
+    // unless there is a preferred_city set for this user
+    var controller = this.controllerFor('map');
+    if (controller.get('currentGeoKey.value')) {
+      var currentGeoKeyValue = controller.get('currentGeoKey.value');
+    }
+    else{
+      // below checks localstorage just in case user has visited site previously
+      var currentGeoKeyValue = Discourse.GeoTopic.getUserDefaultGeoKeyValue();
+    } 
     debugger;
+
+    var topiclist = Discourse.GeoTopic.geoTopicsForCity(currentGeoKeyValue);
+
     this.transitionTo('places.fromGeo', topiclist);
   }
 

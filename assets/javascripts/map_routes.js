@@ -16,7 +16,6 @@ Discourse.MapRootRoute = Discourse.Route.extend({
       // below checks localstorage just in case user has visited site previously
       var currentGeoKeyValue = Discourse.GeoTopic.getUserDefaultGeoKeyValue();
     } 
-    debugger;
 
     var topiclist = Discourse.GeoTopic.geoTopicsForCity(currentGeoKeyValue);
     this.transitionTo('map.fromOneParam', topiclist);

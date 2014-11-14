@@ -13,7 +13,7 @@ Discourse.SimpleDropdownComponent = Ember.Component.extend({
 
   resortSelectionItems: function() {
     var selectionItems = this.get('selectionItems');
-    if (selectionItems) {
+    if (selectionItems && selectionItems.length) {
       var selectionItemsWithoutNcPrompt = selectionItems.rejectBy('value', 'new_city');
       var sortedSelectionItems = selectionItemsWithoutNcPrompt.sortBy('value');
       sortedSelectionItems.push({
