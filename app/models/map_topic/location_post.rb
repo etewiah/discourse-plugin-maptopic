@@ -9,6 +9,15 @@ module MapTopic
 
 
 
+    def self.disassociate location, post
+      location_post = MapTopic::LocationPost.where({:post_id => post.id,location_id => location.id}).first_or_initialize
+
+      binding.pry
+
+    end
+
+
+
     # effectively creating the connection between a post and a location
     def self.create_from_location location, post
       # currently I am only creating 1 location per post hence "first_or_ini..." instead of .new()

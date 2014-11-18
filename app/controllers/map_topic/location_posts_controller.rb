@@ -68,6 +68,7 @@ module MapTopic
     # as a geo-topic..  (so check and ensure geo and category are set)
     # or maybe should leave as is ...
     def set_location
+      binding.pry
       unless(params[:post_id] && params[:location] )
         render_error "incorrect params"
         return
@@ -84,14 +85,6 @@ module MapTopic
 
       location = MapTopic::Location.create_from_location_hash params[:location]
 
-      # # TODO - find location which is close enough to be considered the same..
-      # location = MapTopic::Location.where(:longitude => longitude, :latitude => latitude).first_or_initialize
-      # location.title = params[:location][:title] || ""
-      # location.city = params[:location][:city] || ""
-      # location.country = params[:location][:country] || ""
-      # location.address = params[:location][:address] || ""
-      # location.gplace_id = params[:location][:gplace_id] || ""
-
       # below will not update if already exists:
       # do |loc|
       #   loc.title = params[:location_title] || "ll"
@@ -101,34 +94,10 @@ module MapTopic
       # below ensures that location is set for topic too:
       location_post = MapTopic::LocationPost.create_from_location location, @post
 
-      # if @post.post_number == 1
-      #   # should not get here - now using set_geo for new topics...
-      # end
-
       return render json: location.to_json
-
-      # render json: @post
     end
 
     private
-
-    # poorly named...
-    # def create_location location
-    #   # TODO - find location which is close enough to be considered the same..
-    #   location_object = MapTopic::Location.where(:longitude => location[:longitude], :latitude => location[:latitude]).first_or_initialize
-    #   location_object.title = location[:title] || ""
-    #   location_object.city = location[:city] || ""
-    #   location_object.country = location[:country] || ""
-    #   location_object.address = location[:address] || ""
-    #   location_object.gplace_id = location[:gplace_id] || ""
-    #   # below will not update if already exists:
-    #   # do |loc|
-    #   #   loc.title = params[:location_title] || "ll"
-    #   # end
-    #   location_object.save!
-    #   return location_object
-    # end
-
 
     # TODO - reopen topic model and add this there:
     def ensure_category topic, capability

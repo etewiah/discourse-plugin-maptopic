@@ -158,7 +158,8 @@ require("discourse/controllers/topic")["default"].reopen({
         };
 
         composerController.open(opts).then(function() {
-          composerController.content.set('locationObject', locationObject);
+          composerController.set('content.locationObject', locationObject);
+          // composerController.content.set('locationObject', locationObject);
         });
       } else {
         this.send('showLogin');
