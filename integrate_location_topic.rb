@@ -43,7 +43,8 @@ Post.send(:include, LocationPostExtender)
 module ExtendPostSerializerForLocationTopic
   def self.included(klass)
     klass.attributes :location
-    klass.attributes :locations
+    # below seemed to create a 'circular dependency' error when loading categories.json
+    # klass.attributes :locations
   end
   #
   def location
