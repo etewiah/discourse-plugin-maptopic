@@ -1,6 +1,8 @@
 module MapTopic
   class LocationPost < ActiveRecord::Base
     self.table_name = "location_posts"
+
+    # do I really need below???
     reverse_geocoded_by :latitude, :longitude
     # TODO - include cols which I will use for quering here
     # starting with city..
@@ -8,11 +10,15 @@ module MapTopic
     belongs_to :location
 
 
-
-    def self.disassociate location, post
-      location_post = MapTopic::LocationPost.where({:post_id => post.id,location_id => location.id}).first_or_initialize
-
+    #  delete locationpost
+    def self.disassociate location_id, post_id
+      # location_post = MapTopic::LocationPost.where({:post_id => post_id,location_id => location.id}).first_or_initialize
+      # since I currently only support 1 location per post, above is the same as below
+      location_post = MapTopic::LocationPost.where({:post_id => post_id}).first
       binding.pry
+      if location_post
+        location_post.destroy
+      end
 
     end
 

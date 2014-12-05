@@ -17,15 +17,23 @@ module MapTopic
         render status: :forbidden, json: false
         return
       end
-
       location_id = params[:location_id].to_s
+
+      unless @topic.geo.places[location_id]
+        # if the location can't be found, return
+        return render_json_dump @topic.geo.as_json
+      end
+
+      associated_post_ids = @topic.geo.places[location_id]["post_ids"]
+      binding.pry
+      associated_post_ids.each do |post_id|
+        # @post = Post.find(post_id)
+        MapTopic::LocationPost.disassociate location_id, post_id
+      end
+
       @topic.geo.places.delete location_id
       @topic.geo.places['sorted_ids'].delete location_id
       @topic.geo.save!
-
-      # 
-      MapTopic::LocationPost.disassociate location, @post
-
       return render_json_dump @topic.geo.as_json
 
     end
