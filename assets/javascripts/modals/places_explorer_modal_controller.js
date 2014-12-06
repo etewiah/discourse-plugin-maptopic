@@ -1,5 +1,5 @@
 Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.ModalFunctionality, {
-  needs: ['topic', 'mapFromOneParam'],
+  needs: ['topic', 'mapFromOneParam', 'mapsSelected'],
   actions: {
     // goToPost: function(post) {
     //   var topicController = this.get('controllers.topic');
@@ -40,6 +40,10 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
       if (context === "index_map") {
         var targetController = this.get('controllers.mapFromOneParam');
         targetController.send('showNewTopicModal', 'info', locationObject);
+      } else if (context === "custom_map") {
+        var targetController = this.get('controllers.mapsSelected');
+        targetController.send('addPlaceAction', locationObject);
+        this.send('closeModal');
       } else {
         var topicController = this.get('controllers.topic');
         topicController.send('addPlaceAction', locationObject);
@@ -93,7 +97,6 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
     var that = this;
     service.nearbySearch(request, function(results, status) {
       if (status == google.maps.places.PlacesServiceStatus.OK) {
-        // debugger;
         that.set('nearbyPlaces', results.slice(0, 10));
       } else {
         // clear out any previous results I may have
@@ -105,7 +108,7 @@ Discourse.PlacesExplorerModalController = Discourse.Controller.extend(Discourse.
 
   withinTopic: function() {
     var context = this.get('content.context');
-    if (context === "topic_map") {
+    if (context === "topic_map" || context === "custom_map") {
       return true;
     } else {
       return false;
