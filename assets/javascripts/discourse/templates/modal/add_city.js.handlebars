@@ -3,7 +3,7 @@
 {{#if suggestedLocationName }}
 
   Do you mean {{ suggestedLocationName }}?            
-  <button class='btn btn-primary' {{action addNewCity}}>Yes</button>
+  <button class='btn btn-primary' {{action "addNewCity"}}>Yes</button>
   <button class='btn btn-danger' {{action clearSuggestion}}>No</button>
 
 {{else}}
@@ -40,9 +40,9 @@
 
 <div class="modal-footer">
 {{#unless suggestedLocationName }}
-          <button class='btn btn-large btn-primary' {{action addNewCity}}>
+          <button class='btn btn-large btn-primary' {{action "addNewCity"}}>
             Go
           </button>
 {{/unless}}
-          &nbsp; <a {{action closeModal}}>{{i18n cancel}}</a>
+          &nbsp; <a {{action "closeModal"}}>{{i18n cancel}}</a>
 </div>

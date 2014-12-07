@@ -46,7 +46,7 @@
         <span>{{ name }}</span>
         <span class='time'>{{format-date path="created_at" leaveAgo="true"}}</span>
         <span class="">
-          <a {{action goToPost this }}>go to post</a>
+          <a {{action "goToPost" this }}>go to post</a>
         </span>
         <span>
 
@@ -62,9 +62,9 @@
 
   </div>
 
-  <button class='btn btn-primary' {{action replyWithLocation model.location }}>
+  <button class='btn btn-primary' {{action "replyWithLocation" model.location }}>
     Say something about this place
   </button>
 
-  <a {{action closeModal}}>{{i18n cancel}}</a>
+  <a {{action "closeModal"}}>{{i18n cancel}}</a>
 </div>

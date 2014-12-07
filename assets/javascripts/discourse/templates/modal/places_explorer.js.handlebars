@@ -5,7 +5,7 @@
   <div>
     <h style="padding-bottom: 20px;">{{ model.clickedLocation.formatted_address }}</h>
     <div>
-      <form {{action namedCitySelected on="submit"}}>
+      <form {{action "namedCitySelected" on="submit"}}>
       <br>
                 {{text-field placeholder="Place Name" value=placeName 
                 id="place-name" autofocus="autofocus"}}
@@ -13,13 +13,13 @@
       {{#if withinTopic}}
         <button class='btn btn-primary' style="width:22%;" 
             title="Add this place to the current conversation"
-            {{action namedCitySelected }}>
+            {{action "namedCitySelected" }}>
             {{fa-icon plus label="talk label" }} Add this place
         </button>
       {{else}}
         <button class='btn btn-primary' style="width:22%;" 
             title="Do you have something to say about this place? Go on then, say it..."
-            {{action namedCitySelected }}>
+            {{action "namedCitySelected" }}>
             {{fa-icon comment-o label="talk label" }} Talk about this
         </button>
       {{/if}} 
@@ -36,7 +36,7 @@
         <ul class="nav list-stacked" style="padding: 5px 5px 5px 5px;">
           {{#each place in nearbyPlacesDetails}}
               <li>
-              <a style="padding-left: 5px;" {{action searchResultSelected place}}>
+              <a style="padding-left: 5px;" {{action "searchResultSelected" place}}>
               <div style="width: 77%;float: left;">
               <span>{{ place.name }},</span>
               <span>{{ place.vicinity }},</span>
@@ -66,5 +66,5 @@
 </div>
 
 <div class="modal-footer">
-  <a {{action closeModal}}>{{i18n cancel}}</a>
+  <a {{action "closeModal"}}>{{i18n cancel}}</a>
 </div>
