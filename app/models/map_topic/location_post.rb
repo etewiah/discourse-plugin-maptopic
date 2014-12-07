@@ -12,10 +12,9 @@ module MapTopic
 
     #  delete locationpost
     def self.disassociate location_id, post_id
-      # location_post = MapTopic::LocationPost.where({:post_id => post_id,location_id => location.id}).first_or_initialize
+      location_post = MapTopic::LocationPost.where({:post_id => post_id, :location_id => location.id}).first
       # since I currently only support 1 location per post, above is the same as below
-      location_post = MapTopic::LocationPost.where({:post_id => post_id}).first
-      binding.pry
+      # location_post = MapTopic::LocationPost.where({:post_id => post_id}).first
       if location_post
         location_post.destroy
       end

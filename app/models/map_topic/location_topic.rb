@@ -12,6 +12,14 @@ module MapTopic
     # t.float :longitude
     # t.float :latitude
 
+    # delete locationtopic
+    def self.disassociate location_id, topic_id
+      location_topic = MapTopic::LocationTopic.where({:topic_id => topic_id, :location_id => location_id}).first
+      if location_topic
+        location_topic.destroy!
+      end
+
+    end
 
 
     def self.create_from_location location, topic, post_id

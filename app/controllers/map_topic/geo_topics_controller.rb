@@ -19,13 +19,13 @@ module MapTopic
       end
       location_id = params[:location_id].to_s
 
+      MapTopic::LocationTopic.disassociate location_id, params[:topic_id]
       unless @topic.geo.places[location_id]
         # if the location can't be found, return
         return render_json_dump @topic.geo.as_json
       end
 
       associated_post_ids = @topic.geo.places[location_id]["post_ids"]
-      binding.pry
       associated_post_ids.each do |post_id|
         # @post = Post.find(post_id)
         MapTopic::LocationPost.disassociate location_id, post_id
