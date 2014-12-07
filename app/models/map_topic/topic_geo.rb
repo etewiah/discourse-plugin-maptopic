@@ -99,6 +99,11 @@ module MapTopic
       place['detailsConfirmed'] = false
       place['post_ids'] = post_ids
 
+
+      # ensuring that there is always a happenings node on a place makes client side bindings work better..
+      place['happenings'] = []
+
+
       # self.places[location.id.to_i] = place
       # the key always gets converted to a string on saving, even if I use to_i as above
       self.places[location.id] = place
