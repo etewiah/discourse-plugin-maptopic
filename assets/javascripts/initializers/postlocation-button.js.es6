@@ -58,9 +58,11 @@ default {
         }
         // buffer.push('<button title="Mark this post as solving your initial question" data-action="correct">Mark as correct</button>');
 
-        var innerHTML = "<a> Show '" + locationTitle + "'</a>";
+        // var innerHTML = "<a> Show '" + locationTitle + "'</a>";
+        var innerHTML = "<span> &nbsp; &nbsp;" + locationTitle + "</span>";
         var opts = {
-          innerHTML: innerHTML
+          innerHTML: innerHTML,
+          className: "place-in-post ptr"
         }
         return new Button("postlocation", "go_to_location", "map-marker", opts);
 

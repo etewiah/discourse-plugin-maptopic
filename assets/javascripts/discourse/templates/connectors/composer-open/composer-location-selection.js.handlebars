@@ -1,10 +1,10 @@
 <div class='location-aware-reply-to'>
-  {{{model.actionTitle}}}  (
-    {{ locationTitle }}
-    <a {{action showLocationSelector}} class="composer-location-selector">
+  {{{model.actionTitle}}}  
+    ( {{ locationTitle }} )
+{{!--     <a {{action showLocationSelector}} class="composer-location-selector">
       {{ setLocationPrompt }}
-      </a>) 
-
+      </a>
+ --}}
   {{#if canEdit}}
     {{#if showEditReason}}
       <div class="edit-reason-input">
