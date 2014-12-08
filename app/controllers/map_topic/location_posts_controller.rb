@@ -68,7 +68,6 @@ module MapTopic
     # as a geo-topic..  (so check and ensure geo and category are set)
     # or maybe should leave as is ...
     def set_location
-      binding.pry
       unless(params[:post_id] && params[:location] )
         render_error "incorrect params"
         return
