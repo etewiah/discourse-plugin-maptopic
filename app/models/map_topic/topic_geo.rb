@@ -58,7 +58,6 @@ module MapTopic
       # the idea of having the place col is that it saves me having to query deeply for the basic info that I
       # will need to display a nice infowindow when showing index of topics...
 
-
       # below is a workaround check while I still have some places in db
       # that are arrays
       # binding.pry
@@ -99,26 +98,26 @@ module MapTopic
       place['detailsConfirmed'] = false
       place['post_ids'] = post_ids
 
-
       # ensuring that there is always a happenings node on a place makes client side bindings work better..
       place['happenings'] = []
-
 
       # self.places[location.id.to_i] = place
       # the key always gets converted to a string on saving, even if I use to_i as above
       self.places[location.id] = place
 
+      # in future, might store more in LocationTopic like happenings etc...
+      # might get rid of LocationPosts...
 
-
-      # in future, will stop using LocationTopic and rely on topic.geo.places
-      # should be a bit quicker and more efficient.
-      # LocationPosts will still be around for any queries etc that might be needed
-      #  - will add topic_id to locationposts..
-      # topic_places.push place
-      # self.places = topic_places
       self.save!
-      # end
-      # }
+    end
+
+    def associate_place_with_post location_id, post_id
+      if self.places[location_id]
+        post_ids = self.places[location_id]['post_ids'] || []
+        post_ids.push post_id.to_s
+        self.places[location_id]['post_ids'] = post_ids.uniq
+        self.save!
+      end
     end
 
     # t.string :display_name

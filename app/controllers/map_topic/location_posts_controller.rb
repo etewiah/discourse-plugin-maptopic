@@ -13,8 +13,6 @@ module MapTopic
         render_error "incorrect params"
         return
       end
-      # longitude = params[:geo][:longitude]
-      # latitude = params[:geo][:latitude]
 
       @post = Post.find(params[:post_id])
       if current_user.guardian.ensure_can_edit!(@post)
@@ -43,7 +41,7 @@ module MapTopic
         location = MapTopic::Location.create_from_location_hash params[:geo][:initial_location]
 
         # location = create_location params[:geo][:initial_location]
-              # below ensures that location is set for topic too:
+        # below ensures that location is set for topic too:
         location_post = MapTopic::LocationPost.create_from_location location, @post
       end
 
@@ -64,17 +62,13 @@ module MapTopic
 
     # used for setting location on post (and topic) when post is being created
     # assumption here is that set_geo has already been called and category set
-    # TODO - handle scenarios where locations are added to a topic that was never created
-    # as a geo-topic..  (so check and ensure geo and category are set)
-    # or maybe should leave as is ...
+    # - previously, I allowed new locations to be created here - doesn't work well
+    # so now it only creates the association - should be renamed...
     def set_location
       unless(params[:post_id] && params[:location] )
         render_error "incorrect params"
         return
       end
-      longitude = params[:location][:longitude]
-      latitude = params[:location][:latitude]
-
 
       @post = Post.find(params[:post_id])
       if current_user.guardian.ensure_can_edit!(@post)
@@ -82,16 +76,17 @@ module MapTopic
         return
       end
 
-      location = MapTopic::Location.create_from_location_hash params[:location]
+      location = MapTopic::Location.find params[:location][:location_id]
+      # no longer creating location - has to already exist before post is created
+      # location = MapTopic::Location.create_from_location_hash params[:location]
 
-      # below will not update if already exists:
-      # do |loc|
-      #   loc.title = params[:location_title] || "ll"
-      # end
-      # location.save!
-
-      # below ensures that location is set for topic too:
-      location_post = MapTopic::LocationPost.create_from_location location, @post
+      if location
+        location_post = MapTopic::LocationPost.create_from_location location, @post
+        # might be a bit redundant creating an association between a location and a post with above and below
+        # but below saves me calculating posts for each place each time I render ( perhaps I should have a post_ids 
+          # and happenings json col on LocationTopic)
+        @post.topic.geo.associate_place_with_post location.id.to_s, @post.id.to_s
+      end
 
       return render json: location.to_json
     end
