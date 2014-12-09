@@ -47,13 +47,14 @@ default {
       buttonForPostlocation: function(post, buffer) {
         var locationTitle = this.get('post.location.title');
         if (Ember.isEmpty(locationTitle)) {
+          return null;
           // for topic post, the location is associated with the topic not the post
           // might be an idea to change this...
-          if (this.get('post.post_number') === 1 && this.get('post.topic.location.title')) {
-            locationTitle = this.get('post.topic.location.title');
-          } else {
-            return null;
-          }
+          // if (this.get('post.post_number') === 1 && this.get('post.topic.location.title')) {
+          //   locationTitle = this.get('post.topic.location.title');
+          // } else {
+          //   return null;
+          // }
 
         }
         // buffer.push('<button title="Mark this post as solving your initial question" data-action="correct">Mark as correct</button>');

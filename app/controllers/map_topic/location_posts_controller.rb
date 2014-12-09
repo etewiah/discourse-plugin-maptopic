@@ -8,6 +8,8 @@ module MapTopic
     # sets a TopicGeo object on the topic
     # Bases the TopicGeo on GeoKey (at the moment for the city - bounds_value could in
     # theory be a country or region or womex2014... )
+
+# might make more sense to have this in geo_topics controller...
     def set_geo
       unless(params[:post_id] && params[:geo] )
         render_error "incorrect params"
@@ -36,6 +38,8 @@ module MapTopic
       end
 
       # below needs to run after geo has been created for topic
+
+      # in chattyMaps (unlike klavado) don't support the creation of initial locations
       if params[:geo][:initial_location]
         # TODO - do something with google place id to enhance location info
         location = MapTopic::Location.create_from_location_hash params[:geo][:initial_location]
