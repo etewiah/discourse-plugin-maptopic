@@ -19,42 +19,7 @@ require("discourse/controllers/topic")["default"].reopen({
     }, this).compact();
   }.property('url'),
 
-  addPlace: function(locationObject) {
-    if (Discourse.User.current()) {
 
-      var topic = this.get('model');
-      if (topic) {
-        var topicLocationCount = topic.get('locationCount') || 0;
-        // below triggers recalculation of markers on a topic
-        topic.set('locationCount', topicLocationCount + 1);
-      }
-      // because no post is being created yet, only setting location on topic
-      var update_location_endpoint = '/location_topics/set_location';
-      var map_topic = Discourse.ajax(update_location_endpoint, {
-        data: {
-          location: locationObject,
-          // post_id: post.id,
-          topic_id: topic.id
-        },
-        method: 'POST'
-      });
-
-      // var locs = this.get('model.locations');
-      // locs.pushObject(locationObject);
-
-      var that = this;
-      map_topic.then(function(result) {
-        // topicLocationCount will trigger recalculation of markers
-        // below ensures the new place is available for recalculation right away
-        // var places = that.get('model.geo.places');
-        that.set('model.geo.places', result);
-      });
-      // TODO - handle errors
-
-    } else {
-      this.send('showLogin');
-    }
-  },
 
   setUserPreferredGeoKey: function() {
     var currentGeoKey = this.get('model.geo');
@@ -66,7 +31,7 @@ require("discourse/controllers/topic")["default"].reopen({
       var mapController = this.get('controllers.map');
 
 
-// could check to see if mapctrl already has correct value set:
+      // could check to see if mapctrl already has correct value set:
       mapController.set('currentGeoKey', currentGeoKey);
 
       // below should really be geo.bounds_value but in the case of belfast
@@ -94,6 +59,43 @@ require("discourse/controllers/topic")["default"].reopen({
   // }.observes('topic'),
 
   actions: {
+
+    addPlace: function(locationObject) {
+      if (Discourse.User.current()) {
+
+        var topic = this.get('model');
+        if (topic) {
+          var topicLocationCount = topic.get('locationCount') || 0;
+          // below triggers recalculation of markers on a topic
+          topic.set('locationCount', topicLocationCount + 1);
+        }
+        // because no post is being created yet, only setting location on topic
+        var update_location_endpoint = '/location_topics/set_location';
+        var map_topic = Discourse.ajax(update_location_endpoint, {
+          data: {
+            location: locationObject,
+            // post_id: post.id,
+            topic_id: topic.id
+          },
+          method: 'POST'
+        });
+
+        // var locs = this.get('model.locations');
+        // locs.pushObject(locationObject);
+
+        var that = this;
+        map_topic.then(function(result) {
+          // topicLocationCount will trigger recalculation of markers
+          // below ensures the new place is available for recalculation right away
+          // var places = that.get('model.geo.places');
+          that.set('model.geo.places', result);
+        });
+        // TODO - handle errors
+
+      } else {
+        this.send('showLogin');
+      }
+    },
 
     sharePopup: function(target, url) {
       window.open(url, '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,width=600,height=' + Discourse.ShareLink.popupHeight(target));
@@ -137,7 +139,6 @@ require("discourse/controllers/topic")["default"].reopen({
     // triggered by clicking on search result infowindow 
     addPlaceFromSearchResult: function(searchResult, geo) {
       var locationObject = Discourse.Location.locationFromPlaceSearch(searchResult, "");
-
       this.send('addPlace', locationObject);
 
       //return true to bubble up to route...
