@@ -91,6 +91,7 @@ Discourse.MapFromOneParamController = Discourse.ObjectController.extend({
     //   link = window.location.protocol + "//" + window.location.host + link;
     // }
     return Discourse.SiteSettings.share_links.split('|').map(function(i) {
+      debugger;
       if (Discourse.ShareLink.supportedTargets.indexOf(i) >= 0) {
         return Discourse.ShareLink.create({
           target: i,
